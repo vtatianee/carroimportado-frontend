@@ -461,9 +461,14 @@ export default function Home() {
         {/* Resultados */}
         {result && !loading && <Results result={result} />}
 
-        <footer className="text-center text-xs text-slate-400 pb-8 pt-4">
+        <footer className="text-center text-xs text-slate-400 pb-8 pt-4 space-y-1">
           <p>carroimportado.com — Calculadora de importação de veículos EUA → Brasil</p>
-          <p className="mt-1">Os valores são estimativas. Consulte um despachante aduaneiro para cotações precisas.</p>
+          <p>Os valores são estimativas. Consulte um despachante aduaneiro para cotações precisas.</p>
+          <p>
+            <a href="/privacy" className="hover:text-slate-600 underline">Política de Privacidade</a>
+            {" · "}
+            <a href="/terms" className="hover:text-slate-600 underline">Termos de Uso</a>
+          </p>
         </footer>
       </div>
     </main>
