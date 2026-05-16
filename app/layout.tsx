@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Carro Importado — Calcule o custo de importar um carro dos EUA",
   description:
     "Cole o link do anúncio e descubra quanto vai custar importar o carro para o Brasil, com todos os impostos detalhados.",
+  other: {
+    "google-adsense-account": "ca-pub-8694151594129435",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
