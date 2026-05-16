@@ -262,11 +262,12 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<AnalyzeResult | null>(null);
+  const [urlResult, setUrlResult] = useState<AnalyzeResult | null>(null);
+  const [manualResult, setManualResult] = useState<AnalyzeResult | null>(null);
 
   async function handleUrlSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true); setError(null); setResult(null);
+    setLoading(true); setError(null); setUrlResult(null);
     try {
       const body: Record<string, unknown> = { url, state };
       if (freteUsd) body.frete_usd = parseFloat(freteUsd);
@@ -277,7 +278,7 @@ export default function Home() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro ao analisar o anúncio.");
-      setResult(data);
+      setUrlResult(data);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro inesperado.");
     } finally {
@@ -287,7 +288,7 @@ export default function Home() {
 
   async function handleManualSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true); setError(null); setResult(null);
+    setLoading(true); setError(null); setManualResult(null);
     try {
       const body: Record<string, unknown> = {
         price_usd: parseFloat(priceUsd),
@@ -306,7 +307,7 @@ export default function Home() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro no cálculo.");
-      setResult(data);
+      setManualResult(data);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro inesperado.");
     } finally {
@@ -340,11 +341,11 @@ export default function Home() {
 
           {/* Tabs */}
           <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1 w-fit">
-            <button onClick={() => { setTab("url"); setResult(null); setError(null); }}
+            <button onClick={() => { setTab("url"); setError(null); }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === "url" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
               🔗 Cole um link
             </button>
-            <button onClick={() => { setTab("manual"); setResult(null); setError(null); }}
+            <button onClick={() => { setTab("manual"); setError(null); }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === "manual" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
               ✏️ Inserir manualmente
             </button>
@@ -459,7 +460,8 @@ export default function Home() {
         )}
 
         {/* Resultados */}
-        {result && !loading && <Results result={result} />}
+        {tab === "url" && urlResult && !loading && <Results result={urlResult} />}
+        {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
 
         <footer className="text-center text-xs text-slate-400 pb-8 pt-4 space-y-1">
           <p>carroimportado.com — Calculadora de importação de veículos EUA → Brasil</p>
