@@ -567,10 +567,15 @@ export default function Home() {
                     className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
                 </div>
               </div>
-              <button type="submit" disabled={loading}
-                className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl transition-colors text-sm cursor-pointer">
-                {loading ? "⏳ Calculando..." : "Calcular custo de importação →"}
-              </button>
+              <div>
+                <button type="submit" disabled={loading}
+                  className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl transition-colors text-sm cursor-pointer">
+                  {loading ? "⏳ Calculando..." : "Calcular custo de importação →"}
+                </button>
+                <p className="mt-2 text-xs text-slate-400">
+                  Gratuito · Câmbio PTAX (Banco Central) · Alíquotas Receita Federal 2026 · Sem cadastro
+                </p>
+              </div>
             </form>
           )}
 
@@ -627,10 +632,15 @@ export default function Home() {
                 </div>
               </div>
 
-              <button type="submit" disabled={loading}
-                className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl transition-colors text-sm cursor-pointer">
-                {loading ? "⏳ Calculando..." : "Calcular impostos →"}
-              </button>
+              <div>
+                <button type="submit" disabled={loading}
+                  className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl transition-colors text-sm cursor-pointer">
+                  {loading ? "⏳ Calculando..." : "Calcular impostos →"}
+                </button>
+                <p className="mt-2 text-xs text-slate-400">
+                  Gratuito · Câmbio PTAX (Banco Central) · Alíquotas Receita Federal 2026 · Sem cadastro
+                </p>
+              </div>
             </form>
           )}
         </section>
