@@ -105,6 +105,42 @@ function PhotoCarousel({ photos, alt }: { photos: string[]; alt: string }) {
   );
 }
 
+// ── Ícones SVG (Heroicons outline) ───────────────────────────────────────────
+const IconBox = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+  </svg>
+);
+const IconBuilding = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+  </svg>
+);
+const IconShield = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+  </svg>
+);
+const IconChart = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+  </svg>
+);
+const IconPencil = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+  </svg>
+);
+
+function SectionHeading({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+      <span className="text-blue-600 shrink-0">{icon}</span>
+      {children}
+    </h3>
+  );
+}
+
 // ── Row de custo ──────────────────────────────────────────────────────────────
 function Row({ label, brl, usd, bold }: { label: string; brl: number; usd?: number; bold?: boolean }) {
   return (
@@ -112,7 +148,7 @@ function Row({ label, brl, usd, bold }: { label: string; brl: number; usd?: numb
       <span className="text-slate-600 text-sm">{label}</span>
       <div className="text-right shrink-0">
         <span className="text-slate-900 text-sm">R$ {fmt(brl)}</span>
-        {usd !== undefined && <span className="text-slate-400 text-xs ml-2">(USD {fmtUSD(usd)})</span>}
+        {usd !== undefined && <span className="text-slate-500 text-xs ml-2">(USD {fmtUSD(usd)})</span>}
       </div>
     </div>
   );
@@ -168,30 +204,30 @@ function Results({ result }: { result: AnalyzeResult }) {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
           <p className="text-slate-500 text-sm mb-1">Valor de mercado estimado</p>
           <p className="text-2xl font-bold text-slate-900">R$ {fmt(ic.valor_mercado_estimado_brl)}</p>
-          <p className="text-slate-400 text-xs mt-2">+25% prêmio de revenda típico</p>
+          <p className="text-slate-500 text-xs mt-2">+25% prêmio típico no mercado brasileiro</p>
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
           <p className="text-slate-500 text-sm mb-1">Câmbio utilizado</p>
           <p className="text-2xl font-bold text-slate-900">R$ {cd.valor.toFixed(4)}</p>
-          <p className="text-slate-400 text-xs mt-2">{cd.fonte}</p>
+          <p className="text-slate-500 text-xs mt-2">{cd.fonte}</p>
         </div>
       </div>
 
       {/* Valor aduaneiro */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <h3 className="font-semibold text-slate-900 mb-4">📦 Valor Aduaneiro (CIF)</h3>
+        <SectionHeading icon={<IconBox />}>Valor Aduaneiro (CIF)</SectionHeading>
         <Row label="FOB — Preço do veículo nos EUA" brl={va.fob_brl} usd={va.fob_usd} />
         <Row label={`Frete marítimo (${va.frete_fonte})`} brl={va.frete_brl} usd={va.frete_usd} />
         <Row label="Seguro marítimo (1,5% do FOB)" brl={va.seguro_brl} usd={va.seguro_usd} />
         <Row label="CIF — Valor Aduaneiro total" brl={va.cif_brl} usd={va.cif_usd} bold />
         {va.frete_fonte.includes("estimativa") && (
-          <p className="mt-3 text-xs text-slate-400 bg-slate-50 rounded-lg p-3">💡 {va.frete_sugerido?.nota}</p>
+          <p className="mt-3 text-xs text-slate-500 bg-slate-50 rounded-lg p-3">💡 {va.frete_sugerido?.nota}</p>
         )}
       </section>
 
       {/* Impostos */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <h3 className="font-semibold text-slate-900 mb-4">🏛️ Impostos</h3>
+        <SectionHeading icon={<IconBuilding />}>Impostos</SectionHeading>
         <Row label="II — Imposto de Importação (35% do FOB)" brl={bd.ii_imposto_importacao} />
         <Row label="IPI (18,81% sobre FOB + II)" brl={bd.ipi} />
         <Row label="PIS (2,62% do CIF)" brl={bd.pis} />
@@ -202,7 +238,7 @@ function Results({ result }: { result: AnalyzeResult }) {
 
       {/* Desembaraço */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <h3 className="font-semibold text-slate-900 mb-4">🛃 Desembaraço Aduaneiro</h3>
+        <SectionHeading icon={<IconShield />}>Desembaraço Aduaneiro</SectionHeading>
         <Row label="Despachante (honorários)" brl={da.despachante_honorarios_usd * cd.valor} usd={da.despachante_honorarios_usd} />
         <Row label="THC — Terminal Handling Charge" brl={da.thc_usd * cd.valor} usd={da.thc_usd} />
         <Row label="AFRMM — 25% do frete (Lei 10.893/2004)" brl={da.afrmm_usd * cd.valor} usd={da.afrmm_usd} />
@@ -213,7 +249,7 @@ function Results({ result }: { result: AnalyzeResult }) {
       {/* Benchmark FIPE */}
       {bm?.preco_brl && bm?.comparativo && (
         <section className={`rounded-2xl border shadow-sm p-6 ${bm.comparativo.importar_e_mais_caro ? "bg-orange-50 border-orange-200" : "bg-green-50 border-green-200"}`}>
-          <h3 className="font-semibold text-slate-900 mb-4">📊 Comparativo com o mercado brasileiro</h3>
+          <SectionHeading icon={<IconChart />}>Comparativo com o mercado brasileiro</SectionHeading>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <p className="text-sm text-slate-500">Custo de importar</p>
@@ -222,20 +258,20 @@ function Results({ result }: { result: AnalyzeResult }) {
             <div>
               <p className="text-sm text-slate-500">Preço no Brasil ({bm.source})</p>
               <p className="text-2xl font-bold text-slate-900">R$ {fmt(bm.preco_brl)}</p>
-              {bm.descricao && <p className="text-xs text-slate-400 mt-0.5">{bm.descricao}</p>}
+              {bm.descricao && <p className="text-xs text-slate-500 mt-0.5">{bm.descricao}</p>}
             </div>
           </div>
           <div className={`text-sm font-medium px-4 py-3 rounded-xl ${bm.comparativo.importar_e_mais_caro ? "bg-orange-100 text-orange-800" : "bg-green-100 text-green-800"}`}>
             {bm.comparativo.importar_e_mais_caro ? "⚠️" : "✅"} {bm.comparativo.contexto}
           </div>
-          {bm.mes_referencia && <p className="text-xs text-slate-400 mt-2">Referência FIPE: {bm.mes_referencia}</p>}
+          {bm.mes_referencia && <p className="text-xs text-slate-500 mt-2">Referência FIPE: {bm.mes_referencia}</p>}
         </section>
       )}
 
       {/* Descrição IA (planos pagos) */}
       {result.description_pt && (
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h3 className="font-semibold text-slate-900 mb-3">✍️ Sobre este veículo</h3>
+          <SectionHeading icon={<IconPencil />}>Sobre este veículo</SectionHeading>
           <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">{result.description_pt}</p>
         </section>
       )}
@@ -765,14 +801,16 @@ export default function Home() {
         {/* FAQ */}
         <FAQ />
 
-        <footer className="text-center text-xs text-slate-400 pb-8 pt-4 space-y-1">
-          <p>carroimportado.com — Calculadora de importação de veículos EUA → Brasil</p>
-          <p>Os valores são estimativas. Consulte um despachante aduaneiro para cotações precisas.</p>
+        <footer className="text-center text-xs text-slate-500 pb-8 pt-4 space-y-1.5">
+          <p className="font-medium text-slate-600">carroimportado.com — Calculadora de importação de veículos EUA → Brasil</p>
+          <p>Alíquotas: Receita Federal · Câmbio: PTAX Banco Central do Brasil · Preços de referência: Tabela FIPE</p>
+          <p className="text-slate-400">Os valores são estimativas. Consulte um despachante aduaneiro habilitado para cotações precisas.</p>
           <p>
-            <a href="/privacy" className="hover:text-slate-600 underline">Política de Privacidade</a>
+            <a href="/privacy" className="hover:text-slate-700 underline">Política de Privacidade</a>
             {" · "}
-            <a href="/terms" className="hover:text-slate-600 underline">Termos de Uso</a>
+            <a href="/terms" className="hover:text-slate-700 underline">Termos de Uso</a>
           </p>
+          <p className="text-slate-400">© {new Date().getFullYear()} carroimportado.com — Todos os direitos reservados</p>
         </footer>
       </div>
     </main>
