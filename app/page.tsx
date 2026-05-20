@@ -452,7 +452,7 @@ export default function Home() {
             {
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              name: "Calculadora de Importação de Carros — EUA para o Brasil",
+              name: "Quanto custa trazer aquele carro dos EUA para o Brasil?",
               url: "https://www.carroimportado.com",
               applicationCategory: "FinanceApplication",
               operatingSystem: "Web",
@@ -517,15 +517,36 @@ export default function Home() {
         </div>
       </header>
 
+      {/* ── Hero ─────────────────────────────────────────────────────────────── */}
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white">
+        <div className="max-w-5xl mx-auto px-4 py-14 sm:py-20 text-center">
+          <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight mb-4">
+            Quanto custa trazer aquele carro<br className="hidden sm:block" /> dos EUA para o Brasil?
+          </h1>
+          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-10">
+            Cole o link do anúncio no <strong className="text-white">Cars.com</strong> e veja o custo real em segundos —
+            impostos, frete e despesas de desembaraço, tudo detalhado.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
+              ⚠️ A carga tributária costuma passar de <strong>100%</strong> do valor do carro
+            </span>
+            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
+              💱 Câmbio PTAX do Banco Central
+            </span>
+            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
+              ✅ Gratuito · Sem cadastro
+            </span>
+          </div>
+        </div>
+      </section>
+
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
 
         {/* Form card */}
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
-            Quanto custa importar esse carro?
-          </h1>
           <p className="text-slate-500 mb-6 text-sm">
-            Cole o link de um anúncio do <strong>Cars.com</strong> ou insira os valores manualmente para calcular o custo total de importação para o Brasil.
+            Cole o link de um anúncio do <strong>Cars.com</strong> ou insira os valores manualmente.
           </p>
 
           {/* Tabs */}
