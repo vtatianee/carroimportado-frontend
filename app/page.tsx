@@ -163,8 +163,44 @@ function Results({ result }: { result: AnalyzeResult }) {
 
   const carTitle = [car.year, car.make, car.model].filter(Boolean).join(" ") || "Veículo";
 
+  // Verifica elegibilidade para importação pela legislação brasileira:
+  // Permitido: 0 km (New) OU clássico (30+ anos)
+  const isNew = car.condition?.toLowerCase() === "new";
+  const isClassic = car.is_classic === true;
+  const isRestricted = !isNew && !isClassic;
+  const yearUnknown = car.is_classic === null && !isNew;
+
   return (
     <div className="space-y-6">
+      {/* Aviso legal — importação restrita */}
+      {isRestricted && (
+        <div className="bg-red-50 border border-red-300 rounded-2xl p-5">
+          <div className="flex gap-3">
+            <span className="text-red-500 text-xl shrink-0">🚫</span>
+            <div>
+              <p className="font-semibold text-red-800 text-sm mb-1">
+                Importação possivelmente não permitida pela legislação brasileira
+              </p>
+              <p className="text-red-700 text-sm leading-relaxed">
+                A legislação brasileira{" "}
+                <strong>não permite a importação de veículos usados</strong> com menos
+                de 30 anos de fabricação.{" "}
+                {car.year
+                  ? `Este veículo foi fabricado em ${car.year} e ainda não atingiu o prazo mínimo.`
+                  : ""}
+                {" "}Os valores abaixo são exibidos apenas para fins de estimativa.
+                Consulte um despachante aduaneiro habilitado antes de tomar qualquer decisão.
+              </p>
+              {yearUnknown && (
+                <p className="text-red-600 text-xs mt-2 italic">
+                  Ano do veículo não identificado. Verifique se ele tem mais de 30 anos antes de prosseguir.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Car card */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="flex flex-col sm:flex-row">
