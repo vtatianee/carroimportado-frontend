@@ -243,6 +243,63 @@ function Results({ result }: { result: AnalyzeResult }) {
   );
 }
 
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+const FAQ_ITEMS = [
+  {
+    q: "Quanto custa importar um carro dos EUA para o Brasil?",
+    a: "O custo total inclui o preço do veículo (FOB), frete marítimo (aproximadamente USD 1.500–2.500), Imposto de Importação (35% do FOB), IPI (18,81%), PIS (2,62%), COFINS (12,57%), ICMS (12–20% dependendo do estado) e despesas de desembaraço aduaneiro (~USD 3.000). A carga tributária total costuma superar 100% do valor do veículo nos EUA.",
+  },
+  {
+    q: "Qual é o ICMS para importação de veículos por estado?",
+    a: "O ICMS varia por estado de destino: São Paulo (SP), Minas Gerais (MG), Santa Catarina (SC), Rio Grande do Sul (RS) e Paraná (PR) cobram 12%. Rio de Janeiro (RJ) cobra 20%. Os demais estados cobram 17%. O ICMS é calculado “por dentro” sobre a base total já com os demais impostos.",
+  },
+  {
+    q: "Carros clássicos americanos pagam menos imposto no Brasil?",
+    a: "Veículos com mais de 30 anos são considerados clássicos e podem ter tratamento aduaneiro diferenciado dependendo da classificação fiscal (NCM). Alguns podem ser elegíveis a benefícios específicos, mas isso depende do modelo e da situação de cada veículo. Consulte sempre um despachante aduaneiro habilitado antes de tomar qualquer decisão.",
+  },
+  {
+    q: "Como funciona a calculadora de importação?",
+    a: "Basta colar o link de um anúncio do Cars.com ou inserir o preço do veículo manualmente. A calculadora busca os dados do anúncio, aplica as alíquotas tributárias vigentes e exibe o custo total internado no Brasil em reais, usando a cotação PTAX do Banco Central do Brasil atualizada.",
+  },
+  {
+    q: "O que é o valor aduaneiro (CIF)?",
+    a: "O valor aduaneiro, também chamado CIF (Cost, Insurance and Freight), é a base legal de cálculo dos impostos de importação no Brasil. Ele é composto pelo preço do veículo (FOB) + frete marítimo + seguro marítimo (1,5% do FOB). Todos os impostos federais (II, IPI, PIS, COFINS) são calculados sobre esse valor.",
+  },
+  {
+    q: "Preciso de um despachante aduaneiro para importar um carro?",
+    a: "Sim. A legislação brasileira exige a participação de um despachante aduaneiro habilitado pela Receita Federal para realizar o desembaraço aduaneiro de veículos importados. Os honorários do despachante já estão incluídos nas estimativas desta calculadora (aproximadamente USD 1.500).",
+  },
+];
+
+function FAQ() {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+      <h2 className="text-xl font-bold text-slate-900 mb-6">Perguntas frequentes sobre importação de carros dos EUA</h2>
+      <div className="divide-y divide-slate-100">
+        {FAQ_ITEMS.map((item, i) => (
+          <div key={i}>
+            <button
+              onClick={() => setOpen(open === i ? null : i)}
+              className="w-full text-left py-4 flex items-start justify-between gap-4 group"
+            >
+              <span className="font-medium text-slate-800 text-sm group-hover:text-blue-600 transition-colors">
+                {item.q}
+              </span>
+              <span className={`shrink-0 text-slate-400 text-lg transition-transform ${open === i ? "rotate-45" : ""}`}>
+                +
+              </span>
+            </button>
+            {open === i && (
+              <p className="text-slate-500 text-sm leading-relaxed pb-4">{item.a}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── Página principal ──────────────────────────────────────────────────────────
 export default function Home() {
   const [tab, setTab] = useState<"url" | "manual">("url");
@@ -524,6 +581,9 @@ export default function Home() {
         {/* Resultados */}
         {tab === "url" && urlResult && !loading && <Results result={urlResult} />}
         {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
+
+        {/* FAQ */}
+        <FAQ />
 
         <footer className="text-center text-xs text-slate-400 pb-8 pt-4 space-y-1">
           <p>carroimportado.com — Calculadora de importação de veículos EUA → Brasil</p>
