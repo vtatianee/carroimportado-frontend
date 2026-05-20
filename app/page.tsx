@@ -317,6 +317,68 @@ export default function Home() {
 
   return (
     <main className="flex-1">
+      {/* Schema JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Calculadora de Importação de Carros — EUA para o Brasil",
+              url: "https://www.carroimportado.com",
+              applicationCategory: "FinanceApplication",
+              operatingSystem: "Web",
+              inLanguage: "pt-BR",
+              description:
+                "Calcule o custo total de importar um carro dos Estados Unidos para o Brasil, incluindo II, IPI, PIS, COFINS e ICMS por estado de destino.",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "BRL",
+              },
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "Quanto custa importar um carro dos EUA para o Brasil?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "O custo total de importar um carro dos EUA para o Brasil inclui o preço do veículo (FOB), frete marítimo (~USD 1.500–2.500), Imposto de Importação (35% do FOB), IPI (18,81%), PIS (2,62%), COFINS (12,57%), ICMS (12–20% dependendo do estado) e despesas de desembaraço (~USD 3.000). A carga tributária total costuma superar 100% do valor do veículo.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Carros clássicos americanos pagam menos imposto no Brasil?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Veículos com mais de 30 anos são considerados clássicos e podem ter tratamento aduaneiro diferenciado dependendo da classificação fiscal (NCM). Consulte um despachante aduaneiro habilitado para verificar se há benefícios aplicáveis ao seu veículo.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Qual é o ICMS para importação de veículos por estado?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "O ICMS varia por estado: São Paulo (SP), Minas Gerais (MG), Santa Catarina (SC), Rio Grande do Sul (RS) e Paraná (PR) cobram 12%. Rio de Janeiro (RJ) cobra 20%. Demais estados cobram 17%.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Como funciona a calculadora de importação?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Basta colar o link de um anúncio do Cars.com ou inserir o preço manualmente. A calculadora busca os dados do veículo, aplica as alíquotas tributárias vigentes (II, IPI, PIS, COFINS, ICMS) e exibe o custo total internado no Brasil em reais, usando a cotação PTAX do Banco Central.",
+                  },
+                },
+              ],
+            },
+          ]),
+        }}
+      />
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">

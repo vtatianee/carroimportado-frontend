@@ -6,10 +6,66 @@ import CookieBanner from "./components/CookieBanner";
 
 const geist = Geist({ subsets: ["latin"] });
 
+const SITE_URL = "https://www.carroimportado.com";
+const SITE_NAME = "Carro Importado";
+const TITLE = "Calculadora de Importação de Carros dos EUA para o Brasil | II, IPI, ICMS";
+const DESCRIPTION =
+  "Calcule o custo real de importar um carro dos Estados Unidos para o Brasil. Cole o link do anúncio do Cars.com e veja todos os impostos detalhados: II, IPI, PIS, COFINS e ICMS por estado.";
+
 export const metadata: Metadata = {
-  title: "Carro Importado — Calcule o custo de importar um carro dos EUA",
-  description:
-    "Cole o link do anúncio e descubra quanto vai custar importar o carro para o Brasil, com todos os impostos detalhados.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DESCRIPTION,
+  keywords: [
+    "importar carro dos EUA",
+    "calculadora importação veículos",
+    "quanto custa importar carro brasil",
+    "imposto importar carro eua brasil",
+    "importar carro clássico americano",
+    "II IPI ICMS importação veículo",
+    "carro importado dos estados unidos",
+    "como importar carro dos EUA",
+  ],
+  authors: [{ name: "Tatiane Assink" }],
+  creator: "carroimportado.com",
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "pt_BR",
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "Calculadora de importação de carros dos EUA para o Brasil",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [`${SITE_URL}/opengraph-image`],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   other: {
     "google-adsense-account": "ca-pub-8694151594129435",
   },
