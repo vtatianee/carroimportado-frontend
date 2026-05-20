@@ -243,6 +243,76 @@ function Results({ result }: { result: AnalyzeResult }) {
   );
 }
 
+// ── Links úteis ───────────────────────────────────────────────────────────────
+const USEFUL_LINKS = [
+  {
+    category: "🔍 Encontrar o veículo",
+    links: [
+      { label: "Cars.com", url: "https://www.cars.com", desc: "Maior marketplace de carros usados dos EUA" },
+      { label: "AutoTrader", url: "https://www.autotrader.com", desc: "Anúncios de veículos novos e usados nos EUA" },
+      { label: "Bring a Trailer", url: "https://bringatrailer.com", desc: "Leilões de carros clássicos e esportivos" },
+    ],
+  },
+  {
+    category: "🏛️ Governo Brasileiro",
+    links: [
+      { label: "Receita Federal — Importação", url: "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/importacao", desc: "Normas e procedimentos oficiais de importação" },
+      { label: "Siscomex", url: "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/sistemas/siscomex", desc: "Sistema de comércio exterior do Brasil" },
+      { label: "DENATRAN / SENATRAN", url: "https://www.gov.br/senatran/pt-br", desc: "Registro e licenciamento de veículos importados" },
+      { label: "INMETRO — Veículos", url: "https://www.inmetro.gov.br/qualidade/rtepac/veiculosautomotores.asp", desc: "Requisitos técnicos para homologação de veículos" },
+      { label: "Banco Central — PTAX", url: "https://www.bcb.gov.br/conversao", desc: "Cotação oficial do dólar usada para calcular impostos" },
+    ],
+  },
+  {
+    category: "🇺🇸 Governo Americano",
+    links: [
+      { label: "NHTSA — Conformidade", url: "https://www.nhtsa.gov/importing-vehicle", desc: "Normas de segurança para exportação de veículos dos EUA" },
+      { label: "EPA — Emissões", url: "https://www.epa.gov/importing-vehicles-and-engines", desc: "Requisitos ambientais para importação de veículos" },
+      { label: "CBP — Exportação", url: "https://www.cbp.gov/trade/vehicles", desc: "Alfândega americana — documentação para exportar veículos" },
+    ],
+  },
+  {
+    category: "📊 Referências de preço",
+    links: [
+      { label: "Tabela FIPE", url: "https://veiculos.fipe.org.br", desc: "Preços de referência de veículos no mercado brasileiro" },
+      { label: "Kelley Blue Book", url: "https://www.kbb.com", desc: "Valores de mercado de veículos nos EUA" },
+    ],
+  },
+];
+
+function UsefulLinks() {
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+      <h2 className="text-xl font-bold text-slate-900 mb-2">Links úteis para importação</h2>
+      <p className="text-sm text-slate-500 mb-6">Fontes oficiais e plataformas essenciais para todo o processo de importação.</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        {USEFUL_LINKS.map((cat) => (
+          <div key={cat.category}>
+            <h3 className="text-sm font-semibold text-slate-700 mb-3">{cat.category}</h3>
+            <ul className="space-y-3">
+              {cat.links.map((link) => (
+                <li key={link.url}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-start gap-2"
+                  >
+                    <span className="text-blue-600 font-medium text-sm group-hover:underline shrink-0">
+                      {link.label} ↗
+                    </span>
+                  </a>
+                  <p className="text-xs text-slate-400 mt-0.5 ml-0">{link.desc}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
   {
@@ -581,6 +651,9 @@ export default function Home() {
         {/* Resultados */}
         {tab === "url" && urlResult && !loading && <Results result={urlResult} />}
         {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
+
+        {/* Links úteis */}
+        <UsefulLinks />
 
         {/* FAQ */}
         <FAQ />
