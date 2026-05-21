@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.carroimportado.com";
+// As chamadas à API passam pelo proxy Next.js (app/api/*) para não expor a URL do backend no browser.
 
 const ESTADOS = [
   { value: "SP", label: "São Paulo (SP) — ICMS 12%" },
@@ -546,7 +546,7 @@ export default function Home() {
     try {
       const body: Record<string, unknown> = { url, state };
       if (freteUsd) body.frete_usd = parseFloat(freteUsd);
-      const res = await fetch(`${API_URL}/api/analyze`, {
+      const res = await fetch(`/api/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -575,7 +575,7 @@ export default function Home() {
       if (manualMake) body.make = manualMake;
       if (manualModel) body.model = manualModel;
 
-      const res = await fetch(`${API_URL}/api/calculate`, {
+      const res = await fetch(`/api/calculate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
