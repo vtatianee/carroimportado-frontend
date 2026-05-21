@@ -563,7 +563,7 @@ function HowItWorks() {
     <section className="bg-white border-b border-slate-100">
       <div className="max-w-5xl mx-auto px-4 py-12 sm:py-16 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">
-          Descubra em segundos o custo real de importar
+          Simule em segundos o custo de importar um carro dos EUA
         </h2>
         <p className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto mb-10">
           Cole o link do anúncio que encontrou no{" "}
