@@ -518,6 +518,83 @@ function FAQ() {
   );
 }
 
+// ── Como funciona ─────────────────────────────────────────────────────────────
+const HOW_IT_WORKS = [
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 15.803a7.5 7.5 0 0 0 10.607 0Z" />
+      </svg>
+    ),
+    label: "Encontrar o veículo",
+    desc: "Navegue no Cars.com e escolha o carro que deseja importar",
+  },
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+      </svg>
+    ),
+    label: "Copiar o link do anúncio",
+    desc: "Copie a URL do anúncio na barra de endereços do navegador",
+  },
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+      </svg>
+    ),
+    label: "Colar o link abaixo",
+    desc: "Cole o link no campo da calculadora e selecione o estado de destino",
+  },
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    ),
+    label: "Ver o custo de importação",
+    desc: "Veja todos os impostos detalhados e o custo total em reais",
+  },
+];
+
+function HowItWorks() {
+  return (
+    <section className="bg-white border-b border-slate-100">
+      <div className="max-w-5xl mx-auto px-4 py-12 sm:py-16 text-center">
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">
+          Descubra em segundos o custo real de importar
+        </h2>
+        <p className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto mb-10">
+          Cole o link do anúncio que encontrou no{" "}
+          <a href="https://www.cars.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:underline">Cars.com</a>{" "}
+          e veja o custo real com todos os impostos detalhados.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-0">
+          {HOW_IT_WORKS.map((step, i) => (
+            <div key={i} className="flex flex-col sm:flex-row items-center">
+              {/* Step */}
+              <div className="flex flex-col items-center gap-3 w-40">
+                <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm">
+                  {step.icon}
+                </div>
+                <p className="font-semibold text-slate-800 text-sm leading-tight">{step.label}</p>
+                <p className="text-slate-400 text-xs leading-snug px-1">{step.desc}</p>
+              </div>
+              {/* Arrow between steps */}
+              {i < HOW_IT_WORKS.length - 1 && (
+                <div className="text-slate-300 text-2xl my-3 sm:my-0 sm:mx-2 rotate-90 sm:rotate-0 shrink-0">
+                  →
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── Página principal ──────────────────────────────────────────────────────────
 export default function Home() {
   const [tab, setTab] = useState<"url" | "manual">("url");
@@ -688,6 +765,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <HowItWorks />
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
 
