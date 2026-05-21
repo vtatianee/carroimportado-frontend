@@ -563,7 +563,7 @@ function HowItWorks() {
     <section className="bg-white border-b border-slate-100">
       <div className="max-w-5xl mx-auto px-4 py-12 sm:py-16 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">
-          Simule em segundos o custo de importar um carro dos EUA
+          Como funciona a calculadora
         </h2>
         <p className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto mb-10">
           Cole o link do anúncio que encontrou no{" "}
@@ -669,68 +669,6 @@ export default function Home() {
 
   return (
     <main className="flex-1">
-      {/* Schema JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
-            {
-              "@context": "https://schema.org",
-              "@type": "WebApplication",
-              name: "Quanto custa trazer aquele carro dos EUA para o Brasil?",
-              url: "https://www.carroimportado.com",
-              applicationCategory: "FinanceApplication",
-              operatingSystem: "Web",
-              inLanguage: "pt-BR",
-              description:
-                "Calcule o custo total de importar um carro dos Estados Unidos para o Brasil, incluindo II, IPI, PIS, COFINS e ICMS por estado de destino.",
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "BRL",
-              },
-            },
-            {
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "Quanto custa importar um carro dos EUA para o Brasil?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "O custo total de importar um carro dos EUA para o Brasil inclui o preço do veículo (FOB), frete marítimo (~USD 1.500–2.500), Imposto de Importação (35% do FOB), IPI (18,81%), PIS (2,62%), COFINS (12,57%), ICMS (12–20% dependendo do estado) e despesas de desembaraço (~USD 3.000). A carga tributária total costuma superar 100% do valor do veículo.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Carros clássicos americanos pagam menos imposto no Brasil?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Veículos com mais de 30 anos são considerados clássicos e podem ter tratamento aduaneiro diferenciado dependendo da classificação fiscal (NCM). Consulte um despachante aduaneiro habilitado para verificar se há benefícios aplicáveis ao seu veículo.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Qual é o ICMS para importação de veículos por estado?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "O ICMS varia por estado: São Paulo (SP), Minas Gerais (MG), Santa Catarina (SC), Rio Grande do Sul (RS) e Paraná (PR) cobram 12%. Rio de Janeiro (RJ) cobra 20%. Demais estados cobram 17%.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Como funciona a calculadora de importação?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Basta colar o link de um anúncio do Cars.com ou inserir o preço manualmente. A calculadora busca os dados do veículo, aplica as alíquotas tributárias vigentes (II, IPI, PIS, COFINS, ICMS) e exibe o custo total internado no Brasil em reais, usando a cotação PTAX do Banco Central.",
-                  },
-                },
-              ],
-            },
-          ]),
-        }}
-      />
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -744,11 +682,11 @@ export default function Home() {
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white">
-        <div className="max-w-5xl mx-auto px-4 py-14 sm:py-20 text-center">
-          <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight mb-4">
+        <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 text-center">
+          <h1 className="text-2xl sm:text-4xl font-bold leading-tight tracking-tight mb-3">
             Quanto custa trazer aquele carro<br className="hidden sm:block" /> dos EUA para o Brasil?
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-10">
+          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-6">
             Cole o link do anúncio no <strong className="text-white">Cars.com</strong> e veja o custo real em segundos —
             impostos, frete e despesas de desembaraço, tudo detalhado.
           </p>
@@ -765,8 +703,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <HowItWorks />
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
 
@@ -909,6 +845,9 @@ export default function Home() {
         {/* Resultados */}
         {tab === "url" && urlResult && !loading && <Results result={urlResult} />}
         {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
+
+        {/* Como funciona */}
+        <HowItWorks />
 
         {/* Links úteis */}
         <UsefulLinks />

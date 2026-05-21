@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import CookieBanner from "./components/CookieBanner";
+import { JsonLd } from "./components/JsonLd";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -28,6 +29,12 @@ export const metadata: Metadata = {
     "II IPI ICMS importação veículo",
     "carro importado dos estados unidos",
     "como importar carro dos EUA",
+    "valor aduaneiro CIF importação veículo",
+    "ICMS importação carro por estado",
+    "despachante aduaneiro importação carro",
+    "calculadora imposto importação carro EUA",
+    "custo frete marítimo carro EUA Brasil",
+    "importar carro clássico 30 anos brasil",
   ],
   authors: [{ name: "Tatiane Assink" }],
   creator: "carroimportado.com",
@@ -78,6 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${geist.className} h-full`}>
       <head>
+        <JsonLd />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8694151594129435"
