@@ -154,8 +154,102 @@ function Row({ label, brl, usd, bold }: { label: string; brl: number; usd?: numb
   );
 }
 
+// ── Gráfico de composição de custos ──────────────────────────────────────────
+interface ChartSegment { label: string; valueBrl: number; color: string }
+
+function DonutChart({ segments }: { segments: ChartSegment[] }) {
+  const total = segments.reduce((sum, s) => sum + s.valueBrl, 0);
+  const r = 36;
+  const circumference = 2 * Math.PI * r;
+  let cumulative = 0;
+
+  return (
+    <div className="flex flex-col sm:flex-row items-center gap-6">
+      <div className="relative w-44 h-44 shrink-0">
+        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+          {segments.map((seg, i) => {
+            const len = (seg.valueBrl / total) * circumference;
+            const el = (
+              <circle key={i} cx="50" cy="50" r={r} fill="none"
+                stroke={seg.color} strokeWidth="22"
+                strokeDasharray={`${len} ${circumference - len}`}
+                strokeDashoffset={-cumulative}
+              />
+            );
+            cumulative += len;
+            return el;
+          })}
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+          <span className="text-[10px] text-slate-400 leading-tight">Total</span>
+          <span className="text-[11px] font-bold text-slate-800 leading-tight">R$ {fmt(total)}</span>
+        </div>
+      </div>
+      <div className="flex-1 space-y-2 w-full">
+        {segments.map((seg) => (
+          <div key={seg.label} className="flex items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: seg.color }} />
+              <span className="text-slate-600 truncate">{seg.label}</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-slate-400 w-10 text-right">{((seg.valueBrl / total) * 100).toFixed(1)}%</span>
+              <span className="text-slate-800 font-medium w-24 text-right">R$ {fmt(seg.valueBrl)}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CostChart({ result }: { result: AnalyzeResult }) {
+  const { import_costs: ic, cotacao_dolar: cd } = result;
+  const va = ic.valor_aduaneiro;
+  const bd = ic.breakdown_brl;
+  const da = ic.desembaraco_aduaneiro;
+
+  const segments: ChartSegment[] = [
+    { label: "Veículo (FOB)", valueBrl: va.fob_brl, color: "#475569" },
+    { label: "Frete + Seguro", valueBrl: va.frete_brl + va.seguro_brl, color: "#94a3b8" },
+    { label: "II — Imp. de Importação", valueBrl: bd.ii_imposto_importacao, color: "#ef4444" },
+    { label: "IPI", valueBrl: bd.ipi, color: "#f97316" },
+    { label: "PIS + COFINS", valueBrl: bd.pis + bd.cofins, color: "#f59e0b" },
+    { label: `ICMS (${ic.icms_rate_pct}%)`, valueBrl: bd.icms, color: "#eab308" },
+    { label: "Desembaraço aduaneiro", valueBrl: da.total_brl, color: "#3b82f6" },
+  ];
+
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <SectionHeading icon={<IconChart />}>Composição do custo total</SectionHeading>
+      <DonutChart segments={segments} />
+      <p className="text-xs text-slate-400 mt-4">
+        Câmbio: R$ {cd.valor.toFixed(4)} · ICMS/{result.import_costs.icms_rate_pct === 20 ? "RJ" : result.import_costs.icms_rate_pct === 12 ? "SP/MG/SC/RS/PR" : "outros estados"}
+      </p>
+    </section>
+  );
+}
+
+// ── Exemplo pré-calculado (visível antes de qualquer cálculo) ─────────────────
+const EXAMPLE_RESULT: AnalyzeResult = {
+  cotacao_dolar: { valor: 5.75, fonte: "BCB PTAX (exemplo)", data: "2026-05-01", nota: "Câmbio de exemplo — USD 1 = R$ 5,75 (BCB PTAX)" },
+  car_data: { price_usd: 45000, year: 1969, make: "Ford", model: "Mustang Fastback", mileage_miles: 58420, condition: "Used", photos: [], is_classic: true },
+  import_costs: {
+    icms_rate_pct: 12, effective_tax_rate_pct: 102.3,
+    total_landed_brl: 556019, valor_mercado_estimado_brl: 695024,
+    valor_aduaneiro: {
+      fob_usd: 45000, fob_brl: 258750,
+      frete_usd: 2000, frete_brl: 11500, frete_fonte: "estimativa",
+      frete_sugerido: { min_usd: 1500, max_usd: 2500, nota: "Frete estimado. Solicite cotação a transportadoras especializadas." },
+      seguro_usd: 675, seguro_brl: 3881, cif_usd: 47675, cif_brl: 274131,
+    },
+    desembaraco_aduaneiro: { despachante_honorarios_usd: 1500, thc_usd: 500, afrmm_usd: 500, armazenagem_capatazia_usd: 500, total_usd: 3000, total_brl: 17250 },
+    breakdown_brl: { ii_imposto_importacao: 90563, ipi: 65705, pis: 7182, cofins: 34465, icms: 66723, desembaraco: 17250, total_taxes: 264638, total_landed: 556019 },
+  },
+};
+
 // ── Bloco de resultados (reutilizado pelos dois modos) ────────────────────────
-function Results({ result }: { result: AnalyzeResult }) {
+function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boolean }) {
   const { car_data: car, import_costs: ic, benchmark_brasil: bm, cotacao_dolar: cd } = result;
   const va = ic.valor_aduaneiro;
   const da = ic.desembaraco_aduaneiro;
@@ -172,6 +266,16 @@ function Results({ result }: { result: AnalyzeResult }) {
 
   return (
     <div className="space-y-6">
+      {/* Banner de exemplo */}
+      {isExample && (
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl px-5 py-4 flex items-center gap-3">
+          <span className="text-blue-500 text-xl shrink-0">💡</span>
+          <div>
+            <p className="font-semibold text-blue-800 text-sm">Exemplo de cálculo</p>
+            <p className="text-blue-600 text-xs mt-0.5">Cole o link de um anúncio acima para calcular o seu próprio veículo.</p>
+          </div>
+        </div>
+      )}
       {/* Aviso legal — importação restrita */}
       {isRestricted && (
         <div className="bg-red-50 border border-red-300 rounded-2xl p-5">
@@ -248,6 +352,9 @@ function Results({ result }: { result: AnalyzeResult }) {
           <p className="text-slate-500 text-xs mt-2">{cd.fonte}</p>
         </div>
       </div>
+
+      {/* Gráfico de composição */}
+      <CostChart result={result} />
 
       {/* Valor aduaneiro */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
@@ -845,6 +952,11 @@ export default function Home() {
         {/* Resultados */}
         {tab === "url" && urlResult && !loading && <Results result={urlResult} />}
         {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
+
+        {/* Exemplo pré-calculado — visível enquanto não há resultado */}
+        {!urlResult && !manualResult && !loading && (
+          <Results result={EXAMPLE_RESULT} isExample />
+        )}
 
         {/* Como funciona */}
         <HowItWorks />
