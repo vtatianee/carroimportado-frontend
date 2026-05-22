@@ -501,7 +501,10 @@ function ShareResult({ result }: { result: AnalyzeResult }) {
 // ── Links úteis ───────────────────────────────────────────────────────────────
 const USEFUL_LINKS = [
   {
-    category: "🔍 Encontrar o veículo",
+    category: "Encontrar o veículo",
+    icon: "🔍",
+    color: "bg-blue-50 border-blue-100",
+    iconBg: "bg-blue-100",
     links: [
       { label: "Cars.com", url: "https://www.cars.com", desc: "Maior marketplace de carros usados dos EUA" },
       { label: "AutoTrader", url: "https://www.autotrader.com", desc: "Anúncios de veículos novos e usados nos EUA" },
@@ -509,27 +512,36 @@ const USEFUL_LINKS = [
     ],
   },
   {
-    category: "🏛️ Governo Brasileiro",
+    category: "Governo Brasileiro",
+    icon: "🏛️",
+    color: "bg-green-50 border-green-100",
+    iconBg: "bg-green-100",
     links: [
-      { label: "Receita Federal — Importação", url: "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/importacao", desc: "Normas e procedimentos oficiais de importação" },
+      { label: "Receita Federal", url: "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/importacao", desc: "Normas e procedimentos oficiais de importação" },
       { label: "Siscomex", url: "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/sistemas/siscomex", desc: "Sistema de comércio exterior do Brasil" },
-      { label: "DENATRAN / SENATRAN", url: "https://www.gov.br/senatran/pt-br", desc: "Registro e licenciamento de veículos importados" },
-      { label: "INMETRO — Veículos", url: "https://www.inmetro.gov.br/qualidade/rtepac/veiculosautomotores.asp", desc: "Requisitos técnicos para homologação de veículos" },
-      { label: "Banco Central — PTAX", url: "https://www.bcb.gov.br/conversao", desc: "Cotação oficial do dólar usada para calcular impostos" },
+      { label: "SENATRAN", url: "https://www.gov.br/senatran/pt-br", desc: "Registro e licenciamento de veículos importados" },
+      { label: "INMETRO", url: "https://www.inmetro.gov.br/qualidade/rtepac/veiculosautomotores.asp", desc: "Requisitos técnicos para homologação" },
+      { label: "BCB — PTAX", url: "https://www.bcb.gov.br/conversao", desc: "Cotação oficial do dólar para cálculo dos impostos" },
     ],
   },
   {
-    category: "🇺🇸 Governo Americano",
+    category: "Governo Americano",
+    icon: "🇺🇸",
+    color: "bg-red-50 border-red-100",
+    iconBg: "bg-red-100",
     links: [
-      { label: "NHTSA — Conformidade", url: "https://www.nhtsa.gov/importing-vehicle", desc: "Normas de segurança para exportação de veículos dos EUA" },
-      { label: "EPA — Emissões", url: "https://www.epa.gov/importing-vehicles-and-engines", desc: "Requisitos ambientais para importação de veículos" },
-      { label: "CBP — Exportação", url: "https://www.cbp.gov/trade/vehicles", desc: "Alfândega americana — documentação para exportar veículos" },
+      { label: "NHTSA", url: "https://www.nhtsa.gov/importing-vehicle", desc: "Normas de segurança para exportação dos EUA" },
+      { label: "EPA", url: "https://www.epa.gov/importing-vehicles-and-engines", desc: "Requisitos ambientais de emissões" },
+      { label: "CBP", url: "https://www.cbp.gov/trade/vehicles", desc: "Alfândega americana — documentação de exportação" },
     ],
   },
   {
-    category: "📊 Referências de preço",
+    category: "Referências de preço",
+    icon: "📊",
+    color: "bg-amber-50 border-amber-100",
+    iconBg: "bg-amber-100",
     links: [
-      { label: "Tabela FIPE", url: "https://veiculos.fipe.org.br", desc: "Preços de referência de veículos no mercado brasileiro" },
+      { label: "Tabela FIPE", url: "https://veiculos.fipe.org.br", desc: "Preços de referência no mercado brasileiro" },
       { label: "Kelley Blue Book", url: "https://www.kbb.com", desc: "Valores de mercado de veículos nos EUA" },
     ],
   },
@@ -538,26 +550,33 @@ const USEFUL_LINKS = [
 function UsefulLinks() {
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-      <h2 className="text-xl font-bold text-slate-900 mb-2">Links úteis para importação</h2>
-      <p className="text-sm text-slate-500 mb-6">Fontes oficiais e plataformas essenciais para todo o processo de importação.</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <h2 className="text-xl font-bold text-slate-900 mb-1">Links úteis para importação</h2>
+      <p className="text-sm text-slate-500 mb-6">Fontes oficiais e plataformas essenciais para todo o processo.</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {USEFUL_LINKS.map((cat) => (
-          <div key={cat.category}>
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">{cat.category}</h3>
-            <ul className="space-y-3">
+          <div key={cat.category} className={`rounded-xl border p-4 ${cat.color}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-base ${cat.iconBg}`}>
+                {cat.icon}
+              </span>
+              <h3 className="text-sm font-semibold text-slate-800">{cat.category}</h3>
+            </div>
+            <ul className="space-y-2">
               {cat.links.map((link) => (
                 <li key={link.url}>
                   <a
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-start gap-2"
+                    className="group flex items-start gap-2 rounded-lg hover:bg-white/70 transition-colors p-1.5 -mx-1.5"
                   >
-                    <span className="text-blue-600 font-medium text-sm group-hover:underline shrink-0">
-                      {link.label} ↗
-                    </span>
+                    <div className="min-w-0">
+                      <span className="text-blue-600 font-medium text-sm group-hover:underline block leading-tight">
+                        {link.label} ↗
+                      </span>
+                      <span className="text-xs text-slate-500 leading-snug">{link.desc}</span>
+                    </div>
                   </a>
-                  <p className="text-xs text-slate-400 mt-0.5 ml-0">{link.desc}</p>
                 </li>
               ))}
             </ul>
