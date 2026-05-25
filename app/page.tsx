@@ -550,6 +550,7 @@ const USEFUL_LINKS = [
       { label: "SENATRAN", url: "https://www.gov.br/senatran/pt-br", desc: "Registro e licenciamento de veículos importados" },
       { label: "INMETRO", url: "https://www.inmetro.gov.br/qualidade/rtepac/veiculosautomotores.asp", desc: "Requisitos técnicos para homologação" },
       { label: "BCB — PTAX", url: "https://www.bcb.gov.br/conversao", desc: "Cotação oficial do dólar para cálculo dos impostos" },
+      { label: "DETRAN (SP)", url: "https://www.detran.sp.gov.br/wps/portal/portaldetran/cidadao/veiculos/fichaServico/emissaoCRLVe/559bc4de-0ae0-4d58-960a-ce5d8e8afa6c", desc: "Emplacamento e transferência de veículos importados" },
     ],
   },
   {
