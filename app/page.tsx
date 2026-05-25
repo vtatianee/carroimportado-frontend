@@ -526,6 +526,211 @@ function ShareResult({ result }: { result: AnalyzeResult }) {
   );
 }
 
+// ── Calculadora reversa ───────────────────────────────────────────────────────
+const ICMS_RATES: Record<string, number> = {
+  SP: 0.12, MG: 0.12, SC: 0.12, RS: 0.12, PR: 0.12,
+  RJ: 0.20,
+  OTHER: 0.17,
+};
+
+interface ReverseResult {
+  fob: number;
+  freteUsd: number;
+  ii: number;
+  ipi: number;
+  pis: number;
+  cofins: number;
+  desembaraco: number;
+  icms: number;
+  totalUsd: number;
+  totalBrl: number;
+  usdBrlRate: number;
+  icmsRate: number;
+  state: string;
+}
+
+function calcReverse(
+  budgetBrl: number,
+  state: string,
+  usdBrlRate: number,
+  freteUsd: number,
+): ReverseResult | null {
+  const icmsRate = ICMS_RATES[state] ?? 0.17;
+  const desembaraco = 3000;
+  // Coefficient for FOB in the linear equation:
+  // total_usd = (coeff * FOB + fixedCosts) / (1 - icmsRate)
+  const coeff = 1 + 0.35 + 1.35 * 0.1881 + 0.0262 + 0.1257; // ≈ 1.756135
+  const fixedCosts = freteUsd + desembaraco + freteUsd * 0.0262 + freteUsd * 0.1257;
+  const totalUsdTarget = budgetBrl / usdBrlRate;
+  const fob = (totalUsdTarget * (1 - icmsRate) - fixedCosts) / coeff;
+  if (fob <= 0) return null;
+
+  const cif = fob + freteUsd;
+  const ii = fob * 0.35;
+  const ipi = (fob + ii) * 0.1881;
+  const pis = cif * 0.0262;
+  const cofins = cif * 0.1257;
+  const subtotal = cif + ii + ipi + pis + cofins + desembaraco;
+  const icms = (subtotal / (1 - icmsRate)) * icmsRate;
+  const totalUsd = fob + freteUsd + desembaraco + ii + ipi + pis + cofins + icms;
+  const totalBrl = totalUsd * usdBrlRate;
+
+  return { fob, freteUsd, ii, ipi, pis, cofins, desembaraco, icms, totalUsd, totalBrl, usdBrlRate, icmsRate, state };
+}
+
+function ReverseCalc({
+  budget, setBudget,
+  state, setState,
+  cambio, setCambio,
+  frete, setFrete,
+}: {
+  budget: string; setBudget: (v: string) => void;
+  state: string; setState: (v: string) => void;
+  cambio: string; setCambio: (v: string) => void;
+  frete: string; setFrete: (v: string) => void;
+}) {
+  const budgetNum = parseFloat(budget.replace(/\./g, "").replace(",", ".")) || 0;
+  const cambioNum = parseFloat(cambio.replace(",", ".")) || 0;
+  const freteNum = parseFloat(frete) || 1500;
+  const result = budgetNum > 0 && cambioNum > 0 ? calcReverse(budgetNum, state, cambioNum, freteNum) : null;
+
+  return (
+    <div className="space-y-4">
+      <p className="text-xs text-slate-500 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+        💡 Informe seu orçamento total em reais e veja qual o preço máximo que você pode pagar pelo veículo nos EUA, já considerando todos os impostos e despesas.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Orçamento total (R$) *</label>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={budget}
+            onChange={(e) => setBudget(e.target.value)}
+            placeholder="ex: 500.000"
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Estado de destino</label>
+          <select value={state} onChange={(e) => setState(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white">
+            {ESTADOS.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Câmbio USD/BRL *</label>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={cambio}
+            onChange={(e) => setCambio(e.target.value)}
+            placeholder="ex: 5.10"
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+          <p className="mt-1 text-xs text-slate-400">
+            Consulte a cotação atual no{" "}
+            <a href="https://www.bcb.gov.br/conversao" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+              Banco Central ↗
+            </a>
+          </p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Frete marítimo (USD) <span className="text-slate-400 font-normal">— opcional</span>
+          </label>
+          <input
+            type="number"
+            value={frete}
+            onChange={(e) => setFrete(e.target.value)}
+            placeholder="Padrão: USD 1.500"
+            min={100} max={10000}
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+        </div>
+      </div>
+
+      {result && (
+        <div className="mt-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 space-y-5">
+          {/* Headline */}
+          <div className="text-center">
+            <p className="text-sm text-slate-500 mb-1">Com <strong className="text-slate-700">R$ {fmt(result.totalBrl)}</strong> você pode pagar até:</p>
+            <p className="text-4xl font-bold text-green-700 tracking-tight">
+              US$ {fmtUSD(result.fob)}
+            </p>
+            <p className="text-sm text-slate-500 mt-1">pelo veículo nos EUA</p>
+            <div className="flex flex-wrap justify-center gap-2 mt-3">
+              <span className="bg-white border border-slate-200 text-xs text-slate-600 px-3 py-1 rounded-full">
+                Câmbio: R$ {result.usdBrlRate.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              </span>
+              <span className="bg-white border border-slate-200 text-xs text-slate-600 px-3 py-1 rounded-full">
+                {result.state === "OTHER" ? "Outros estados" : result.state} · ICMS {(result.icmsRate * 100).toFixed(0)}%
+              </span>
+            </div>
+          </div>
+
+          {/* Breakdown */}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-100">
+                  <th className="text-left px-4 py-2 font-medium text-slate-600 text-xs">Custo</th>
+                  <th className="text-right px-4 py-2 font-medium text-slate-600 text-xs">USD</th>
+                  <th className="text-right px-4 py-2 font-medium text-slate-600 text-xs">BRL</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {[
+                  { label: "Veículo (FOB)", usd: result.fob, highlight: true },
+                  { label: `Frete marítimo`, usd: result.freteUsd },
+                  { label: "II — Imposto de Importação (35%)", usd: result.ii },
+                  { label: `IPI (${(result.icmsRate === 0.20 ? 25 : 18.81).toFixed(2)}%)`, usd: result.ipi },
+                  { label: "PIS (2,62%)", usd: result.pis },
+                  { label: "COFINS (12,57%)", usd: result.cofins },
+                  { label: "Desembaraço aduaneiro", usd: result.desembaraco },
+                  { label: `ICMS (${(result.icmsRate * 100).toFixed(0)}%)`, usd: result.icms },
+                ].map(({ label, usd, highlight }) => (
+                  <tr key={label} className={highlight ? "bg-green-50/50" : ""}>
+                    <td className={`px-4 py-2.5 ${highlight ? "font-semibold text-slate-800" : "text-slate-600"}`}>{label}</td>
+                    <td className={`px-4 py-2.5 text-right font-mono ${highlight ? "font-semibold text-slate-800" : "text-slate-600"}`}>
+                      {fmtUSD(usd)}
+                    </td>
+                    <td className={`px-4 py-2.5 text-right font-mono ${highlight ? "font-semibold text-slate-800" : "text-slate-600"}`}>
+                      {fmt(usd * result.usdBrlRate)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="bg-slate-50 border-t border-slate-200">
+                  <td className="px-4 py-3 font-bold text-slate-900">Total estimado</td>
+                  <td className="px-4 py-3 text-right font-bold font-mono text-slate-900">
+                    {fmtUSD(result.totalUsd)}
+                  </td>
+                  <td className="px-4 py-3 text-right font-bold font-mono text-slate-900">
+                    {fmt(result.totalBrl)}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <p className="text-xs text-slate-500 text-center">
+            ⚠️ Estimativa com base nas alíquotas da Receita Federal 2026. Consulte um despachante aduaneiro para cotação exata.
+          </p>
+        </div>
+      )}
+
+      {budgetNum > 0 && cambioNum > 0 && !result && (
+        <div className="mt-4 bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+          ⚠️ O orçamento informado é insuficiente para cobrir os custos fixos de importação (frete + desembaraço + impostos mínimos). Tente um valor maior.
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Links úteis ───────────────────────────────────────────────────────────────
 const USEFUL_LINKS = [
   {
@@ -752,7 +957,7 @@ function HowItWorks() {
 
 // ── Página principal ──────────────────────────────────────────────────────────
 export default function Home() {
-  const [tab, setTab] = useState<"url" | "manual">("url");
+  const [tab, setTab] = useState<"url" | "manual" | "reversa">("url");
 
   // Modo URL
   const [url, setUrl] = useState("");
@@ -766,6 +971,12 @@ export default function Home() {
   const [manualModel, setManualModel] = useState("");
   const [manualFrete, setManualFrete] = useState("");
   const [manualCambio, setManualCambio] = useState("");
+
+  // Calculadora reversa
+  const [revBudget, setRevBudget] = useState("");
+  const [revState, setRevState] = useState("SP");
+  const [revCambio, setRevCambio] = useState("");
+  const [revFrete, setRevFrete] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -879,6 +1090,10 @@ export default function Home() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === "manual" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
               ✏️ Inserir manualmente
             </button>
+            <button onClick={() => { setTab("reversa"); setError(null); }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === "reversa" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+              💰 Por orçamento
+            </button>
           </div>
 
           {/* Tab: URL */}
@@ -918,6 +1133,16 @@ export default function Home() {
                 </p>
               </div>
             </form>
+          )}
+
+          {/* Tab: Reversa */}
+          {tab === "reversa" && (
+            <ReverseCalc
+              budget={revBudget} setBudget={setRevBudget}
+              state={revState} setState={setRevState}
+              cambio={revCambio} setCambio={setRevCambio}
+              frete={revFrete} setFrete={setRevFrete}
+            />
           )}
 
           {/* Tab: Manual */}
@@ -996,6 +1221,7 @@ export default function Home() {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 text-center text-slate-500 text-sm">
             <div className="text-3xl mb-3 animate-pulse">🔍</div>
             {tab === "url" ? "Buscando dados do anúncio e calculando impostos..." : "Calculando impostos..."}
+
           </div>
         )}
 
