@@ -830,7 +830,9 @@ export default function Home() {
             <span className="text-2xl">🚗</span>
             <span className="font-bold text-lg tracking-tight">carroimportado.com</span>
           </div>
-          <span className="text-sm text-slate-500 hidden sm:block">Calculadora de importação EUA → Brasil</span>
+          <a href="/guia" className="text-sm text-blue-600 hover:underline font-medium hidden sm:block">
+            Guia de importação →
+          </a>
         </div>
       </header>
 
