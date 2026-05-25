@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Como Importar um Carro dos EUA para o Brasil — Guia Completo 2026",
   description:
-    "Guia passo a passo completo para importar um carro dos Estados Unidos para o Brasil em 2026. Todas as etapas: DECEX, IBAMA, CAT, Siscomex, impostos e DETRAN.",
+    "Guia passo a passo completo para importar um carro dos Estados Unidos para o Brasil em 2026. Todas as etapas: Licença de Importação, IBAMA, CAT, Siscomex, impostos e DETRAN.",
   alternates: {
     canonical: "https://www.carroimportado.com/guia",
   },
@@ -81,44 +81,45 @@ const STEPS = [
   },
   {
     number: 4,
-    title: "Licença de Importação — DECEX e IBAMA",
+    title: "Licença de Importação — Siscomex e IBAMA",
     duration: "2–4 semanas",
     color: "violet",
     icon: "🏛️",
     description:
-      "Enquanto o navio está em trânsito, inicie o processo de licenciamento no Brasil. O DECEX autoriza a operação e o IBAMA verifica a conformidade ambiental do veículo.",
+      "Enquanto o navio está em trânsito, inicie o processo de licenciamento no Brasil. A Licença de Importação (LI) é solicitada no Siscomex e analisada pela SECEX (Secretaria de Comércio Exterior/MDIC). O IBAMA verifica a conformidade ambiental do veículo.",
     actions: [
       "Contrate um despachante aduaneiro habilitado pela Receita Federal",
       "Solicite a Licença de Importação (LI) no Siscomex",
-      "DECEX (MDIC) analisa e aprova a operação de importação",
+      "SECEX/MDIC analisa e aprova a operação de importação",
       "IBAMA verifica se o veículo atende às normas de emissão vigentes",
       "Para clássicos (30+ anos), o IBAMA geralmente concede isenção de laudo",
     ],
     warning: "A LI deve ser aprovada antes do desembaraço aduaneiro. Iniciar esse processo com o navio em trânsito economiza semanas.",
     documents: [
       "Licença de Importação (LI) — Siscomex",
-      "Comprovante de aprovação DECEX",
+      "Comprovante de aprovação SECEX/MDIC",
       "Laudo IBAMA ou isenção para clássicos",
     ],
   },
   {
     number: 5,
-    title: "Homologação técnica — CAT (SENATRAN)",
+    title: "Homologação técnica — CAT (SENATRANS)",
     duration: "2–8 semanas",
     color: "purple",
     icon: "🔧",
     description:
-      "O Certificado de Adequação à Legislação de Trânsito (CAT) certifica que o veículo atende às normas técnicas brasileiras de segurança e trânsito.",
+      "O Certificado de Adequação à Legislação de Trânsito (CAT) certifica que o veículo atende às normas técnicas brasileiras de segurança e trânsito. A aprovação final é do SENATRANS (Secretaria Nacional de Trânsito), vinculado ao Ministério dos Transportes.",
     actions: [
       "Verifique se o modelo tem CAT pré-aprovado (modelos comuns já têm)",
       "Para clássicos únicos, pode ser necessário laudo técnico individual",
       "O despachante aduaneiro geralmente coordena esse processo",
       "Adaptações podem ser necessárias: faróis, retrovisores, cintos etc.",
     ],
-    tip: "Carros clássicos americanos amplamente conhecidos (Mustang, Camaro, Corvette etc.) geralmente têm o processo facilitado. Modelos raros podem exigir laudos individuais.",
+    tip: "Carros clássicos americanos amplamente conhecidos (Mustang, Camaro, Corvette etc.) geralmente têm o processo facilitado. Modelos raros podem exigir laudos individuais. Atenção: reprovação pode gerar custos de adaptação de R$ 15.000 a R$ 80.000 — pesquise antes de comprar.",
+    warning: "Se o veículo não passar na homologação e não puder ser adaptado, deverá ser reexportado ou destruído — mesmo após todos os impostos terem sido pagos.",
     documents: [
-      "CAT — Certificado de Adequação à Legislação de Trânsito",
-      "Laudo técnico (se necessário)",
+      "CAT — Certificado de Adequação à Legislação de Trânsito (SENATRANS)",
+      "Laudo técnico do laboratório credenciado pelo INMETRO (se necessário)",
     ],
   },
   {
@@ -193,7 +194,7 @@ const STEPS = [
 
 const COSTS_SUMMARY = [
   { label: "Imposto de Importação (II)", value: "35% do FOB", color: "text-red-600" },
-  { label: "IPI", value: "18,81% sobre (FOB + II)", color: "text-orange-600" },
+  { label: "IPI", value: "18,81% sobre (FOB + II) — 0% para clássicos 30+ anos", color: "text-orange-600" },
   { label: "PIS", value: "2,62% do CIF", color: "text-amber-600" },
   { label: "COFINS", value: "12,57% do CIF", color: "text-amber-600" },
   { label: "ICMS (SP)", value: "12% — cálculo por dentro", color: "text-yellow-600" },
@@ -393,7 +394,7 @@ export default function GuiaPage() {
             <div>
               <h3 className="text-sm font-semibold text-slate-700 mb-3">🇧🇷 Documentação brasileira</h3>
               <ul className="space-y-2">
-                {["Licença de Importação (LI) — Siscomex", "Aprovação DECEX", "Laudo / Isenção IBAMA", "CAT — Certificado de Adequação", "Declaração de Importação (DI)", "DARF quitado (II, IPI, PIS, COFINS)", "Comprovante ICMS", "Comprovante de Importação (CI)", "CRLV + Placas DETRAN"].map((doc) => (
+                {["Licença de Importação (LI) — Siscomex", "Aprovação SECEX/MDIC", "Laudo / Isenção IBAMA", "CAT — Certificado de Adequação (SENATRANS)", "Declaração de Importação (DI)", "DARF quitado (II, IPI, PIS, COFINS)", "Comprovante ICMS", "Comprovante de Importação (CI)", "CRLV + Placas DETRAN"].map((doc) => (
                   <li key={doc} className="flex items-center gap-2 text-sm text-slate-600">
                     <span className="w-4 h-4 rounded border-2 border-slate-300 shrink-0 flex items-center justify-center" />
                     {doc}
