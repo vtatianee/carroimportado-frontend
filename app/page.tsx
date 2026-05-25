@@ -731,6 +731,101 @@ function ReverseCalc({
   );
 }
 
+// ── Próximos passos ───────────────────────────────────────────────────────────
+function NextSteps() {
+  return (
+    <section className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white">
+      <h2 className="font-bold text-base mb-4">O que fazer agora?</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <a href="/guia" className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
+          <span className="text-2xl shrink-0">📋</span>
+          <div>
+            <p className="font-semibold text-sm">Leia o guia completo</p>
+            <p className="text-blue-100 text-xs mt-0.5">8 etapas do processo de importação</p>
+          </div>
+        </a>
+        <a href="#form" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+          className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors cursor-pointer">
+          <span className="text-2xl shrink-0">🔄</span>
+          <div>
+            <p className="font-semibold text-sm">Calcular outro veículo</p>
+            <p className="text-blue-100 text-xs mt-0.5">Compare diferentes opções</p>
+          </div>
+        </a>
+        <a href="https://wa.me/?text=Calculei%20o%20custo%20de%20importar%20um%20carro%20dos%20EUA%20no%20carroimportado.com%20%F0%9F%9A%97" target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
+          <span className="text-2xl shrink-0">💬</span>
+          <div>
+            <p className="font-semibold text-sm">Compartilhar resultado</p>
+            <p className="text-blue-100 text-xs mt-0.5">Enviar via WhatsApp</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  );
+}
+
+// ── Captura de email ──────────────────────────────────────────────────────────
+function EmailCapture() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setStatus("loading");
+    try {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "done") {
+    return (
+      <section className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
+        <p className="text-2xl mb-2">✅</p>
+        <p className="font-semibold text-green-800">Cadastro realizado!</p>
+        <p className="text-green-700 text-sm mt-1">Você receberá novidades sobre importação de veículos e novos recursos da calculadora.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8">
+      <div className="max-w-lg mx-auto text-center">
+        <p className="text-xl mb-1">📬</p>
+        <h2 className="font-bold text-slate-900 text-base mb-1">Fique por dentro das novidades</h2>
+        <p className="text-slate-500 text-sm mb-5">
+          Receba atualizações sobre regras de importação, mudanças de alíquota e novos recursos da calculadora. Sem spam.
+        </p>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="seu@email.com"
+            className="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+          <button type="submit" disabled={status === "loading"}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl transition-colors text-sm whitespace-nowrap cursor-pointer">
+            {status === "loading" ? "Enviando..." : "Quero receber →"}
+          </button>
+        </form>
+        {status === "error" && (
+          <p className="text-red-500 text-xs mt-2">Erro ao cadastrar. Tente novamente.</p>
+        )}
+      </div>
+    </section>
+  );
+}
+
 // ── Links úteis ───────────────────────────────────────────────────────────────
 const USEFUL_LINKS = [
   {
@@ -1060,13 +1155,16 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
-              ⚠️ A carga tributária costuma passar de <strong>100%</strong> do valor do carro
+              ✅ Gratuito · Sem cadastro
             </span>
             <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
               💱 Câmbio PTAX do Banco Central
             </span>
             <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
-              ✅ Gratuito · Sem cadastro
+              🏦 Alíquotas Receita Federal 2026
+            </span>
+            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
+              ⚠️ Carga tributária costuma passar de <strong>100%</strong> do valor
             </span>
           </div>
         </div>
@@ -1081,18 +1179,18 @@ export default function Home() {
           </p>
 
           {/* Tabs */}
-          <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1 w-fit">
+          <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1 overflow-x-auto">
             <button onClick={() => { setTab("url"); setError(null); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === "url" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
-              🔗 Cole um link
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${tab === "url" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+              🔗 <span className="hidden sm:inline">Cole um </span>Link
             </button>
             <button onClick={() => { setTab("manual"); setError(null); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === "manual" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
-              ✏️ Inserir manualmente
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${tab === "manual" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+              ✏️ <span className="hidden sm:inline">Inserir </span>Manual
             </button>
             <button onClick={() => { setTab("reversa"); setError(null); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === "reversa" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
-              💰 Por orçamento
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${tab === "reversa" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+              💰 <span className="hidden sm:inline">Simular por </span>Orçamento
             </button>
           </div>
 
@@ -1229,10 +1327,16 @@ export default function Home() {
         {tab === "url" && urlResult && !loading && <Results result={urlResult} />}
         {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
 
+        {/* Próximos passos — aparece quando há resultado real */}
+        {(urlResult || manualResult) && !loading && <NextSteps />}
+
         {/* Exemplo pré-calculado — visível enquanto não há resultado */}
         {!urlResult && !manualResult && !loading && (
           <Results result={EXAMPLE_RESULT} isExample />
         )}
+
+        {/* Captura de email */}
+        <EmailCapture />
 
         {/* Como funciona */}
         <HowItWorks />
