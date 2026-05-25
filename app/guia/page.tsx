@@ -137,7 +137,7 @@ const STEPS = [
       "Pagamento das despesas de desembaraço: despachante, THC, AFRMM, armazenagem",
       "Após confirmação do pagamento, veículo é liberado para retirada",
     ],
-    warning: "O veículo gera custos de armazenagem no porto desde o momento do desembarque. Agilize a documentação para evitar taxas extras.",
+    warning: "O veículo gera custos de armazenagem no porto desde o desembarque (~R$ 150–300/dia após a franquia). Se não for retirado em 90 dias, pode ser declarado abandonado e leiloado pela Receita Federal — mesmo com todos os impostos pagos.",
     documents: [
       "Declaração de Importação (DI) — Siscomex",
       "DARF — Documento de Arrecadação de Receitas Federais",
@@ -402,6 +402,54 @@ export default function GuiaPage() {
                 ))}
               </ul>
             </div>
+          </div>
+        </section>
+
+        {/* CTA contextual após impostos */}
+        <section className="bg-blue-600 rounded-2xl p-5 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="font-bold text-base">Sabe qual veículo vai importar?</p>
+            <p className="text-blue-100 text-sm mt-0.5">Calcule agora os impostos exatos com a cotação PTAX do dia.</p>
+          </div>
+          <Link href="/" className="shrink-0 bg-white text-blue-600 font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors text-sm whitespace-nowrap">
+            🚗 Abrir a calculadora →
+          </Link>
+        </section>
+
+        {/* Portos e AFRMM */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">🚢 Portos e AFRMM</h2>
+          <p className="text-sm text-slate-500 mb-5">A escolha do porto impacta o custo de THC, armazenagem e transporte interno.</p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-100">
+                  <th className="text-left pb-3 text-slate-600 font-semibold">Porto</th>
+                  <th className="text-left pb-3 text-slate-600 font-semibold">Estado</th>
+                  <th className="text-left pb-3 text-slate-600 font-semibold">ICMS</th>
+                  <th className="text-left pb-3 text-slate-600 font-semibold">Observação</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {[
+                  { porto: "Santos", estado: "SP", icms: "12%", obs: "Mais utilizado — maior estrutura e volume" },
+                  { porto: "Paranaguá", estado: "PR", icms: "12%", obs: "Boa alternativa para Sul e Centro-Oeste" },
+                  { porto: "Itajaí / Navegantes", estado: "SC", icms: "12%", obs: "Bastante utilizado, bom custo de THC" },
+                  { porto: "Rio de Janeiro / Sepetiba", estado: "RJ", icms: "20%", obs: "ICMS mais alto — desvantagem tributária" },
+                  { porto: "Suape", estado: "PE", icms: "17%", obs: "Referência para o Nordeste" },
+                ].map((r) => (
+                  <tr key={r.porto}>
+                    <td className="py-3 font-medium text-slate-800">{r.porto}</td>
+                    <td className="py-3 text-slate-600">{r.estado}</td>
+                    <td className={`py-3 font-semibold ${r.icms === "20%" ? "text-red-600" : "text-green-700"}`}>{r.icms}</td>
+                    <td className="py-3 text-slate-500 text-xs">{r.obs}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+            <strong>AFRMM (Adicional ao Frete para Renovação da Marinha Mercante):</strong> Cobrado pela ANTAQ, equivale a 25% do frete marítimo internacional (Lei 10.893/2004). Para um frete de USD 1.800 com câmbio a R$ 5,75: AFRMM ≈ <strong>R$ 2.588</strong>. Já está incluído nas estimativas de desembaraço desta calculadora.
           </div>
         </section>
 

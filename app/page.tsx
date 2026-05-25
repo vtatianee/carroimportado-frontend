@@ -847,7 +847,7 @@ const USEFUL_LINKS = [
     links: [
       { label: "Receita Federal", url: "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/importacao", desc: "Normas e procedimentos oficiais de importação" },
       { label: "Siscomex", url: "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/sistemas/siscomex", desc: "Sistema de comércio exterior do Brasil" },
-      { label: "SENATRAN", url: "https://www.gov.br/senatran/pt-br", desc: "Registro e licenciamento de veículos importados" },
+      { label: "SENATRANS", url: "https://www.gov.br/transportes/pt-br/assuntos/transito", desc: "Secretaria Nacional de Trânsito — homologação de veículos importados" },
       { label: "INMETRO", url: "https://www.inmetro.gov.br/qualidade/rtepac/veiculosautomotores.asp", desc: "Requisitos técnicos para homologação" },
       { label: "BCB — PTAX", url: "https://www.bcb.gov.br/conversao", desc: "Cotação oficial do dólar para cálculo dos impostos" },
       { label: "DETRAN (SP)", url: "https://www.detran.sp.gov.br/wps/portal/portaldetran/cidadao/veiculos/fichaServico/emissaoCRLVe/559bc4de-0ae0-4d58-960a-ce5d8e8afa6c", desc: "Emplacamento e transferência de veículos importados" },
@@ -917,30 +917,34 @@ function UsefulLinks() {
 }
 
 // ── FAQ ───────────────────────────────────────────────────────────────────────
-const FAQ_ITEMS = [
+const FAQ_ITEMS: { q: string; a: string; guia?: string }[] = [
   {
     q: "Quanto custa importar um carro dos EUA para o Brasil?",
-    a: "O custo total inclui o preço do veículo (FOB), frete marítimo (aproximadamente USD 1.500–2.500), Imposto de Importação (35% do FOB), IPI (18,81%), PIS (2,62%), COFINS (12,57%), ICMS (12–20% dependendo do estado) e despesas de desembaraço aduaneiro (~USD 3.000). A carga tributária total costuma superar 100% do valor do veículo nos EUA.",
+    a: "O custo total inclui o preço do veículo (FOB), frete marítimo (~USD 1.500–2.500), II (35% do FOB), IPI (18,81% — ou 0% para clássicos 30+ anos), PIS (2,62%), COFINS (12,57%), ICMS (12–20% por estado) e desembaraço aduaneiro (~USD 3.000). A carga tributária costuma superar 100% do valor do veículo.",
+    guia: "guia",
   },
   {
     q: "Qual é o ICMS para importação de veículos por estado?",
-    a: "O ICMS varia por estado de destino: São Paulo (SP), Minas Gerais (MG), Santa Catarina (SC), Rio Grande do Sul (RS) e Paraná (PR) cobram 12%. Rio de Janeiro (RJ) cobra 20%. Os demais estados cobram 17%. O ICMS é calculado “por dentro” sobre a base total já com os demais impostos.",
+    a: "O ICMS varia por estado: SP, MG, SC, RS e PR cobram 12%. RJ cobra 20%. Os demais estados cobram 17%. O ICMS é calculado \"por dentro\" sobre a base total já com os demais impostos — por isso o impacto real é maior do que a alíquota nominal.",
   },
   {
     q: "Carros clássicos americanos pagam menos imposto no Brasil?",
-    a: "Veículos com mais de 30 anos são considerados clássicos e podem ter tratamento aduaneiro diferenciado dependendo da classificação fiscal (NCM). Alguns podem ser elegíveis a benefícios específicos, mas isso depende do modelo e da situação de cada veículo. Consulte sempre um despachante aduaneiro habilitado antes de tomar qualquer decisão.",
+    a: "Sim. Veículos com mais de 30 anos de fabricação são isentos de IPI na importação (Lei 9.055/1995), o que reduz o custo total em 10–15%. O II de 35% continua sendo aplicado. A calculadora detecta automaticamente veículos clássicos e aplica a alíquota correta.",
+    guia: "guia",
   },
   {
     q: "Como funciona a calculadora de importação?",
-    a: "Basta colar o link de um anúncio do Cars.com ou inserir o preço do veículo manualmente. A calculadora busca os dados do anúncio, aplica as alíquotas tributárias vigentes e exibe o custo total internado no Brasil em reais, usando a cotação PTAX do Banco Central do Brasil atualizada.",
+    a: "Cole o link de um anúncio do Cars.com, insira o preço manualmente ou simule por orçamento disponível. A calculadora aplica as alíquotas da Receita Federal 2026 e a cotação PTAX do Banco Central, exibindo o custo total estimado com o breakdown completo de cada imposto.",
   },
   {
     q: "O que é o valor aduaneiro (CIF)?",
-    a: "O valor aduaneiro, também chamado CIF (Cost, Insurance and Freight), é a base legal de cálculo dos impostos de importação no Brasil. Ele é composto pelo preço do veículo (FOB) + frete marítimo + seguro marítimo (1,5% do FOB). Todos os impostos federais (II, IPI, PIS, COFINS) são calculados sobre esse valor.",
+    a: "CIF (Cost, Insurance and Freight) é a base legal de cálculo dos impostos no Brasil. Compõe-se pelo preço do veículo (FOB) + frete marítimo + seguro marítimo (1,5% do FOB). Todos os impostos federais (II, IPI, PIS, COFINS) incidem sobre esse valor.",
+    guia: "guia",
   },
   {
     q: "Preciso de um despachante aduaneiro para importar um carro?",
-    a: "Sim. A legislação brasileira exige a participação de um despachante aduaneiro habilitado pela Receita Federal para realizar o desembaraço aduaneiro de veículos importados. Os honorários do despachante já estão incluídos nas estimativas desta calculadora (aproximadamente USD 1.500).",
+    a: "Sim. A legislação exige despachante habilitado pela Receita Federal para o desembaraço aduaneiro. Além disso, o processo envolve homologação no SENATRANS, licença de importação no Siscomex e laudos do IBAMA — etapas que o despachante coordena.",
+    guia: "guia",
   },
 ];
 
@@ -964,7 +968,14 @@ function FAQ() {
               </span>
             </button>
             {open === i && (
-              <p className="text-slate-500 text-sm leading-relaxed pb-4">{item.a}</p>
+              <div className="pb-4">
+                <p className="text-slate-500 text-sm leading-relaxed">{item.a}</p>
+                {item.guia && (
+                  <a href={`/${item.guia}`} className="inline-block mt-2 text-blue-600 text-xs hover:underline font-medium">
+                    → Veja mais no guia completo de importação
+                  </a>
+                )}
+              </div>
             )}
           </div>
         ))}
@@ -1066,6 +1077,7 @@ export default function Home() {
   const [manualModel, setManualModel] = useState("");
   const [manualFrete, setManualFrete] = useState("");
   const [manualCambio, setManualCambio] = useState("");
+  const [manualVehicleType, setManualVehicleType] = useState("standard");
 
   // Calculadora reversa
   const [revBudget, setRevBudget] = useState("");
@@ -1112,6 +1124,7 @@ export default function Home() {
       if (manualYear) body.year = parseInt(manualYear);
       if (manualMake) body.make = manualMake;
       if (manualModel) body.model = manualModel;
+      body.vehicle_type = manualVehicleType;
 
       const res = await fetch(`/api/calculate`, {
         method: "POST",
@@ -1147,11 +1160,11 @@ export default function Home() {
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 text-center">
           <h1 className="text-2xl sm:text-4xl font-bold leading-tight tracking-tight mb-3">
-            Simule o custo de importar<br className="hidden sm:block" /> um carro dos EUA para o Brasil
+            Encontrou um carro dos EUA?<br className="hidden sm:block" /> Simule o custo de importá-lo para o Brasil.
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-            Cole o link do anúncio no <strong className="text-white">Cars.com</strong> e veja o custo real em segundos —
-            impostos, frete e despesas de desembaraço, tudo detalhado.
+            Cole o link do <strong className="text-white">Cars.com</strong>, insira o preço manualmente ou simule por orçamento —
+            impostos, frete e desembaraço detalhados em segundos.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
@@ -1271,7 +1284,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Preço do veículo (USD) *</label>
                   <input type="number" value={priceUsd} onChange={(e) => setPriceUsd(e.target.value)}
@@ -1293,6 +1306,15 @@ export default function Home() {
                   <input type="number" value={manualCambio} onChange={(e) => setManualCambio(e.target.value)}
                     placeholder="Padrão: BCB PTAX do dia" min={1} max={20} step={0.01}
                     className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Tipo de veículo</label>
+                  <select value={manualVehicleType} onChange={(e) => setManualVehicleType(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white">
+                    <option value="standard">Combustão (padrão)</option>
+                    <option value="electric">Elétrico (IPI 0%)</option>
+                    <option value="hybrid">Híbrido</option>
+                  </select>
                 </div>
               </div>
 
