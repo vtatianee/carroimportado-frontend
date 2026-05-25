@@ -17,17 +17,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    {
-      url: `${base}/privacy`,
-      lastModified: new Date("2026-05-01"),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${base}/terms`,
-      lastModified: new Date("2026-05-01"),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
+    // /privacy e /terms têm robots noindex — omitidos do sitemap intencionalmente
   ];
 }
