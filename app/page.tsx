@@ -1211,7 +1211,9 @@ export default function Home() {
             Encontrou um carro dos EUA?<br className="hidden sm:block" /> Simule o custo de importá-lo para o Brasil.
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-            Cole o link do <strong className="text-white">Cars.com</strong>, insira o preço manualmente ou simule por orçamento —
+            Cole o link do{" "}
+            <a href="https://www.cars.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-300 hover:text-blue-200 underline underline-offset-2">Cars.com</a>
+            , insira o preço manualmente ou simule por orçamento —
             impostos, frete e desembaraço detalhados em segundos.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
@@ -1236,7 +1238,9 @@ export default function Home() {
         {/* Form card */}
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
           <p className="text-slate-500 mb-6 text-sm">
-            Cole o link de um anúncio do <strong>Cars.com</strong> ou insira os valores manualmente.
+            Cole o link de um anúncio do{" "}
+            <a href="https://www.cars.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:underline">Cars.com</a>
+            {" "}ou insira os valores manualmente.
           </p>
 
           {/* Tabs */}

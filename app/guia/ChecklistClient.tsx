@@ -188,7 +188,7 @@ export function ChecklistClient() {
 
     const subject = encodeURIComponent("Checklist de importação de veículo — carroimportado.com");
     const body = encodeURIComponent(lines.join("\n"));
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    window.open(`mailto:?subject=${subject}&body=${body}`, "_self");
   };
 
   const total = totalItems(GROUPS);
