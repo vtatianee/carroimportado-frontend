@@ -23,6 +23,8 @@ function fmtUSD(n: number) {
 
 interface ImportCosts {
   icms_rate_pct: number;
+  ipi_rate_pct: number;
+  is_classic: boolean;
   effective_tax_rate_pct: number;
   total_landed_brl: number;
   valor_mercado_estimado_brl: number;
@@ -141,11 +143,41 @@ function SectionHeading({ icon, children }: { icon: React.ReactNode; children: R
   );
 }
 
+// ── Tooltip ───────────────────────────────────────────────────────────────────
+function Tooltip({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <span className="relative inline-flex items-center ml-1" style={{ verticalAlign: "middle" }}>
+      <button
+        type="button"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onClick={() => setOpen((v) => !v)}
+        aria-label="Mais informações"
+        className="w-4 h-4 rounded-full bg-slate-200 hover:bg-blue-100 text-slate-500 hover:text-blue-600 flex items-center justify-center text-[10px] font-bold leading-none transition-colors cursor-help focus:outline-none"
+      >
+        ?
+      </button>
+      {open && (
+        <span className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-slate-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg pointer-events-none leading-relaxed">
+          {text}
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900" />
+        </span>
+      )}
+    </span>
+  );
+}
+
 // ── Row de custo ──────────────────────────────────────────────────────────────
-function Row({ label, brl, usd, bold }: { label: string; brl: number; usd?: number; bold?: boolean }) {
+function Row({ label, brl, usd, bold, tooltip }: { label: string; brl: number; usd?: number; bold?: boolean; tooltip?: string }) {
   return (
     <div className={`flex items-center justify-between gap-4 py-1.5 ${bold ? "font-semibold border-t border-slate-100 mt-1 pt-3" : ""}`}>
-      <span className="text-slate-600 text-sm">{label}</span>
+      <span className="text-slate-600 text-sm flex items-center">
+        {label}
+        {tooltip && <Tooltip text={tooltip} />}
+      </span>
       <div className="text-right shrink-0">
         <span className="text-slate-900 text-sm">R$ {fmt(brl)}</span>
         {usd !== undefined && <span className="text-slate-500 text-xs ml-2">(USD {fmtUSD(usd)})</span>}
@@ -235,7 +267,7 @@ const EXAMPLE_RESULT: AnalyzeResult = {
   cotacao_dolar: { valor: 5.75, fonte: "BCB PTAX (exemplo)", data: "2026-05-01", nota: "Câmbio de exemplo — USD 1 = R$ 5,75 (BCB PTAX)" },
   car_data: { price_usd: 45000, year: 1969, make: "Ford", model: "Mustang Fastback", mileage_miles: 58420, condition: "Used", photos: [], is_classic: true },
   import_costs: {
-    icms_rate_pct: 12, effective_tax_rate_pct: 102.3,
+    icms_rate_pct: 12, ipi_rate_pct: 0, is_classic: true, effective_tax_rate_pct: 102.3,
     total_landed_brl: 556019, valor_mercado_estimado_brl: 695024,
     valor_aduaneiro: {
       fob_usd: 45000, fob_brl: 258750,
@@ -359,10 +391,14 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
       {/* Valor aduaneiro */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         <SectionHeading icon={<IconBox />}>Valor Aduaneiro (CIF)</SectionHeading>
-        <Row label="FOB — Preço do veículo nos EUA" brl={va.fob_brl} usd={va.fob_usd} />
-        <Row label={`Frete marítimo (${va.frete_fonte})`} brl={va.frete_brl} usd={va.frete_usd} />
-        <Row label="Seguro marítimo (1,5% do FOB)" brl={va.seguro_brl} usd={va.seguro_usd} />
-        <Row label="CIF — Valor Aduaneiro total" brl={va.cif_brl} usd={va.cif_usd} bold />
+        <Row label="FOB — Preço do veículo nos EUA" brl={va.fob_brl} usd={va.fob_usd}
+          tooltip="FOB (Free On Board): preço do veículo no porto de origem nos EUA, sem incluir frete nem seguro." />
+        <Row label={`Frete marítimo (${va.frete_fonte})`} brl={va.frete_brl} usd={va.frete_usd}
+          tooltip="Custo do transporte marítimo do porto americano até o porto brasileiro (ex: Santos/SP). Varia entre USD 1.200–2.500 dependendo da rota." />
+        <Row label="Seguro marítimo (1,5% do FOB)" brl={va.seguro_brl} usd={va.seguro_usd}
+          tooltip="Seguro obrigatório calculado em 1,5% do valor FOB, conforme padrão da Receita Federal (IN RFB nº 1.401/2013)." />
+        <Row label="CIF — Valor Aduaneiro total" brl={va.cif_brl} usd={va.cif_usd} bold
+          tooltip="CIF (Cost, Insurance and Freight): FOB + frete + seguro. É a base legal de cálculo de todos os impostos de importação no Brasil (AVA-GATT / Decreto 6.759/2009)." />
         {va.frete_fonte.includes("estimativa") && (
           <p className="mt-3 text-xs text-slate-500 bg-slate-50 rounded-lg p-3">💡 {va.frete_sugerido?.nota}</p>
         )}
@@ -371,21 +407,30 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
       {/* Impostos */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         <SectionHeading icon={<IconBuilding />}>Impostos</SectionHeading>
-        <Row label="II — Imposto de Importação (35% do FOB)" brl={bd.ii_imposto_importacao} />
-        <Row label="IPI (18,81% sobre FOB + II)" brl={bd.ipi} />
-        <Row label="PIS (2,62% do CIF)" brl={bd.pis} />
-        <Row label="COFINS (12,57% do CIF)" brl={bd.cofins} />
-        <Row label={`ICMS — ${ic.icms_rate_pct}% (cálculo por dentro)`} brl={bd.icms} />
+        <Row label="II — Imposto de Importação (35% do FOB)" brl={bd.ii_imposto_importacao}
+          tooltip="II (Imposto de Importação): alíquota fixa de 35% sobre o valor FOB. É o maior imposto isolado na importação de veículos, arrecadado pela Receita Federal." />
+        <Row label={`IPI (${ic.ipi_rate_pct === 0 ? "0% — isento" : "18,81% sobre FOB + II"})`} brl={bd.ipi}
+          tooltip={`IPI (Imposto sobre Produtos Industrializados): incide sobre FOB + II. Alíquota padrão: 18,81% para motores 1.0–2.0L. ${ic.is_classic ? "Isento para veículos com 30+ anos de fabricação (Lei 9.055/1995)." : ic.ipi_rate_pct === 0 ? "Isento para veículos elétricos (Decreto 11.394/2023)." : "Motores acima de 3.0L pagam 25%."}`} />
+        <Row label="PIS (2,62% do CIF)" brl={bd.pis}
+          tooltip="PIS (Programa de Integração Social): 2,62% sobre o valor CIF. Contribuição federal destinada ao seguro-desemprego e abono salarial." />
+        <Row label="COFINS (12,57% do CIF)" brl={bd.cofins}
+          tooltip="COFINS (Contribuição para o Financiamento da Seguridade Social): 12,57% sobre o CIF. Destinada à previdência social, saúde pública e assistência social." />
+        <Row label={`ICMS — ${ic.icms_rate_pct}% (cálculo por dentro)`} brl={bd.icms}
+          tooltip={`ICMS (Imposto sobre Circulação de Mercadorias e Serviços): varia por estado (SP/MG/SC/RS/PR: 12%, RJ: 20%, outros: 17%). Calculado "por dentro" — a alíquota incide sobre uma base que já inclui o próprio ICMS, tornando o impacto real maior que a alíquota nominal.`} />
         <Row label="Total de impostos" brl={bd.total_taxes} bold />
       </section>
 
       {/* Desembaraço */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         <SectionHeading icon={<IconShield />}>Desembaraço Aduaneiro</SectionHeading>
-        <Row label="Despachante (honorários)" brl={da.despachante_honorarios_usd * cd.valor} usd={da.despachante_honorarios_usd} />
-        <Row label="THC — Terminal Handling Charge" brl={da.thc_usd * cd.valor} usd={da.thc_usd} />
-        <Row label="AFRMM — 25% do frete (Lei 10.893/2004)" brl={da.afrmm_usd * cd.valor} usd={da.afrmm_usd} />
-        <Row label="Armazenagem e capatazia" brl={da.armazenagem_capatazia_usd * cd.valor} usd={da.armazenagem_capatazia_usd} />
+        <Row label="Despachante (honorários)" brl={da.despachante_honorarios_usd * cd.valor} usd={da.despachante_honorarios_usd}
+          tooltip="Honorários do despachante aduaneiro habilitado pela Receita Federal, obrigatório para o desembaraço. Valor estimado — pode variar conforme profissional e complexidade." />
+        <Row label="THC — Terminal Handling Charge" brl={da.thc_usd * cd.valor} usd={da.thc_usd}
+          tooltip="THC (Terminal Handling Charge): taxa cobrada pelo terminal portuário pelo manuseio e movimentação do veículo/contêiner no porto de destino." />
+        <Row label="AFRMM — 25% do frete (Lei 10.893/2004)" brl={da.afrmm_usd * cd.valor} usd={da.afrmm_usd}
+          tooltip="AFRMM (Adicional ao Frete para Renovação da Marinha Mercante): 25% do valor do frete marítimo, cobrado por lei (Lei 10.893/2004) para financiar a marinha mercante brasileira." />
+        <Row label="Armazenagem e capatazia" brl={da.armazenagem_capatazia_usd * cd.valor} usd={da.armazenagem_capatazia_usd}
+          tooltip="Capatazia: manuseio da carga dentro do recinto aduaneiro. Armazenagem: custo do período de guarda do veículo no porto. Valores estimados para os primeiros dias — aumentam a cada dia adicional." />
         <Row label="Total desembaraço" brl={da.total_brl} usd={da.total_usd} bold />
       </section>
 
