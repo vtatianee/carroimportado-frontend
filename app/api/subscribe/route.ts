@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-// TODO: integre com seu serviço de email (Resend, Mailchimp, etc.)
-// Por enquanto, loga o email no servidor e retorna sucesso.
+import { Resend } from "resend";
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,16 +9,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email inválido." }, { status: 400 });
     }
 
-    // Log no servidor (visível nos logs do Vercel)
-    console.log(`[subscribe] Novo cadastro: ${email}`);
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      // Fallback para quando a chave não está configurada (desenvolvimento local)
+      console.warn("[subscribe] RESEND_API_KEY não configurada — apenas logando.");
+      console.log(`[subscribe] Novo cadastro: ${email}`);
+      return NextResponse.json({ ok: true });
+    }
 
-    // TODO: salvar em banco de dados ou enviar para serviço de email
-    // Exemplo com Resend:
-    // await resend.contacts.create({ email, audienceId: process.env.RESEND_AUDIENCE_ID });
+    // Instancia Resend dentro do handler para evitar erro em build time
+    const resend = new Resend(apiKey);
+    const audienceId = process.env.RESEND_AUDIENCE_ID;
 
+    if (audienceId) {
+      // Adiciona contato à audience do Resend (lista de emails / newsletter)
+      await resend.contacts.create({
+        email,
+        audienceId,
+        unsubscribed: false,
+      });
+    } else {
+      // Sem audience: envia notificação ao admin por email
+      await resend.emails.send({
+        from: "carroimportado.com <onboarding@resend.dev>",
+        to: "arche.boost@gmail.com",
+        subject: "Novo cadastro — carroimportado.com",
+        text: `Novo email cadastrado na lista de espera: ${email}`,
+      });
+    }
+
+    console.log(`[subscribe] Cadastrado com sucesso: ${email}`);
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[subscribe] Erro:", err);
-    return NextResponse.json({ error: "Erro interno." }, { status: 500 });
+    console.error("[subscribe] Erro Resend:", err);
+    return NextResponse.json({ error: "Erro ao cadastrar. Tente novamente." }, { status: 500 });
   }
 }
