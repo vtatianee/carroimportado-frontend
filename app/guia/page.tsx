@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ChecklistClient } from "./ChecklistClient";
 
 export const metadata: Metadata = {
   title: "Como Importar um Carro dos EUA para o Brasil — Guia Completo 2026",
@@ -622,6 +623,15 @@ export default function GuiaPage() {
               </p>
             </div>
           </div>
+        </section>
+
+        {/* Checklist interativo */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">☑️ Checklist de documentos</h2>
+          <p className="text-slate-500 text-sm mb-6">
+            Marque cada item conforme você avança no processo. O progresso é salvo automaticamente no seu navegador.
+          </p>
+          <ChecklistClient />
         </section>
 
         {/* Tempo total */}
