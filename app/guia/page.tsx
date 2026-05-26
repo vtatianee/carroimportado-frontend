@@ -26,7 +26,7 @@ const STEPS = [
     color: "blue",
     icon: "🔍",
     description:
-      "Antes de qualquer coisa, confirme que o veículo é elegível para importação ao Brasil. A legislação permite apenas veículos 0 km ou com mais de 30 anos de fabricação.",
+      "Antes de fechar negócio, confirme que o veículo está em boas condições, que o título está limpo e que você tem cotações de frete e seguro. Uma inspeção presencial nos EUA evita surpresas caras.",
     actions: [
       "Verifique o ano de fabricação — deve ser 0 km ou anterior a 1996 (30+ anos)",
       "Confira o título de propriedade (Title) — deve estar limpo, sem gravames",
@@ -361,9 +361,27 @@ export default function GuiaPage() {
           </div>
         </section>
 
+        {/* Checklist interativo */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">☑️ Checklist de documentos</h2>
+          <p className="text-slate-500 text-sm mb-6">
+            Marque cada item conforme você avança. O progresso é salvo automaticamente no seu navegador.
+          </p>
+          <ChecklistClient />
+        </section>
+
+        {/* Estimador de prazo */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">📅 Estimador de prazo</h2>
+          <p className="text-slate-500 text-sm mb-6">
+            Informe quando pretende começar e veja a data estimada de conclusão por cenário.
+          </p>
+          <TimelineClient />
+        </section>
+
         {/* Resumo de custos */}
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-1">Resumo dos impostos e custos</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-1">💰 Resumo dos impostos e custos</h2>
           <p className="text-sm text-slate-500 mb-5">A carga tributária total costuma superar 100% do valor do veículo.</p>
           <div className="divide-y divide-slate-100">
             {COSTS_SUMMARY.map((item) => (
@@ -373,54 +391,22 @@ export default function GuiaPage() {
               </div>
             ))}
           </div>
-          <div className="mt-5 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-700">
-            💡 Use a calculadora para simular o custo total com os valores reais do veículo que você encontrou.
+          <div className="mt-5 bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-600">
+            <p className="font-semibold text-slate-700 mb-1">Exemplo: veículo FOB USD 30.000 (combustão, SP)</p>
+            <p>II ≈ R$ 60.375 · IPI ≈ R$ 43.800 · PIS+COFINS ≈ R$ 26.000 · ICMS ≈ R$ 51.000 · Desembaraço ≈ R$ 17.000</p>
+            <p className="mt-1 font-semibold text-slate-800">Total estimado: ~R$ 330.000 — carga tributária efetiva ~103%</p>
           </div>
-        </section>
-
-        {/* Checklist geral */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-5">📋 Checklist completo de documentos</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-sm font-semibold text-slate-700 mb-3">🇺🇸 Documentação americana</h3>
-              <ul className="space-y-2">
-                {["Certificate of Title", "Bill of Sale", "EEI — Electronic Export Information (CBP)", "Bill of Lading", "Relatório Carfax/AutoCheck", "Invoice da compra"].map((doc) => (
-                  <li key={doc} className="flex items-center gap-2 text-sm text-slate-600">
-                    <span className="w-4 h-4 rounded border-2 border-slate-300 shrink-0 flex items-center justify-center" />
-                    {doc}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-slate-700 mb-3">🇧🇷 Documentação brasileira</h3>
-              <ul className="space-y-2">
-                {["Licença de Importação (LI) — Siscomex", "Aprovação SECEX/MDIC", "Laudo / Isenção IBAMA", "CAT — Certificado de Adequação (SENATRANS)", "Declaração de Importação (DI)", "DARF quitado (II, IPI, PIS, COFINS)", "Comprovante ICMS", "Comprovante de Importação (CI)", "CRLV + Placas DETRAN"].map((doc) => (
-                  <li key={doc} className="flex items-center gap-2 text-sm text-slate-600">
-                    <span className="w-4 h-4 rounded border-2 border-slate-300 shrink-0 flex items-center justify-center" />
-                    {doc}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="mt-3 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-700 flex items-center justify-between gap-4 flex-wrap">
+            <span>Calcule com os valores exatos do veículo que você encontrou — câmbio PTAX do dia.</span>
+            <Link href="/" className="shrink-0 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm whitespace-nowrap">
+              Calcular impostos do meu veículo →
+            </Link>
           </div>
-        </section>
-
-        {/* CTA contextual após impostos */}
-        <section className="bg-blue-600 rounded-2xl p-5 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <p className="font-bold text-base">Sabe qual veículo vai importar?</p>
-            <p className="text-blue-100 text-sm mt-0.5">Calcule agora os impostos exatos com a cotação PTAX do dia.</p>
-          </div>
-          <Link href="/" className="shrink-0 bg-white text-blue-600 font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors text-sm whitespace-nowrap">
-            🚗 Abrir a calculadora →
-          </Link>
         </section>
 
         {/* Portos e AFRMM */}
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-1">🚢 Portos e AFRMM</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-1">⚓ Portos e AFRMM</h2>
           <p className="text-sm text-slate-500 mb-5">A escolha do porto impacta o custo de THC, armazenagem e transporte interno.</p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -626,63 +612,18 @@ export default function GuiaPage() {
           </div>
         </section>
 
-        {/* Checklist interativo */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-1">☑️ Checklist de documentos</h2>
-          <p className="text-slate-500 text-sm mb-6">
-            Marque cada item conforme você avança no processo. O progresso é salvo automaticamente no seu navegador.
-          </p>
-          <ChecklistClient />
-        </section>
-
-        {/* Estimador de prazo */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-1">📅 Estimador de prazo</h2>
-          <p className="text-slate-500 text-sm mb-6">
-            Informe quando pretende começar e veja a data estimada de conclusão por cenário.
-          </p>
-          <TimelineClient />
-        </section>
-
-        {/* Tempo total */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-5">⏱ Tempo estimado por etapa</h2>
-          <div className="space-y-3">
-            {STEPS.map((step) => (
-              <div key={step.number} className="flex items-center gap-3">
-                <span className="text-slate-400 text-sm w-4 shrink-0">{step.number}.</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm text-slate-700 truncate">{step.title}</span>
-                    <span className="text-xs text-slate-500 shrink-0">{step.duration}</span>
-                  </div>
-                  <div className="mt-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${colorMap[step.color].split(" ")[0]}`}
-                      style={{ width: step.number <= 2 ? "25%" : step.number <= 4 ? "45%" : step.number <= 6 ? "75%" : "95%" }}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-            <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="font-semibold text-slate-900 text-sm">Tempo total estimado</span>
-              <span className="font-bold text-blue-600">60 — 120 dias</span>
-            </div>
-          </div>
-        </section>
-
         {/* CTA */}
-        <section className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 sm:p-8 text-white text-center">
-          <h2 className="text-xl font-bold mb-2">Pronto para calcular o custo do seu veículo?</h2>
-          <p className="text-blue-100 text-sm mb-6 max-w-lg mx-auto">
-            Cole o link do anúncio do Cars.com e veja todos os impostos detalhados — II, IPI, PIS, COFINS e ICMS do seu estado — em segundos.
+        <section className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-white text-center">
+          <h2 className="text-xl font-bold mb-2">Calcule o custo do seu veículo agora</h2>
+          <p className="text-slate-300 text-sm mb-2 max-w-lg mx-auto">
+            Cole o link de qualquer anúncio do Cars.com e receba o breakdown completo de impostos — II, IPI, PIS, COFINS, ICMS e desembaraço — com câmbio PTAX do dia.
           </p>
+          <p className="text-slate-400 text-xs mb-6">Gratuito · Sem cadastro · Resultado em segundos</p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
           >
-            🚗 Ir para a calculadora →
+            🚗 Calcular impostos do meu veículo →
           </Link>
         </section>
 
