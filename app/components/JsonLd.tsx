@@ -58,7 +58,7 @@ export function JsonLd() {
       "@context": "https://schema.org",
       "@type": "WebApplication",
       name: "Calculadora de Importação de Carros EUA → Brasil",
-      url: "https://www.carroimportado.com",
+      url: "https://www.carroimportado.com/",
       applicationCategory: "FinanceApplication",
       operatingSystem: "Web",
       inLanguage: "pt-BR",

@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Tatiane Assink" }],
   creator: "carroimportado.com",
   alternates: {
-    canonical: SITE_URL,
+    canonical: SITE_URL + "/",
   },
   openGraph: {
     type: "website",
