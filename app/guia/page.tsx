@@ -538,6 +538,92 @@ export default function GuiaPage() {
           </div>
         </section>
 
+        {/* PF vs PJ */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">👤 Pessoa Física vs Pessoa Jurídica</h2>
+          <p className="text-slate-500 text-sm mb-6">Diferenças importantes dependendo de quem importa o veículo</p>
+
+          {/* RADAR destaque */}
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+            <h3 className="font-semibold text-blue-800 text-sm mb-1">🔐 Habilitação RADAR — obrigatória para todos</h3>
+            <p className="text-blue-700 text-sm">
+              Antes de importar, qualquer importador (PF ou PJ) precisa de habilitação no <strong>RADAR</strong> (Registro e
+              Rastreamento da Atuação dos Intervenientes Aduaneiros) da Receita Federal. O processo leva <strong>30 a 90 dias</strong> e
+              deve ser iniciado com antecedência. Sem RADAR ativo, o despacho aduaneiro não pode ser iniciado.
+            </p>
+          </div>
+
+          {/* Tabela comparativa */}
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-slate-50">
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold rounded-tl-lg border border-slate-200">Critério</th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold border border-slate-200">👤 Pessoa Física (PF)</th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold rounded-tr-lg border border-slate-200">🏢 Pessoa Jurídica (PJ)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                <tr>
+                  <td className="px-4 py-3 text-slate-700 font-medium border border-slate-200">Pode importar?</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">✅ Sim, para uso próprio</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">✅ Sim, inclusive para revenda</td>
+                </tr>
+                <tr className="bg-slate-50/50">
+                  <td className="px-4 py-3 text-slate-700 font-medium border border-slate-200">RADAR</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Limitado (até USD 150k/semestre) ou Ilimitado</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Ilimitado (exige patrimônio líquido mínimo)</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 text-slate-700 font-medium border border-slate-200">Impostos de importação</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">II, IPI, PIS, COFINS, ICMS — iguais para ambos</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Mesmos impostos; PJ no Lucro Real pode creditar PIS/COFINS</td>
+                </tr>
+                <tr className="bg-slate-50/50">
+                  <td className="px-4 py-3 text-slate-700 font-medium border border-slate-200">Revenda</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">⚠️ Restrita — importação para uso pessoal, não comercial</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">✅ Permitida, desde que no objeto social da empresa</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 text-slate-700 font-medium border border-slate-200">Ganho de capital na venda</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">IR: 15% a 22,5% sobre o lucro obtido</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Tributação conforme regime (Simples, Presumido ou Real)</td>
+                </tr>
+                <tr className="bg-slate-50/50">
+                  <td className="px-4 py-3 text-slate-700 font-medium border border-slate-200">Despachante</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Obrigatório (mesma regra)</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Obrigatório (mesma regra)</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 text-slate-700 font-medium border border-slate-200">Vantagens fiscais extras</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Nenhuma além das isenções de IPI (clássicos/EVs)</td>
+                  <td className="px-4 py-3 text-slate-600 border border-slate-200">Crédito de PIS/COFINS (Lucro Real), depreciação contábil</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Alertas */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="border border-amber-200 bg-amber-50 rounded-xl p-4">
+              <h3 className="font-semibold text-amber-800 text-sm mb-2">⚠️ Atenção — PF importando para revenda</h3>
+              <p className="text-amber-700 text-sm">
+                Importar um veículo como PF e revendê-lo em seguida pode ser caracterizado como prática comercial habitual
+                pela Receita Federal, sujeitando o importador a autuação fiscal, multas e, em casos reincidentes, processo
+                por sonegação. Consulte um contador antes.
+              </p>
+            </div>
+            <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+              <h3 className="font-semibold text-green-800 text-sm mb-2">✅ Recomendação prática</h3>
+              <p className="text-green-700 text-sm">
+                Para importação de <strong>uso pessoal</strong> (coleção, uso próprio): PF é mais simples e sem exigência
+                de patrimônio mínimo. Para <strong>negócio</strong> (revenda, frota): abra uma PJ com objeto social adequado
+                e habilite o RADAR Ilimitado. Em ambos os casos, conte com despachante aduaneiro e contador especializados.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Tempo total */}
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
           <h2 className="text-xl font-bold text-slate-900 mb-5">⏱ Tempo estimado por etapa</h2>
