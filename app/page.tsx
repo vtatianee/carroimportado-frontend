@@ -598,6 +598,18 @@ interface ReverseResult {
   state: string;
 }
 
+interface SearchListing {
+  title: string;
+  price_usd: number;
+  mileage_miles: number | null;
+  condition: string;
+  photo_url: string | null;
+  photo_count: number | null;
+  listing_url: string;
+  year: number | null;
+  is_classic: boolean | null;
+}
+
 function calcReverse(
   budgetBrl: number,
   state: string,
@@ -646,6 +658,42 @@ function ReverseCalc({
   const cambioNum = parseFloat(cambio.replace(",", ".")) || 0;
   const freteNum = parseFloat(frete) || 1500;
   const result = budgetNum > 0 && cambioNum > 0 ? calcReverse(budgetNum, state, cambioNum, freteNum, vehicleType) : null;
+
+  const [listings, setListings] = useState<SearchListing[] | null>(null);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+
+  const handleSearch = async () => {
+    if (!result) return;
+    setSearching(true);
+    setSearchError(null);
+    setListings(null);
+
+    const fobMin = Math.round(result.fob * 0.85);
+    const fobMax = Math.round(result.fob * 1.15);
+    const params = new URLSearchParams({
+      priceMin: String(fobMin),
+      priceMax: String(fobMax),
+      count: "5",
+    });
+    if (vehicleType === "classic") {
+      params.set("yearMax", String(new Date().getFullYear() - 30));
+    }
+
+    try {
+      const res = await fetch(`/api/search?${params.toString()}`);
+      const data = await res.json();
+      if (data.listings) {
+        setListings(data.listings);
+      } else {
+        setSearchError(data.error || "Nenhum anúncio encontrado nessa faixa de preço.");
+      }
+    } catch {
+      setSearchError("Erro de conexão ao buscar anúncios.");
+    } finally {
+      setSearching(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -781,6 +829,127 @@ function ReverseCalc({
           <p className="text-xs text-slate-500 text-center">
             ⚠️ Estimativa com base nas alíquotas da Receita Federal 2026. Consulte um despachante aduaneiro para cotação exata.
           </p>
+
+          {/* Botão buscar anúncios */}
+          <div className="flex justify-center">
+            <button
+              onClick={handleSearch}
+              disabled={searching}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-xl transition-colors shadow-sm"
+            >
+              {searching ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                  </svg>
+                  Buscando anúncios…
+                </>
+              ) : (
+                <>🔎 Ver anúncios disponíveis no Cars.com</>
+              )}
+            </button>
+          </div>
+
+          {/* Erro de busca */}
+          {searchError && (
+            <p className="text-center text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+              {searchError}
+            </p>
+          )}
+
+          {/* Cards de anúncios */}
+          {listings && listings.length > 0 && (
+            <div className="space-y-3 pt-1">
+              <p className="text-xs text-slate-500 text-center">
+                Anúncios ativos no Cars.com entre{" "}
+                <strong className="text-slate-700">
+                  US$ {fmtUSD(Math.round(result.fob * 0.85))} – {fmtUSD(Math.round(result.fob * 1.15))}
+                </strong>
+              </p>
+              {listings.map((listing, idx) => (
+                <a
+                  key={idx}
+                  href={listing.listing_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex gap-3 bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-blue-300 hover:shadow-md transition-all group"
+                >
+                  {/* Foto */}
+                  <div className="relative shrink-0 w-28 sm:w-36 bg-slate-100 overflow-hidden">
+                    {listing.photo_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={listing.photo_url}
+                        alt={listing.title}
+                        className="w-full h-full object-cover"
+                        style={{ minHeight: "80px" }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-300 text-3xl" style={{ minHeight: "80px" }}>
+                        🚗
+                      </div>
+                    )}
+                    {listing.photo_count && (
+                      <span className="absolute top-1.5 left-1.5 bg-black/60 text-white text-[10px] font-medium px-1.5 py-0.5 rounded-md">
+                        1/{listing.photo_count}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex-1 flex flex-col justify-center py-3 pr-3 min-w-0">
+                    <p className="font-bold text-slate-900 text-sm leading-tight truncate group-hover:text-blue-700 transition-colors">
+                      {listing.title}
+                    </p>
+                    <p className="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-x-1.5">
+                      {listing.mileage_miles != null && (
+                        <span>{listing.mileage_miles.toLocaleString("pt-BR")} milhas</span>
+                      )}
+                      {listing.mileage_miles != null && <span>·</span>}
+                      <span>{listing.condition}</span>
+                      {listing.is_classic && (
+                        <>
+                          <span>·</span>
+                          <span className="bg-amber-100 text-amber-700 font-semibold px-1.5 py-0.5 rounded text-[10px]">
+                            Clássico
+                          </span>
+                        </>
+                      )}
+                    </p>
+                    {cambioNum > 0 && (
+                      <p className="text-[11px] text-slate-400 mt-1.5">
+                        🔄 Cotação USD/BRL: R$ {cambioNum.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Preço */}
+                  <div className="shrink-0 flex flex-col items-end justify-center pr-4 py-3">
+                    <p className="font-bold text-slate-900 text-base whitespace-nowrap">
+                      USD {listing.price_usd.toLocaleString("en-US")}
+                    </p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Preço nos EUA (FOB)</p>
+                    {cambioNum > 0 && (
+                      <p className="text-xs text-slate-500 font-medium mt-1">
+                        ≈ R$ {fmt(listing.price_usd * cambioNum)}
+                      </p>
+                    )}
+                  </div>
+                </a>
+              ))}
+
+              <p className="text-[11px] text-slate-400 text-center">
+                Anúncios exibidos para referência. Disponibilidade pode variar.
+              </p>
+            </div>
+          )}
+
+          {listings && listings.length === 0 && (
+            <p className="text-center text-sm text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-3">
+              Nenhum anúncio encontrado nessa faixa de preço no momento. Tente ajustar o orçamento.
+            </p>
+          )}
         </div>
       )}
 
