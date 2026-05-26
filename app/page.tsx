@@ -594,6 +594,7 @@ interface ReverseResult {
   totalBrl: number;
   usdBrlRate: number;
   icmsRate: number;
+  ipiRate: number;
   state: string;
 }
 
@@ -602,12 +603,14 @@ function calcReverse(
   state: string,
   usdBrlRate: number,
   freteUsd: number,
+  vehicleType: string = "standard",
 ): ReverseResult | null {
   const icmsRate = ICMS_RATES[state] ?? 0.17;
   const desembaraco = 3000;
+  const ipiRate = (vehicleType === "electric" || vehicleType === "classic") ? 0 : 0.1881;
   // Coefficient for FOB in the linear equation:
   // total_usd = (coeff * FOB + fixedCosts) / (1 - icmsRate)
-  const coeff = 1 + 0.35 + 1.35 * 0.1881 + 0.0262 + 0.1257; // ≈ 1.756135
+  const coeff = 1 + 0.35 + 1.35 * ipiRate + 0.0262 + 0.1257;
   const fixedCosts = freteUsd + desembaraco + freteUsd * 0.0262 + freteUsd * 0.1257;
   const totalUsdTarget = budgetBrl / usdBrlRate;
   const fob = (totalUsdTarget * (1 - icmsRate) - fixedCosts) / coeff;
@@ -615,7 +618,7 @@ function calcReverse(
 
   const cif = fob + freteUsd;
   const ii = fob * 0.35;
-  const ipi = (fob + ii) * 0.1881;
+  const ipi = (fob + ii) * ipiRate;
   const pis = cif * 0.0262;
   const cofins = cif * 0.1257;
   const subtotal = cif + ii + ipi + pis + cofins + desembaraco;
@@ -623,7 +626,7 @@ function calcReverse(
   const totalUsd = fob + freteUsd + desembaraco + ii + ipi + pis + cofins + icms;
   const totalBrl = totalUsd * usdBrlRate;
 
-  return { fob, freteUsd, ii, ipi, pis, cofins, desembaraco, icms, totalUsd, totalBrl, usdBrlRate, icmsRate, state };
+  return { fob, freteUsd, ii, ipi, pis, cofins, desembaraco, icms, totalUsd, totalBrl, usdBrlRate, icmsRate, state, ipiRate };
 }
 
 function ReverseCalc({
@@ -631,16 +634,18 @@ function ReverseCalc({
   state, setState,
   cambio, setCambio,
   frete, setFrete,
+  vehicleType, setVehicleType,
 }: {
   budget: string; setBudget: (v: string) => void;
   state: string; setState: (v: string) => void;
   cambio: string; setCambio: (v: string) => void;
   frete: string; setFrete: (v: string) => void;
+  vehicleType: string; setVehicleType: (v: string) => void;
 }) {
   const budgetNum = parseFloat(budget.replace(/\./g, "").replace(",", ".")) || 0;
   const cambioNum = parseFloat(cambio.replace(",", ".")) || 0;
   const freteNum = parseFloat(frete) || 1500;
-  const result = budgetNum > 0 && cambioNum > 0 ? calcReverse(budgetNum, state, cambioNum, freteNum) : null;
+  const result = budgetNum > 0 && cambioNum > 0 ? calcReverse(budgetNum, state, cambioNum, freteNum, vehicleType) : null;
 
   return (
     <div className="space-y-4">
@@ -683,6 +688,15 @@ function ReverseCalc({
               Banco Central ↗
             </a>
           </p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Tipo de veículo</label>
+          <select value={vehicleType} onChange={(e) => setVehicleType(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white">
+            <option value="standard">Padrão (IPI 18,81%)</option>
+            <option value="classic">Clássico +30 anos (IPI isento)</option>
+            <option value="electric">Elétrico / Híbrido (IPI isento)</option>
+          </select>
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -733,7 +747,7 @@ function ReverseCalc({
                   { label: "Veículo (FOB)", usd: result.fob, highlight: true },
                   { label: `Frete marítimo`, usd: result.freteUsd },
                   { label: "II — Imposto de Importação (35%)", usd: result.ii },
-                  { label: `IPI (${(result.icmsRate === 0.20 ? 25 : 18.81).toFixed(2)}%)`, usd: result.ipi },
+                  { label: result.ipiRate === 0 ? "IPI (0% — isento)" : `IPI (${(result.ipiRate * 100).toFixed(2)}%)`, usd: result.ipi },
                   { label: "PIS (2,62%)", usd: result.pis },
                   { label: "COFINS (12,57%)", usd: result.cofins },
                   { label: "Desembaraço aduaneiro", usd: result.desembaraco },
@@ -1132,6 +1146,7 @@ export default function Home() {
   const [revState, setRevState] = useState("SP");
   const [revCambio, setRevCambio] = useState("");
   const [revFrete, setRevFrete] = useState("");
+  const [revVehicleType, setRevVehicleType] = useState("standard");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -1305,6 +1320,7 @@ export default function Home() {
               state={revState} setState={setRevState}
               cambio={revCambio} setCambio={setRevCambio}
               frete={revFrete} setFrete={setRevFrete}
+              vehicleType={revVehicleType} setVehicleType={setRevVehicleType}
             />
           )}
 
