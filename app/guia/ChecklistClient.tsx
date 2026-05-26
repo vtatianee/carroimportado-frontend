@@ -133,6 +133,64 @@ export function ChecklistClient() {
     }
   };
 
+  const handlePrint = () => {
+    const lines: string[] = [
+      "CHECKLIST DE IMPORTAÇÃO DE VEÍCULO — carroimportado.com",
+      "=".repeat(55),
+      "",
+    ];
+    for (const group of GROUPS) {
+      const groupDone = group.items.filter((i) => checked[i.id]).length;
+      lines.push(`${group.icon} ${group.title.toUpperCase()} (${groupDone}/${group.items.length})`);
+      lines.push("-".repeat(45));
+      for (const item of group.items) {
+        const mark = checked[item.id] ? "[x]" : "[ ]";
+        lines.push(`  ${mark} ${item.label}${item.note ? ` — ${item.note}` : ""}`);
+      }
+      lines.push("");
+    }
+    lines.push(`Progresso: ${done}/${total} itens (${pct}%)`);
+    lines.push("Gerado em: " + new Date().toLocaleDateString("pt-BR", { dateStyle: "long" }));
+
+    const win = window.open("", "_blank");
+    if (!win) return;
+    win.document.write(`
+      <html><head><title>Checklist de Importação</title>
+      <style>
+        body { font-family: monospace; font-size: 13px; line-height: 1.7; padding: 32px; max-width: 700px; margin: 0 auto; color: #1e293b; }
+        h1 { font-size: 16px; margin-bottom: 4px; }
+        pre { white-space: pre-wrap; }
+        @media print { body { padding: 0; } button { display: none; } }
+      </style></head>
+      <body>
+        <button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;background:#2563eb;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;">🖨️ Imprimir</button>
+        <pre>${lines.join("\n")}</pre>
+      </body></html>
+    `);
+    win.document.close();
+  };
+
+  const handleEmail = () => {
+    const lines: string[] = [
+      "Checklist de importação de veículo — carroimportado.com",
+      "",
+    ];
+    for (const group of GROUPS) {
+      lines.push(`${group.icon} ${group.title}`);
+      for (const item of group.items) {
+        const mark = checked[item.id] ? "✓" : "○";
+        lines.push(`  ${mark} ${item.label}`);
+      }
+      lines.push("");
+    }
+    lines.push(`Progresso: ${done}/${total} itens (${pct}%)`);
+    lines.push("https://www.carroimportado.com/guia");
+
+    const subject = encodeURIComponent("Checklist de importação de veículo — carroimportado.com");
+    const body = encodeURIComponent(lines.join("\n"));
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+
   const total = totalItems(GROUPS);
   const done = Object.values(checked).filter(Boolean).length;
   const pct = Math.round((done / total) * 100);
@@ -141,6 +199,18 @@ export function ChecklistClient() {
 
   return (
     <div>
+      {/* Botões de ação */}
+      <div className="flex flex-wrap gap-2 mb-5">
+        <button onClick={handlePrint}
+          className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors">
+          🖨️ Imprimir / salvar PDF
+        </button>
+        <button onClick={handleEmail}
+          className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors">
+          ✉️ Enviar por email
+        </button>
+      </div>
+
       {/* Progress geral */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
