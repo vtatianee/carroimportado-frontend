@@ -267,16 +267,19 @@ const EXAMPLE_RESULT: AnalyzeResult = {
   cotacao_dolar: { valor: 5.75, fonte: "BCB PTAX (exemplo)", data: "2026-05-01", nota: "Câmbio de exemplo — USD 1 = R$ 5,75 (BCB PTAX)" },
   car_data: { price_usd: 45000, year: 1969, make: "Ford", model: "Mustang Fastback", mileage_miles: 58420, condition: "Used", photos: [], is_classic: true },
   import_costs: {
-    icms_rate_pct: 12, ipi_rate_pct: 0, is_classic: true, effective_tax_rate_pct: 102.3,
-    total_landed_brl: 556019, valor_mercado_estimado_brl: 695024,
+    // Mustang 1969 — clássico 30+ anos → IPI = 0% (Lei 9.055/1995)
+    // FOB $45k · Frete $2k · Seguro $675 · CIF $47.675 · Taxa R$5,75
+    // II=35%·FOB · IPI=0 · PIS=2,62%·CIF · COFINS=12,57%·CIF · ICMS=12% por dentro
+    icms_rate_pct: 12, ipi_rate_pct: 0, is_classic: true, effective_tax_rate_pct: 73.4,
+    total_landed_brl: 481336, valor_mercado_estimado_brl: 601670,
     valor_aduaneiro: {
       fob_usd: 45000, fob_brl: 258750,
       frete_usd: 2000, frete_brl: 11500, frete_fonte: "estimativa",
       frete_sugerido: { min_usd: 1500, max_usd: 2500, nota: "Frete estimado. Solicite cotação a transportadoras especializadas." },
       seguro_usd: 675, seguro_brl: 3881, cif_usd: 47675, cif_brl: 274131,
     },
-    desembaraco_aduaneiro: { despachante_honorarios_usd: 1500, thc_usd: 500, afrmm_usd: 500, armazenagem_capatazia_usd: 500, total_usd: 3000, total_brl: 17250 },
-    breakdown_brl: { ii_imposto_importacao: 90563, ipi: 65705, pis: 7182, cofins: 34465, icms: 66723, desembaraco: 17250, total_taxes: 264638, total_landed: 556019 },
+    desembaraco_aduaneiro: { despachante_honorarios_usd: 1500, thc_usd: 500, afrmm_usd: 500, armazenagem_capatazia_usd: 375, total_usd: 2875, total_brl: 16531 },
+    breakdown_brl: { ii_imposto_importacao: 90563, ipi: 0, pis: 7182, cofins: 34450, icms: 57760, desembaraco: 16531, total_taxes: 189955, total_landed: 481336 },
   },
 };
 
