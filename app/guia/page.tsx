@@ -453,6 +453,91 @@ export default function GuiaPage() {
           </div>
         </section>
 
+        {/* Veículos Elétricos */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">⚡ Importando veículos elétricos (EVs)</h2>
+          <p className="text-slate-500 text-sm mb-6">Regras específicas e vantagens fiscais para elétricos importados dos EUA</p>
+
+          {/* IPI destaque */}
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">💚</span>
+              <div>
+                <p className="font-semibold text-green-800 text-sm">IPI = 0% para veículos elétricos puros</p>
+                <p className="text-green-700 text-sm mt-1">
+                  Pelo <strong>Decreto 11.394/2023</strong>, veículos elétricos a bateria (BEV) têm alíquota zero de IPI na importação.
+                  Isso representa uma economia de <strong>18,81%</strong> sobre o valor do veículo + II, comparado a um carro a combustão equivalente.
+                  A calculadora aplica essa isenção automaticamente quando você seleciona &quot;Elétrico&quot; no tipo de veículo.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+            {/* Elegibilidade */}
+            <div>
+              <h3 className="font-semibold text-slate-800 text-sm mb-3">🎯 Quais EVs podem ser importados?</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-500 mt-0.5">✓</span>
+                  <span><strong>Veículos 0 km (novos)</strong> — principal via para EVs modernos (Tesla, Rivian, Lucid etc.)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-500 mt-0.5">✓</span>
+                  <span><strong>30+ anos de fabricação</strong> — raros, mas tecnicamente elegíveis (ex: carros elétricos experimentais dos anos 1990)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-0.5">✗</span>
+                  <span><strong>EVs usados com menos de 30 anos</strong> — <em>não permitidos</em>, mesma regra de combustão</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Infraestrutura */}
+            <div>
+              <h3 className="font-semibold text-slate-800 text-sm mb-3">🔌 Compatibilidade elétrica</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">⚠</span>
+                  <span>Rede elétrica dos EUA: <strong>120V / 60Hz</strong> — Brasil usa <strong>127V–220V / 60Hz</strong>. Verifique compatibilidade do carregador</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">⚠</span>
+                  <span>Conector americano padrão: <strong>J1772 / CCS1</strong>. Brasil adota <strong>Type 2 / CCS2</strong>. Adaptadores ou onboard charger compatível são necessários</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-0.5">ℹ</span>
+                  <span>Tesla usa conector NACS (North American Charging Standard) — verifique disponibilidade de Superchargers no Brasil</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Homologação EV */}
+          <div className="border border-amber-200 bg-amber-50 rounded-xl p-4 mb-4">
+            <h3 className="font-semibold text-amber-800 text-sm mb-2">🏛 Homologação mais complexa para EVs</h3>
+            <p className="text-amber-700 text-sm mb-2">
+              O processo de <strong>CAT (Certificado de Adequação à Legislação de Trânsito)</strong> no SENATRANS é mais criterioso para elétricos:
+            </p>
+            <ul className="text-sm text-amber-700 space-y-1">
+              <li>• Laudos específicos de segurança do sistema de bateria (térmica, elétrica, mecânica)</li>
+              <li>• Certificação INMETRO para o sistema de recarga</li>
+              <li>• Verificação de compatibilidade com a norma NBR 16620 (veículos elétricos)</li>
+              <li>• Prazo de homologação pode ser <strong>50–100% maior</strong> que para veículos convencionais</li>
+            </ul>
+          </div>
+
+          {/* ICMS estadual */}
+          <div className="border border-blue-100 bg-blue-50 rounded-xl p-4">
+            <h3 className="font-semibold text-blue-800 text-sm mb-2">🏷 ICMS: verifique incentivos estaduais</h3>
+            <p className="text-blue-700 text-sm">
+              Alguns estados brasileiros concedem <strong>redução ou isenção de ICMS</strong> para veículos elétricos importados.
+              Consulte a legislação do seu estado antes de definir o porto de destino — a escolha do estado pode impactar
+              significativamente o custo total, além dos 12–20% já calculados pela regra geral.
+            </p>
+          </div>
+        </section>
+
         {/* Tempo total */}
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
           <h2 className="text-xl font-bold text-slate-900 mb-5">⏱ Tempo estimado por etapa</h2>
