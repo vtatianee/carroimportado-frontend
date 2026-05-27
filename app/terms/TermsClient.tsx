@@ -21,7 +21,7 @@ export default function TermsClient() {
             <nav className="flex items-center gap-1 mr-2">
               <Link href="/" className="text-sm text-slate-600 hover:text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors hidden sm:block">Calculadora</Link>
               <Link href="/guia" className="text-sm text-slate-600 hover:text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors hidden sm:block">Guia</Link>
-              <Link href="/guia" className="text-sm text-white font-medium px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors">Checklist</Link>
+              <Link href="/guia#checklist" className="text-sm text-white font-medium px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors">Checklist</Link>
             </nav>
             <div className="flex gap-1 bg-slate-100 rounded-lg p-1">
               <button onClick={() => setLang("pt")}

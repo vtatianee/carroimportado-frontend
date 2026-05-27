@@ -242,10 +242,10 @@ export default function GuiaPage() {
             <Link href="/" className="text-sm text-slate-600 hover:text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors hidden sm:block">
               Calculadora
             </Link>
-            <Link href="/guia" className="text-sm text-slate-600 hover:text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors hidden sm:block">
+            <Link href="/guia" className="text-sm text-blue-600 font-semibold px-3 py-1.5 rounded-lg bg-blue-50 hidden sm:block">
               Guia
             </Link>
-            <Link href="/guia" className="text-sm text-white font-medium px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors">
+            <Link href="/guia#checklist" className="text-sm text-white font-medium px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors">
               Checklist
             </Link>
           </nav>
@@ -371,7 +371,7 @@ export default function GuiaPage() {
         </section>
 
         {/* Checklist interativo */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <section id="checklist" className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
           <h2 className="text-xl font-bold text-slate-900 mb-1">☑️ Checklist de documentos</h2>
           <p className="text-slate-500 text-sm mb-6">
             Marque cada item conforme você avança. O progresso é salvo automaticamente no seu navegador.
