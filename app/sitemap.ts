@@ -13,9 +13,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${base}/guia`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
+    },
+    {
+      url: `${base}/sobre`,
+      lastModified: new Date("2026-05-27"),
+      changeFrequency: "yearly",
+      priority: 0.5,
     },
     // /privacy e /terms têm robots noindex — omitidos do sitemap intencionalmente
   ];

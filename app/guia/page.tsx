@@ -621,6 +621,119 @@ export default function GuiaPage() {
           </div>
         </section>
 
+        {/* Melhores clássicos para importar */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">🏆 Melhores carros clássicos americanos para importar</h2>
+          <p className="text-slate-500 text-sm mb-5">
+            Veículos com mais de 30 anos são isentos de IPI, o que reduz significativamente a carga tributária.
+            Estes são os modelos mais procurados por colecionadores brasileiros.
+          </p>
+          <div className="space-y-4">
+            {[
+              {
+                modelo: "Ford Mustang (1964–1973)",
+                desc: "O ícone americano por excelência. Os modelos da primeira geração — especialmente o Fastback 2+2 — têm alta liquidez no Brasil e excelente valorização. Peças de reposição relativamente acessíveis graças à enorme comunidade global.",
+                tags: ["Alta liquidez", "Boa valorização", "Peças disponíveis"],
+              },
+              {
+                modelo: "Chevrolet Camaro (1967–1981)",
+                desc: "Concorrente direto do Mustang, com visual agressivo que agrada ao mercado brasileiro. Os modelos SS e Z28 são os mais valorizados. Atenção ao custo de manutenção do motor V8 no Brasil.",
+                tags: ["Alta demanda", "Visual marcante", "V8 clássico"],
+              },
+              {
+                modelo: "Ford F-100 (1953–1979)",
+                desc: "A pickup clássica americana que conquistou o coração dos brasileiros. Versátil — usada tanto em exposições quanto no dia a dia. Mercado aquecido, especialmente para modelos dos anos 60 e 70.",
+                tags: ["Mercado aquecido", "Versátil", "Fácil de customizar"],
+              },
+              {
+                modelo: "Chevrolet Corvette (1953–1982)",
+                desc: "O esportivo americano mais desejado. Importar um C3 (1968–1982) pode ser mais viável que comprar um no Brasil, onde os preços são muito inflados. Exige manutenção especializada.",
+                tags: ["Altamente valorizado", "Exclusivo", "Manutenção especializada"],
+              },
+              {
+                modelo: "Dodge Charger / Plymouth Road Runner (1968–1974)",
+                desc: "Muscle cars da era de ouro. Popularizados no Brasil por filmes e séries americanas. O Charger R/T com motor 440 ou HEMI é o mais cobiçado — e também o mais caro.",
+                tags: ["Muscle car puro", "Valorização alta", "Mercado de nicho"],
+              },
+            ].map((car) => (
+              <div key={car.modelo} className="border border-slate-100 rounded-xl p-4">
+                <h3 className="font-semibold text-slate-900 mb-1">{car.modelo}</h3>
+                <p className="text-sm text-slate-600 mb-2">{car.desc}</p>
+                <div className="flex flex-wrap gap-2">
+                  {car.tags.map((tag) => (
+                    <span key={tag} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+            <strong>Dica:</strong> Sempre verifique o histórico do veículo (Carfax ou AutoCheck) antes de fechar negócio. Carros clássicos podem ter restaurações ocultas, acidentes não registrados ou quilometragem adulterada.
+          </div>
+        </section>
+
+        {/* Custos ocultos */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">⚠️ Custos ocultos que muita gente esquece</h2>
+          <p className="text-slate-500 text-sm mb-5">
+            Além dos impostos federais, existem despesas que frequentemente surpreendem quem importa pela primeira vez.
+          </p>
+          <div className="space-y-3">
+            {[
+              { custo: "Inspeção mecânica pré-compra nos EUA", valor: "USD 200–500", desc: "Contratar um mecânico independente nos EUA para vistoriar o carro antes da compra. Obrigatório para clássicos — evita surpresas caras após o desembarque." },
+              { custo: "Transporte interno nos EUA", valor: "USD 300–800", desc: "Levar o carro do vendedor até o porto de embarque (geralmente Baltimore, Houston ou Los Angeles). Varia conforme a distância." },
+              { custo: "Frete marítimo + seguro", valor: "USD 1.500–3.500", desc: "A calculadora usa USD 2.000 como estimativa. Solicite pelo menos 2 cotações de transportadoras como Seabridge, Classicargo ou Roll-on Roll-off carriers." },
+              { custo: "Armazenagem no porto no Brasil", valor: "R$ 500–3.000", desc: "Cada dia além da franquia livre gera cobrança de armazenagem. Tenha toda a documentação pronta para agilizar o desembaraço." },
+              { custo: "Adaptações obrigatórias para emplacamento", valor: "R$ 2.000–15.000", desc: "Lanternas, retrovisores, buzina, cinto traseiro e farol adaptados ao padrão DENATRAN. Clássicos frequentemente precisam de adaptações significativas." },
+              { custo: "IPVA do primeiro ano", valor: "2%–4% do valor FIPE", desc: "Calculado sobre o valor arbitrado pela Receita Federal, que pode ser diferente do que você pagou. Em SP, a alíquota para clássicos é 1,5%." },
+              { custo: "Homologação no DENATRAN/SENATRAN", valor: "R$ 1.000–5.000", desc: "Processo de inspeção veicular para emissão do CRLV brasileiro. Algumas adaptações são exigidas após a vistoria." },
+            ].map((item) => (
+              <div key={item.custo} className="flex gap-4 border-b border-slate-50 pb-3 last:border-0 last:pb-0">
+                <div className="flex-1">
+                  <div className="flex items-start justify-between gap-2 mb-0.5">
+                    <p className="text-sm font-semibold text-slate-800">{item.custo}</p>
+                    <span className="text-xs font-mono bg-slate-100 text-slate-700 px-2 py-0.5 rounded shrink-0">{item.valor}</span>
+                  </div>
+                  <p className="text-xs text-slate-500">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Como escolher despachante */}
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-1">🔍 Como escolher um bom despachante aduaneiro</h2>
+          <p className="text-slate-500 text-sm mb-5">
+            O despachante aduaneiro é o profissional habilitado pela Receita Federal para representar
+            o importador no processo de desembaraço. A escolha certa pode economizar semanas e muito dinheiro.
+          </p>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-2">✅ O que verificar antes de contratar</h3>
+              <ul className="text-sm text-slate-600 space-y-1.5">
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">•</span>Registro ativo no <strong>SINDASP</strong> (Sindicato dos Agentes Autônomos de Despachantes) ou entidade estadual equivalente</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">•</span>Habilitação <strong>RADAR</strong> própria — prova que opera legalmente na Receita Federal</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">•</span>Experiência comprovada com <strong>importação de veículos</strong> especificamente (não apenas mercadorias gerais)</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">•</span>Referências de clientes anteriores — peça contato de pelo menos 2 importadores que já usaram o serviço</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">•</span>Orçamento detalhado por escrito — honorários, taxas portuárias e o que está ou não incluso</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-2">🚩 Sinais de alerta</h3>
+              <ul className="text-sm text-slate-600 space-y-1.5">
+                <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Promete "despachar sem pagar impostos" ou "reduzir drasticamente o II" — isso é crime</li>
+                <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Não emite nota fiscal pelos honorários</li>
+                <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Pede pagamento adiantado total antes de iniciar o processo</li>
+                <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Não tem CNPJ ou endereço físico verificável</li>
+              </ul>
+            </div>
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
+              <strong>Custo típico:</strong> Honorários do despachante para importação de veículo variam entre <strong>R$ 5.000 e R$ 15.000</strong>, dependendo da complexidade e do porto. Já incluso na nossa estimativa de desembaraço de USD 1.500.
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-white text-center">
           <h2 className="text-xl font-bold mb-2">Calcule o custo do seu veículo agora</h2>

@@ -1628,6 +1628,8 @@ export default function Home() {
             <a href="/privacy" className="hover:text-slate-700 underline">Política de Privacidade</a>
             {" · "}
             <a href="/terms" className="hover:text-slate-700 underline">Termos de Uso</a>
+            {" · "}
+            <a href="/sobre" className="hover:text-slate-700 underline">Sobre</a>
           </p>
           <p className="text-slate-400">© {new Date().getFullYear()} carroimportado.com — Todos os direitos reservados</p>
         </footer>
