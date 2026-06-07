@@ -189,10 +189,7 @@ export default function EmpresasClient() {
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white">
-        <div className="max-w-5xl mx-auto px-4 py-10 sm:py-14">
-          <span className="inline-block bg-white/10 text-white/80 text-xs font-semibold px-3 py-1 rounded-full mb-4 border border-white/20">
-            Diretório curado
-          </span>
+        <div className="max-w-5xl mx-auto px-4 py-6 sm:py-10">
           <h1 className="text-2xl sm:text-4xl font-bold leading-tight mb-3">
             Empresas de importação de carros
           </h1>

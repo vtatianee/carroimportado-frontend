@@ -1515,7 +1515,7 @@ export default function Home() {
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 text-center">
           <h1 className="text-2xl sm:text-4xl font-bold leading-tight tracking-tight mb-3">
-            Encontrou um carro dos EUA?<br className="hidden sm:block" /> Simule o custo de importá-lo para o Brasil.
+            Encontrou um carro nos EUA?<br className="hidden sm:block" /> Simule o custo de importá-lo para o Brasil.
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-6">
             Cole o link do{" "}
@@ -1725,11 +1725,11 @@ export default function Home() {
           <Results result={EXAMPLE_RESULT} isExample />
         )}
 
-        {/* Captura de email */}
-        <EmailCapture />
-
         {/* Como funciona */}
         <HowItWorks />
+
+        {/* Captura de email */}
+        <EmailCapture />
 
         {/* Links úteis */}
         <UsefulLinks />
