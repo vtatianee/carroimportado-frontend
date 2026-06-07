@@ -1513,27 +1513,24 @@ export default function Home() {
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white">
-        <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 text-center">
-          <h1 className="text-2xl sm:text-4xl font-bold leading-tight tracking-tight mb-3">
+        <div className="max-w-5xl mx-auto px-4 py-5 sm:py-8 text-center">
+          <h1 className="text-2xl sm:text-4xl font-bold leading-tight tracking-tight mb-2">
             Encontrou um carro nos EUA?<br className="hidden sm:block" /> Simule o custo de importá-lo para o Brasil.
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-6">
+          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-4">
             Cole o link do{" "}
             <a href="https://www.cars.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-300 hover:text-blue-200 underline underline-offset-2">Cars.com</a>
             , insira o preço manualmente ou simule por orçamento —
             impostos, frete e desembaraço detalhados em segundos.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
+          <div className="flex flex-wrap justify-center gap-2">
+            <span className="bg-white/10 border border-white/20 text-white text-xs px-3 py-1.5 rounded-full">
               ✅ Gratuito · Sem cadastro
             </span>
-            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
-              💱 Câmbio PTAX do Banco Central
+            <span className="bg-white/10 border border-white/20 text-white text-xs px-3 py-1.5 rounded-full">
+              💱 Câmbio PTAX · Alíquotas 2026
             </span>
-            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
-              🏦 Alíquotas Receita Federal 2026
-            </span>
-            <span className="bg-white/10 border border-white/20 text-white text-sm px-4 py-2 rounded-full">
+            <span className="bg-white/10 border border-white/20 text-white text-xs px-3 py-1.5 rounded-full">
               ⚠️ Carga tributária costuma passar de <strong>100%</strong> do valor
             </span>
           </div>
