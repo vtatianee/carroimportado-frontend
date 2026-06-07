@@ -3,7 +3,6 @@ import { Geist } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import CookieBanner from "./components/CookieBanner";
-import { JsonLd } from "./components/JsonLd";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -85,7 +84,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${geist.className} h-full`}>
       <head>
-        <JsonLd />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8694151594129435"
