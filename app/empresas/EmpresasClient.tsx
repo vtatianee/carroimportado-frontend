@@ -303,15 +303,15 @@ export default function EmpresasClient() {
             Se você tem uma empresa especializada em exportação ou importação de veículos
             EUA ↔ Brasil e quer aparecer neste diretório, entre em contato.
           </p>
-          <a
-            href="mailto:arche.boost@gmail.com?subject=Quero%20aparecer%20no%20diret%C3%B3rio%20carroimportado.com"
+          <Link
+            href="/empresas/cadastro"
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
-            Enviar solicitação
-          </a>
+            Solicitar cadastro
+          </Link>
         </div>
       </main>
 
