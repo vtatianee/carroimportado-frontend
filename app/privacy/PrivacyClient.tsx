@@ -2,41 +2,27 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import NavHeader from "../components/NavHeader";
 
 export default function PrivacyClient() {
   const [lang, setLang] = useState<"pt" | "en">("pt");
 
   return (
     <main className="flex-1">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
-        <div className="h-1 bg-gradient-to-r from-orange-500 via-orange-400 to-blue-500" />
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <span className="text-2xl">🚗</span>
-            <span className="font-bold text-lg tracking-tight">
-              carro<span className="text-blue-600">importado</span>.com
-            </span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <nav className="flex items-center gap-1 mr-2">
-              <Link href="/" className="text-sm text-slate-600 hover:text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors hidden sm:block">Calculadora</Link>
-              <Link href="/guia" className="text-sm text-slate-600 hover:text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors hidden sm:block">Guia</Link>
-              <Link href="/empresas" className="text-sm text-slate-600 hover:text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors hidden sm:block">Empresas</Link>
-              <Link href="/guia#checklist" className="text-sm text-white font-medium px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors">Checklist</Link>
-            </nav>
-            <div className="flex gap-1 bg-slate-100 rounded-lg p-1">
-              <button onClick={() => setLang("pt")}
-                className={`px-3 py-1 rounded text-sm font-medium transition-colors ${lang === "pt" ? "bg-white shadow-sm text-slate-900" : "text-slate-500"}`}>
-                PT-BR
-              </button>
-              <button onClick={() => setLang("en")}
-                className={`px-3 py-1 rounded text-sm font-medium transition-colors ${lang === "en" ? "bg-white shadow-sm text-slate-900" : "text-slate-500"}`}>
-                EN
-              </button>
-            </div>
+      <NavHeader
+        rightContent={
+          <div className="flex gap-1 bg-slate-100 rounded-lg p-1">
+            <button onClick={() => setLang("pt")}
+              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${lang === "pt" ? "bg-white shadow-sm text-slate-900" : "text-slate-500"}`}>
+              PT-BR
+            </button>
+            <button onClick={() => setLang("en")}
+              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${lang === "en" ? "bg-white shadow-sm text-slate-900" : "text-slate-500"}`}>
+              EN
+            </button>
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <div className="max-w-3xl mx-auto px-4 py-10">
         {lang === "pt" ? <PrivacyPT /> : <PrivacyEN />}
