@@ -1,6 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// ── Histórico de pesquisas (localStorage) ─────────────────────────────────────
+const HISTORY_KEY = "search_history";
+const MAX_HISTORY = 5;
+
+interface HistoryEntry {
+  id: string;            // timestamp como ID único
+  listing_url: string;   // URL do anúncio no Cars.com
+  title: string;         // "2019 Ford Mustang GT"
+  photo: string | null;  // primeira foto
+  price_usd: number;
+  is_classic: boolean;
+  searched_at: number;   // Date.now()
+}
+
+function loadHistory(): HistoryEntry[] {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveHistory(entries: HistoryEntry[]) {
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(entries)); } catch { /* quota */ }
+}
 
 // As chamadas à API passam pelo proxy Next.js (app/api/*) para não expor a URL do backend no browser.
 
@@ -962,6 +987,59 @@ function ReverseCalc({
   );
 }
 
+// ── Histórico de pesquisas ────────────────────────────────────────────────────
+function SearchHistory({ entries, onClear }: { entries: HistoryEntry[]; onClear: () => void }) {
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+          🕐 Pesquisas recentes
+        </h2>
+        <button
+          onClick={onClear}
+          className="text-xs text-slate-400 hover:text-red-500 transition-colors"
+        >
+          Limpar histórico
+        </button>
+      </div>
+      <div className="space-y-2">
+        {entries.map((entry) => (
+          <a
+            key={entry.id}
+            href={entry.listing_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
+          >
+            {/* Foto */}
+            <div className="w-14 h-10 rounded-lg bg-slate-100 shrink-0 overflow-hidden">
+              {entry.photo ? (
+                <img src={entry.photo} alt={entry.title} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-slate-300 text-xl">🚗</div>
+              )}
+            </div>
+            {/* Info */}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-slate-800 truncate group-hover:text-blue-600 transition-colors">
+                {entry.title}
+                {entry.is_classic && (
+                  <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-normal">Clássico</span>
+                )}
+              </p>
+              <p className="text-xs text-slate-400 truncate">
+                USD {entry.price_usd.toLocaleString("en-US")} · {entry.listing_url.replace("https://", "").split("/")[0]}
+              </p>
+            </div>
+            {/* Seta */}
+            <span className="text-slate-300 group-hover:text-blue-400 transition-colors text-sm shrink-0">↗</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── Próximos passos ───────────────────────────────────────────────────────────
 function NextSteps() {
   return (
@@ -1295,6 +1373,24 @@ function HowItWorks() {
 // ── Página principal ──────────────────────────────────────────────────────────
 export default function Home() {
   const [tab, setTab] = useState<"url" | "manual" | "reversa">("url");
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+
+  // Carrega histórico do localStorage ao montar
+  useEffect(() => { setHistory(loadHistory()); }, []);
+
+  function addToHistory(entry: Omit<HistoryEntry, "id" | "searched_at">) {
+    setHistory(prev => {
+      // Remove duplicatas da mesma URL
+      const filtered = prev.filter(h => h.listing_url !== entry.listing_url);
+      const next = [
+        { ...entry, id: String(Date.now()), searched_at: Date.now() },
+        ...filtered,
+      ].slice(0, MAX_HISTORY);
+      saveHistory(next);
+      return next;
+    });
+  }
+
 
   // Modo URL
   const [url, setUrl] = useState("");
@@ -1336,6 +1432,16 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro ao analisar o anúncio.");
       setUrlResult(data);
+      // Salva no histórico
+      const cd = data.car_data;
+      const title = [cd.year, cd.make, cd.model].filter(Boolean).join(" ") || "Veículo";
+      addToHistory({
+        listing_url: url,
+        title,
+        photo: cd.photos?.[0] ?? null,
+        price_usd: cd.price_usd,
+        is_classic: cd.is_classic,
+      });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro inesperado.");
     } finally {
@@ -1594,6 +1700,14 @@ export default function Home() {
             {tab === "url" ? "Buscando dados do anúncio e calculando impostos..." : "Calculando impostos..."}
 
           </div>
+        )}
+
+        {/* Histórico de pesquisas */}
+        {history.length > 0 && !loading && (
+          <SearchHistory entries={history} onClear={() => {
+            saveHistory([]);
+            setHistory([]);
+          }} />
         )}
 
         {/* Resultados */}
