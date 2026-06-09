@@ -436,10 +436,10 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
       {/* Impostos */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         <SectionHeading icon={<IconBuilding />}>Impostos</SectionHeading>
-        <Row label="II — Imposto de Importação (35% do FOB)" brl={bd.ii_imposto_importacao}
-          tooltip="II (Imposto de Importação): alíquota fixa de 35% sobre o valor FOB. É o maior imposto isolado na importação de veículos, arrecadado pela Receita Federal." />
-        <Row label={`IPI (${ic.ipi_rate_pct === 0 ? "0% — isento" : "18,81% sobre FOB + II"})`} brl={bd.ipi}
-          tooltip={`IPI (Imposto sobre Produtos Industrializados): incide sobre FOB + II. Alíquota padrão: 18,81% para motores 1.0–2.0L. ${ic.is_classic ? "Isento para veículos com 30+ anos de fabricação (Lei 9.055/1995)." : ic.ipi_rate_pct === 0 ? "Isento para veículos elétricos (Decreto 11.394/2023)." : "Motores acima de 3.0L pagam 25%."}`} />
+        <Row label="II — Imposto de Importação (35% do CIF)" brl={bd.ii_imposto_importacao}
+          tooltip="II (Imposto de Importação): alíquota fixa de 35% sobre o valor aduaneiro (CIF = FOB + frete + seguro). É o maior imposto isolado na importação de veículos, arrecadado pela Receita Federal. Base legal: Decreto 6.759/2009 (Regulamento Aduaneiro) e Acordo AVA-GATT." />
+        <Row label={`IPI (${ic.ipi_rate_pct === 0 ? "0% — isento" : `${ic.ipi_rate_pct.toFixed(2)}% sobre CIF + II`})`} brl={bd.ipi}
+          tooltip={`IPI (Imposto sobre Produtos Industrializados): incide sobre CIF + II. Alíquotas TIPI (Decreto 11.158/2022): ≤1.000cc → 7%, 1.001–2.000cc → 18,81%, acima de 2.000cc → 25%. ${ic.is_classic ? "Isento para veículos com 30+ anos de fabricação (Lei 9.055/1995)." : ic.ipi_rate_pct === 0 ? "Isento para veículos elétricos (Decreto 11.394/2023)." : ""}`} />
         <Row label="PIS (2,62% do CIF)" brl={bd.pis}
           tooltip="PIS (Programa de Integração Social): 2,62% sobre o valor CIF. Contribuição federal destinada ao seguro-desemprego e abono salarial." />
         <Row label="COFINS (12,57% do CIF)" brl={bd.cofins}
@@ -1712,11 +1712,15 @@ export default function Home() {
           <p>Alíquotas: Receita Federal · Câmbio: PTAX Banco Central do Brasil · Preços de referência: Tabela FIPE</p>
           <p className="text-slate-400">Os valores são estimativas. Consulte um despachante aduaneiro habilitado para cotações precisas.</p>
           <p>
-            <a href="/privacy" className="hover:text-slate-700 underline">Política de Privacidade</a>
+            <a href="/guia" className="hover:text-slate-700 underline">Guia de Importação</a>
             {" · "}
-            <a href="/terms" className="hover:text-slate-700 underline">Termos de Uso</a>
+            <a href="/empresas" className="hover:text-slate-700 underline">Empresas</a>
             {" · "}
             <a href="/sobre" className="hover:text-slate-700 underline">Sobre</a>
+            {" · "}
+            <a href="/privacy" className="hover:text-slate-700 underline">Privacidade</a>
+            {" · "}
+            <a href="/terms" className="hover:text-slate-700 underline">Termos</a>
           </p>
           <p className="text-slate-400">© {new Date().getFullYear()} carroimportado.com — Todos os direitos reservados</p>
         </footer>

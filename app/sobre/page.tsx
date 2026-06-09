@@ -3,7 +3,7 @@ import Link from "next/link";
 import NavHeader from "../components/NavHeader";
 
 export const metadata: Metadata = {
-  title: "Sobre o carroimportado.com",
+  title: "Sobre a Calculadora de Importação de Carros dos EUA",
   description:
     "Conheça o carroimportado.com — a ferramenta gratuita que ajuda brasileiros a calcular o custo real de importar um carro dos Estados Unidos, com impostos detalhados e câmbio do Banco Central.",
   alternates: { canonical: "https://www.carroimportado.com/sobre" },

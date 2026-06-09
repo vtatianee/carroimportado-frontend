@@ -2,24 +2,23 @@ import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://www.carroimportado.com";
-  const now = new Date();
 
   return [
     {
       url: base + "/",
-      lastModified: now,
+      lastModified: new Date("2026-06-09"),
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
       url: `${base}/guia`,
-      lastModified: now,
+      lastModified: new Date("2026-06-01"),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${base}/empresas`,
-      lastModified: now,
+      lastModified: new Date("2026-05-27"),
       changeFrequency: "monthly",
       priority: 0.7,
     },

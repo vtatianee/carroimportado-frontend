@@ -16,6 +16,14 @@ export const metadata: Metadata = {
     description:
       "Todas as etapas do processo de importação: documentação, impostos, desembaraço aduaneiro e emplacamento. Tempo médio: 60 a 120 dias.",
     url: "https://www.carroimportado.com/guia",
+    images: [
+      {
+        url: "https://www.carroimportado.com/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Guia completo de importação de carros dos EUA para o Brasil",
+      },
+    ],
   },
 };
 
@@ -196,8 +204,8 @@ const STEPS = [
 ];
 
 const COSTS_SUMMARY = [
-  { label: "Imposto de Importação (II)", value: "35% do FOB", color: "text-red-600" },
-  { label: "IPI", value: "18,81% sobre (FOB + II) — 0% para clássicos 30+ anos", color: "text-orange-600" },
+  { label: "Imposto de Importação (II)", value: "35% do CIF (valor aduaneiro)", color: "text-red-600" },
+  { label: "IPI", value: "18,81% sobre (CIF + II) — 0% para clássicos 30+ anos | 25% para motores acima de 2.0L", color: "text-orange-600" },
   { label: "PIS", value: "2,62% do CIF", color: "text-amber-600" },
   { label: "COFINS", value: "12,57% do CIF", color: "text-amber-600" },
   { label: "ICMS (SP)", value: "12% — cálculo por dentro", color: "text-yellow-600" },
@@ -225,9 +233,39 @@ const bgMap: Record<string, string> = {
   green: "bg-green-50 border-green-100",
 };
 
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Como importar um carro dos EUA para o Brasil",
+  description:
+    "Guia completo com todas as 8 etapas do processo de importação de veículos dos Estados Unidos para o Brasil, incluindo documentação, impostos e emplacamento.",
+  totalTime: "P90D",
+  estimatedCost: { "@type": "MonetaryAmount", currency: "BRL", value: "50000" },
+  step: STEPS.map((s) => ({
+    "@type": "HowToStep",
+    position: s.number,
+    name: s.title,
+    text: s.description,
+    timeRequired: `P${s.duration.replace(/\D+/g, "")}D`,
+  })),
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Calculadora", item: "https://www.carroimportado.com/" },
+    { "@type": "ListItem", position: 2, name: "Guia de Importação", item: "https://www.carroimportado.com/guia" },
+  ],
+};
+
 export default function GuiaPage() {
   return (
     <main className="flex-1 bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([howToSchema, breadcrumbSchema]) }}
+      />
       <NavHeader activePage="guia" />
 
       {/* Hero */}
