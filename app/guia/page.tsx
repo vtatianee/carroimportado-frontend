@@ -7,7 +7,7 @@ import NavHeader from "../components/NavHeader";
 export const metadata: Metadata = {
   title: "Como Importar um Carro dos EUA para o Brasil — Guia Completo 2026",
   description:
-    "Guia passo a passo completo para importar um carro dos Estados Unidos para o Brasil em 2026. Todas as etapas: Licença de Importação, IBAMA, CAT, Siscomex, impostos e DETRAN.",
+    "8 etapas para importar carro dos EUA para o Brasil em 2026: LI, IBAMA, CAT, Siscomex, desembaraço e DETRAN. Checklist completo + tempo estimado por etapa.",
   alternates: {
     canonical: "https://www.carroimportado.com/guia",
   },

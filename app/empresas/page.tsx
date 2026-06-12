@@ -4,7 +4,7 @@ import EmpresasClient from "./EmpresasClient";
 export const metadata: Metadata = {
   title: "Empresas de Importação de Carros dos EUA para o Brasil",
   description:
-    "Diretório curado de empresas especializadas em exportação de veículos nos EUA (Flórida) e importação no Brasil. Compare exportadoras, importadoras e despachantes aduaneiros de confiança.",
+    "Exportadoras na Flórida e importadoras no Brasil especializadas em carros americanos. Despachantes aduaneiros, frete RORO e container — compare e escolha com segurança.",
   keywords: [
     "empresa importação carro EUA Brasil",
     "exportadora carros Florida Brasil",
