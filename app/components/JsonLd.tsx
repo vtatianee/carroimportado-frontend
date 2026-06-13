@@ -53,34 +53,39 @@ const FAQ_SCHEMA = [
 ];
 
 export function JsonLd() {
-  const data = [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      name: "Calculadora de Importação de Carros EUA → Brasil",
-      url: "https://www.carroimportado.com/",
-      applicationCategory: "FinanceApplication",
-      operatingSystem: "Web",
-      inLanguage: "pt-BR",
-      description:
-        "Calcule o custo total de importar um carro dos Estados Unidos para o Brasil, incluindo II, IPI, PIS, COFINS e ICMS por estado de destino.",
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "BRL",
-      },
+  const webAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Calculadora de Importação de Carros EUA → Brasil",
+    url: "https://www.carroimportado.com/",
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Web",
+    inLanguage: "pt-BR",
+    description:
+      "Calcule o custo total de importar um carro dos Estados Unidos para o Brasil, incluindo II, IPI, PIS, COFINS e ICMS por estado de destino.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "BRL",
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: FAQ_SCHEMA,
-    },
-  ];
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_SCHEMA,
+  };
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+    </>
   );
 }
