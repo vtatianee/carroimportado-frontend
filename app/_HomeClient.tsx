@@ -1054,12 +1054,12 @@ function NextSteps() {
             <p className="text-blue-100 text-xs mt-0.5">8 etapas do processo de importação</p>
           </div>
         </a>
-        <a href="#form" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-          className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors cursor-pointer">
-          <span className="text-2xl shrink-0">🔄</span>
+        <a href="/empresas"
+          className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
+          <span className="text-2xl shrink-0">🏢</span>
           <div>
-            <p className="font-semibold text-sm">Calcular outro veículo</p>
-            <p className="text-blue-100 text-xs mt-0.5">Compare diferentes opções</p>
+            <p className="font-semibold text-sm">Encontrar empresa importadora</p>
+            <p className="text-blue-100 text-xs mt-0.5">Exportadoras nos EUA e importadoras no Brasil</p>
           </div>
         </a>
         <a href="https://wa.me/?text=Calculei%20o%20custo%20de%20importar%20um%20carro%20dos%20EUA%20no%20carroimportado.com%20%F0%9F%9A%97" target="_blank" rel="noopener noreferrer"
