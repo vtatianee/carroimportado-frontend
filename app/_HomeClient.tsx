@@ -15,6 +15,7 @@ interface HistoryEntry {
   price_usd: number;
   is_classic: boolean;
   searched_at: number;   // Date.now()
+  result?: AnalyzeResult; // resultado completo para restaurar sem nova chamada
 }
 
 function loadHistory(): HistoryEntry[] {
@@ -989,7 +990,11 @@ function ReverseCalc({
 }
 
 // ── Histórico de pesquisas ────────────────────────────────────────────────────
-function SearchHistory({ entries, onClear }: { entries: HistoryEntry[]; onClear: () => void }) {
+function SearchHistory({ entries, onSelect, onClear }: {
+  entries: HistoryEntry[];
+  onSelect: (result: AnalyzeResult) => void;
+  onClear: () => void;
+}) {
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
       <div className="flex items-center justify-between mb-4">
@@ -1005,12 +1010,15 @@ function SearchHistory({ entries, onClear }: { entries: HistoryEntry[]; onClear:
       </div>
       <div className="space-y-2">
         {entries.map((entry) => (
-          <a
+          <button
             key={entry.id}
-            href={entry.listing_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
+            onClick={() => {
+              if (entry.result) {
+                onSelect(entry.result);
+              }
+            }}
+            disabled={!entry.result}
+            className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group text-left disabled:opacity-50 disabled:cursor-default"
           >
             {/* Foto */}
             <div className="w-14 h-10 rounded-lg bg-slate-100 shrink-0 overflow-hidden">
@@ -1029,12 +1037,12 @@ function SearchHistory({ entries, onClear }: { entries: HistoryEntry[]; onClear:
                 )}
               </p>
               <p className="text-xs text-slate-400 truncate">
-                USD {entry.price_usd.toLocaleString("en-US")} · {entry.listing_url.replace("https://", "").split("/")[0]}
+                USD {entry.price_usd.toLocaleString("en-US")} · clique para ver o cálculo
               </p>
             </div>
             {/* Seta */}
-            <span className="text-slate-300 group-hover:text-blue-400 transition-colors text-sm shrink-0">↗</span>
-          </a>
+            <span className="text-slate-300 group-hover:text-blue-400 transition-colors text-sm shrink-0">↩</span>
+          </button>
         ))}
       </div>
     </section>
@@ -1433,7 +1441,7 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro ao analisar o anúncio.");
       setUrlResult(data);
-      // Salva no histórico
+      // Salva no histórico com o resultado completo para restaurar sem nova chamada
       const cd = data.car_data;
       const title = [cd.year, cd.make, cd.model].filter(Boolean).join(" ") || "Veículo";
       addToHistory({
@@ -1442,6 +1450,7 @@ export default function Home() {
         photo: cd.photos?.[0] ?? null,
         price_usd: cd.price_usd,
         is_classic: cd.is_classic,
+        result: data,
       });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro inesperado.");
@@ -1677,10 +1686,18 @@ export default function Home() {
 
         {/* Histórico de pesquisas */}
         {history.length > 0 && !loading && (
-          <SearchHistory entries={history} onClear={() => {
-            saveHistory([]);
-            setHistory([]);
-          }} />
+          <SearchHistory
+            entries={history}
+            onSelect={(result) => {
+              setUrlResult(result);
+              setTab("url");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            onClear={() => {
+              saveHistory([]);
+              setHistory([]);
+            }}
+          />
         )}
 
         {/* Resultados */}
