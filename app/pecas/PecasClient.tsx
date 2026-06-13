@@ -34,12 +34,7 @@ function PecaCard({ peca }: { peca: Peca }) {
   const flag = peca.pais === "US" ? "🇺🇸" : "🇧🇷";
 
   return (
-    <article className={`bg-white rounded-2xl border shadow-sm flex flex-col ${peca.destaque ? "border-blue-200 ring-1 ring-blue-100" : "border-slate-200"}`}>
-      {peca.destaque && (
-        <div className="bg-blue-600 text-white text-xs font-semibold px-4 py-1 rounded-t-2xl tracking-wide">
-          ⭐ Destaque
-        </div>
-      )}
+    <article className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col">
 
       <div className="p-5 flex flex-col flex-1 gap-3">
         <div className="flex items-start justify-between gap-2">
