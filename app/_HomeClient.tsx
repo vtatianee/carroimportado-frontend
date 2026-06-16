@@ -1267,34 +1267,21 @@ const FAQ_ITEMS: { q: string; a: string; guia?: string }[] = [
 ];
 
 function FAQ() {
-  const [open, setOpen] = useState<number | null>(null);
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
       <h2 className="text-xl font-bold text-slate-900 mb-6">Perguntas frequentes sobre importação de carros dos EUA</h2>
       <div className="divide-y divide-slate-100">
         {FAQ_ITEMS.map((item, i) => (
-          <div key={i}>
-            <button
-              onClick={() => setOpen(open === i ? null : i)}
-              className="w-full text-left py-4 flex items-start justify-between gap-4 group"
-            >
-              <span className="font-medium text-slate-800 text-sm group-hover:text-blue-600 transition-colors">
-                {item.q}
-              </span>
-              <span className={`shrink-0 text-slate-400 text-lg transition-transform ${open === i ? "rotate-45" : ""}`}>
-                +
-              </span>
-            </button>
-            {open === i && (
-              <div className="pb-4">
-                <p className="text-slate-500 text-sm leading-relaxed">{item.a}</p>
-                {item.guia && (
-                  <a href={`/${item.guia}`} className="inline-block mt-2 text-blue-600 text-xs hover:underline font-medium">
-                    → Veja mais no guia completo de importação
-                  </a>
-                )}
-              </div>
-            )}
+          <div key={i} className="py-4">
+            <p className="font-medium text-slate-800 text-sm mb-2">{item.q}</p>
+            <div>
+              <p className="text-slate-500 text-sm leading-relaxed">{item.a}</p>
+              {item.guia && (
+                <a href={`/${item.guia}`} className="inline-block mt-2 text-blue-600 text-xs hover:underline font-medium">
+                  → Veja mais no guia completo de importação
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>
