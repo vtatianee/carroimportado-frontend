@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 interface NavHeaderProps {
-  activePage?: "home" | "guia" | "empresas" | "pecas";
+  activePage?: "home" | "guia" | "empresas" | "pecas" | "blog";
   rightContent?: React.ReactNode;
 }
 
@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { href: "/guia",      label: "Guia",        key: "guia"     },
   { href: "/empresas",  label: "Empresas",    key: "empresas" },
   { href: "/pecas",     label: "Peças",       key: "pecas"    },
+  { href: "/blog",      label: "Blog",        key: "blog"     },
 ] as const;
 
 export default function NavHeader({ activePage, rightContent }: NavHeaderProps) {
