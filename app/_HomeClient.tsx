@@ -1413,9 +1413,11 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [urlResult, setUrlResult] = useState<AnalyzeResult | null>(null);
   const [manualResult, setManualResult] = useState<AnalyzeResult | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   async function handleUrlSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setHasSearched(true);
     setLoading(true); setError(null); setUrlResult(null);
     try {
       const body: Record<string, unknown> = { url, state };
@@ -1694,8 +1696,8 @@ export default function Home() {
         {/* Próximos passos — aparece quando há resultado real */}
         {(urlResult || manualResult) && !loading && <NextSteps />}
 
-        {/* Exemplo pré-calculado — visível enquanto não há resultado */}
-        {!urlResult && !manualResult && !loading && (
+        {/* Exemplo pré-calculado — visível apenas antes de qualquer busca */}
+        {!hasSearched && !urlResult && !manualResult && !loading && (
           <Results result={EXAMPLE_RESULT} isExample />
         )}
 
