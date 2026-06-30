@@ -10,7 +10,18 @@ export interface BlogPost {
 }
 
 // Adicione posts aqui. Só aparecem no site quando published: true.
-export const BLOG_POSTS: BlogPost[] = [];
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: "imposto-importacao-eletricos-hibridos-35-2026",
+    title: "Imposto de importação de elétricos e híbridos sobe para 35% em julho de 2026",
+    excerpt:
+      "A partir de julho, carros elétricos e híbridos importados passam a pagar a mesma alíquota máxima de 35% que veículos a combustão. Entenda o que muda no cálculo e quem ainda escapa da alta.",
+    date: "2026-06-30",
+    readTimeMin: 4,
+    tags: ["Impostos", "Elétricos", "Legislação"],
+    published: true,
+  },
+];
 
 export function getPublishedPosts(): BlogPost[] {
   return BLOG_POSTS.filter((p) => p.published).sort(

@@ -1,7 +1,15 @@
 import type { MetadataRoute } from "next";
+import { getPublishedPosts } from "./data/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://www.carroimportado.com";
+
+  const postEntries: MetadataRoute.Sitemap = getPublishedPosts().map((post) => ({
+    url: `${base}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
 
   return [
     {
@@ -41,5 +49,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     // /privacy e /terms têm robots noindex — omitidos do sitemap intencionalmente
+    ...postEntries,
   ];
 }
