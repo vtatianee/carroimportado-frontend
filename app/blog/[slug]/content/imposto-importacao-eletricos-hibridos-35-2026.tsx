@@ -47,6 +47,18 @@ export default function Post() {
         Quer ver o impacto real no seu caso? Cole o link de um anúncio do Cars.com na calculadora
         e compare o custo total considerando a alíquota atualizada.
       </p>
+
+      <hr />
+      <p className="text-sm text-slate-400">
+        <strong>Fontes:</strong>{" "}
+        <a href="https://www.cnnbrasil.com.br/auto/como-a-aliquota-de-35-sobre-veiculos-eletrificados-afeta-a-manutencao/" target="_blank" rel="noopener noreferrer">
+          CNN Brasil
+        </a>
+        {" · "}
+        <a href="https://diariodopoder.com.br/diario-motor/governo-mantem-aumento-de-imposto-de-importacao-para-veiculos-eletrificados" target="_blank" rel="noopener noreferrer">
+          Diário do Poder
+        </a>
+      </p>
     </>
   );
 }

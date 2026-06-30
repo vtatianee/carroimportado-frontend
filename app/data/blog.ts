@@ -20,6 +20,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTimeMin: 4,
     tags: ["Impostos", "Elétricos", "Legislação"],
     published: true,
+    coverImage: "/blog/imposto-importacao-eletricos-hibridos-35-2026.jpg",
   },
 ];
 
