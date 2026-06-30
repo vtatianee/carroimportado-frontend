@@ -1722,6 +1722,8 @@ export default function Home() {
             {" · "}
             <a href="/empresas" className="hover:text-slate-700 underline">Empresas</a>
             {" · "}
+            <a href="/blog" className="hover:text-slate-700 underline">Blog</a>
+            {" · "}
             <a href="/sobre" className="hover:text-slate-700 underline">Sobre</a>
             {" · "}
             <a href="/privacy" className="hover:text-slate-700 underline">Privacidade</a>
