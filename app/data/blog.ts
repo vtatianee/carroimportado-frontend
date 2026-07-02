@@ -12,15 +12,15 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
-    slug: "governo-avalia-nova-alta-imposto-importacao-veiculos-2026",
-    title: "Governo avalia nova rodada de altas no imposto de importação de veículos em 2026",
+    slug: "custos-ocultos-importacao-carro-eua-brasil",
+    title: "Os custos ocultos de importar um carro americano que ninguém calcula antes",
     excerpt:
-      "Com a 35% dos elétricos e híbridos já em vigor, a equipe econômica estuda elevar tarifas em mais setores para arrecadar até R$ 14 bilhões. Entenda o que está em jogo para quem quer importar um clássico americano.",
+      "AFRMM, capatazia, armazenagem, despachante, frete interno — esses itens somam 15% a 25% do custo total e raramente aparecem nas simulações. Entenda cada um e por que eles encarecem ainda mais os impostos.",
     date: "2026-07-02",
-    readTimeMin: 4,
-    tags: ["Impostos", "Legislação", "Mercado"],
+    readTimeMin: 5,
+    tags: ["Guia", "Custos", "Importação"],
     published: true,
-    coverImage: "/blog/governo-avalia-nova-alta-imposto-importacao-veiculos-2026.jpg",
+    coverImage: "/blog/custos-ocultos-importacao-carro-eua-brasil.jpg",
   },
   {
     slug: "imposto-importacao-eletricos-hibridos-35-2026",
