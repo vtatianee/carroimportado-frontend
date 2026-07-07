@@ -12,6 +12,17 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "cambio-dolar-julho-2026-importacao-carro-americano",
+    title: "Dólar a R$ 5,15 vs. R$ 6,27: quanto a queda do câmbio economiza de verdade na importação do seu carro",
+    excerpt:
+      "O dólar caiu 18% desde o pico de dezembro de 2024. Num processo com impostos em cascata, essa diferença no câmbio vale muito mais do que parece — estamos falando de R$ 50–66 mil a mais ou a menos no custo total de um clássico americano.",
+    date: "2026-07-07",
+    readTimeMin: 4,
+    tags: ["Câmbio", "Custos", "Mercado"],
+    published: true,
+    coverImage: "/blog/cambio-dolar-julho-2026-importacao-carro-americano.jpg",
+  },
+  {
     slug: "custos-ocultos-importacao-carro-eua-brasil",
     title: "Os custos ocultos de importar um carro americano que ninguém calcula antes",
     excerpt:
