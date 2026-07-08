@@ -23,14 +23,7 @@ export async function GET(req: NextRequest) {
   const from = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
   // ── 1. Vercel Analytics ────────────────────────────────────────────────────
-  let analytics: {
-    pageViews?: number;
-    visitors?: number;
-    topPages?: { path: string; visitors: number }[];
-  } = {};
-
-  console.log("[weekly-report] token present:", !!VERCEL_ACCESS_TOKEN, "| token length:", VERCEL_ACCESS_TOKEN?.length ?? 0);
-  console.log("[weekly-report] project id:", VERCEL_PROJECT_ID ?? "MISSING");
+  let analytics: { pageViews?: number; visitors?: number } = {};
 
   if (VERCEL_ACCESS_TOKEN && VERCEL_PROJECT_ID) {
     try {
@@ -42,46 +35,21 @@ export async function GET(req: NextRequest) {
         ...(VERCEL_TEAM_ID ? { teamId: VERCEL_TEAM_ID } : {}),
       });
 
-      const statsUrl = `https://vercel.com/api/v1/web/insights/stats?${params}`;
-      console.log("[weekly-report] fetching:", statsUrl);
-
-      const headers = { Authorization: `Bearer ${VERCEL_ACCESS_TOKEN}` };
-
-      const [statsRes, pathsRes] = await Promise.all([
-        fetch(statsUrl, { headers }),
-        fetch(`https://vercel.com/api/v1/web/insights/path?${params}&limit=5`, { headers }),
-      ]);
-
-      console.log("[weekly-report] stats status:", statsRes.status);
-      console.log("[weekly-report] paths status:", pathsRes.status);
+      const statsRes = await fetch(
+        `https://vercel.com/api/v1/web/insights/stats?${params}`,
+        { headers: { Authorization: `Bearer ${VERCEL_ACCESS_TOKEN}` } }
+      );
 
       if (statsRes.ok) {
-        const json = await statsRes.json();
-        console.log("[weekly-report] stats body:", JSON.stringify(json).slice(0, 500));
-        const { data } = json;
+        const { data } = await statsRes.json();
         analytics.pageViews = data?.pageViews ?? 0;
         analytics.visitors = data?.visitors ?? 0;
       } else {
-        const errBody = await statsRes.text();
-        console.error("[weekly-report] stats error body:", errBody.slice(0, 500));
-      }
-
-      if (pathsRes.ok) {
-        const json = await pathsRes.json();
-        const { data } = json;
-        analytics.topPages = (data ?? []).map((p: { path: string; visitors: number }) => ({
-          path: p.path,
-          visitors: p.visitors,
-        }));
-      } else {
-        const errBody = await pathsRes.text();
-        console.error("[weekly-report] paths error body:", errBody.slice(0, 500));
+        console.error("[weekly-report] stats error:", statsRes.status, await statsRes.text());
       }
     } catch (e) {
       console.error("[weekly-report] Vercel Analytics error:", e);
     }
-  } else {
-    console.warn("[weekly-report] Skipping Analytics — token:", !!VERCEL_ACCESS_TOKEN, "projectId:", !!VERCEL_PROJECT_ID);
   }
 
   // ── 2. Buscas na calculadora (Railway backend) ─────────────────────────────
@@ -105,19 +73,6 @@ export async function GET(req: NextRequest) {
 
   // ── 3. Monta e envia email ─────────────────────────────────────────────────
   const weekLabel = `${from.toLocaleDateString("pt-BR")} – ${now.toLocaleDateString("pt-BR")}`;
-
-  const topPagesHtml =
-    analytics.topPages && analytics.topPages.length > 0
-      ? `<table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
-           <tr style="background:#f1f5f9"><th style="text-align:left">Página</th><th style="text-align:right">Visitantes</th></tr>
-           ${analytics.topPages
-             .map(
-               (p) =>
-                 `<tr><td style="color:#334155">${p.path}</td><td style="text-align:right;color:#334155">${p.visitors}</td></tr>`
-             )
-             .join("")}
-         </table>`
-      : "<p style='color:#94a3b8;font-size:13px'>Dados indisponíveis — configure VERCEL_ACCESS_TOKEN.</p>";
 
   const calculatorRows =
     calculatorByDay.length > 0
@@ -146,9 +101,6 @@ export async function GET(req: NextRequest) {
           <td style="font-weight:600">${calculatorTotal}</td>
         </tr>
       </table>
-
-      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Top páginas</h3>
-      ${topPagesHtml}
 
       <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Buscas por dia</h3>
       <table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
