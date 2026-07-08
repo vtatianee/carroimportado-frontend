@@ -6,9 +6,6 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   // Lidas dentro da função para captar env vars adicionadas após o último deploy
   const BACKEND_URL = process.env.API_URL || "https://api.carroimportado.com";
-  const VERCEL_ACCESS_TOKEN = process.env.VERCEL_ACCESS_TOKEN;
-  const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
-  const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
   const STATS_TOKEN = process.env.STATS_TOKEN;
   const CRON_SECRET = process.env.CRON_SECRET;
   const REPORT_EMAIL = process.env.REPORT_EMAIL || "arche.boost@gmail.com";
@@ -22,37 +19,7 @@ export async function GET(req: NextRequest) {
   const now = new Date();
   const from = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-  // ── 1. Vercel Analytics ────────────────────────────────────────────────────
-  let analytics: { pageViews?: number; visitors?: number } = {};
-
-  if (VERCEL_ACCESS_TOKEN && VERCEL_PROJECT_ID) {
-    try {
-      const params = new URLSearchParams({
-        projectId: VERCEL_PROJECT_ID,
-        from: from.toISOString().slice(0, 10),
-        to: now.toISOString().slice(0, 10),
-        environment: "production",
-        ...(VERCEL_TEAM_ID ? { teamId: VERCEL_TEAM_ID } : {}),
-      });
-
-      const statsRes = await fetch(
-        `https://vercel.com/api/v1/web/insights/stats?${params}`,
-        { headers: { Authorization: `Bearer ${VERCEL_ACCESS_TOKEN}` } }
-      );
-
-      if (statsRes.ok) {
-        const { data } = await statsRes.json();
-        analytics.pageViews = data?.pageViews ?? 0;
-        analytics.visitors = data?.visitors ?? 0;
-      } else {
-        console.error("[weekly-report] stats error:", statsRes.status, await statsRes.text());
-      }
-    } catch (e) {
-      console.error("[weekly-report] Vercel Analytics error:", e);
-    }
-  }
-
-  // ── 2. Buscas na calculadora (Railway backend) ─────────────────────────────
+  // ── Buscas na calculadora (Railway backend) ────────────────────────────────
   let calculatorTotal = 0;
   let calculatorByDay: { date: string; count: number }[] = [];
 
@@ -86,21 +53,16 @@ export async function GET(req: NextRequest) {
       <h2 style="margin-bottom:4px">📊 Relatório semanal — carroimportado.com</h2>
       <p style="color:#64748b;font-size:13px;margin-top:0">${weekLabel}</p>
 
-      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px">Visitantes e pageviews</h3>
+      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px">Calculadora</h3>
       <table cellpadding="8" style="border-collapse:collapse;font-size:14px">
         <tr>
-          <td style="color:#64748b">Visitantes únicos</td>
-          <td style="font-weight:600">${analytics.visitors ?? "—"}</td>
-        </tr>
-        <tr>
-          <td style="color:#64748b">Pageviews</td>
-          <td style="font-weight:600">${analytics.pageViews ?? "—"}</td>
-        </tr>
-        <tr>
-          <td style="color:#64748b">Buscas na calculadora</td>
+          <td style="color:#64748b">Buscas na semana</td>
           <td style="font-weight:600">${calculatorTotal}</td>
         </tr>
       </table>
+      <p style="font-size:12px;color:#64748b;margin-top:8px">
+        Visitantes e pageviews: <a href="https://vercel.com/vtatianee-s-projects/carroimportado-frontend/analytics" style="color:#3b82f6">ver no Vercel Analytics</a>
+      </p>
 
       <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Buscas por dia</h3>
       <table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
