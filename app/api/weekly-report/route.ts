@@ -7,7 +7,7 @@ const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
 const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID; // opcional (plano hobby = sem team)
 const STATS_TOKEN = process.env.STATS_TOKEN;
 const CRON_SECRET = process.env.CRON_SECRET;
-const REPORT_EMAIL = process.env.REPORT_EMAIL || "ar.assink@gmail.com";
+const REPORT_EMAIL = process.env.REPORT_EMAIL || "arche.boost@gmail.com";
 
 export async function GET(req: NextRequest) {
   // Vercel injeta Authorization: Bearer <CRON_SECRET> nas chamadas de cron
