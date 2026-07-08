@@ -9,6 +9,8 @@ const STATS_TOKEN = process.env.STATS_TOKEN;
 const CRON_SECRET = process.env.CRON_SECRET;
 const REPORT_EMAIL = process.env.REPORT_EMAIL || "arche.boost@gmail.com";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   // Vercel injeta Authorization: Bearer <CRON_SECRET> nas chamadas de cron
   const authHeader = req.headers.get("authorization");
@@ -148,12 +150,12 @@ export async function GET(req: NextRequest) {
   }
 
   const resend = new Resend(apiKey);
-  const result = await resend.emails.send({
+  await resend.emails.send({
     from: "carroimportado.com <onboarding@resend.dev>",
     to: REPORT_EMAIL,
     subject: `Relatório semanal carroimportado.com — ${weekLabel}`,
     html,
   });
 
-  return NextResponse.json({ ok: true, debug: result });
+  return NextResponse.json({ ok: true });
 }
