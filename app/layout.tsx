@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import CookieBanner from "./components/CookieBanner";
 
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 antialiased">
         {children}
         <CookieBanner />
+        <Analytics />
       </body>
     </html>
   );
