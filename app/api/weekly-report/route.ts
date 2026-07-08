@@ -4,13 +4,13 @@ import { Resend } from "resend";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
-  // Lidas dentro da função para captar env vars adicionadas após o último deploy
   const BACKEND_URL = process.env.API_URL || "https://api.carroimportado.com";
   const STATS_TOKEN = process.env.STATS_TOKEN;
   const CRON_SECRET = process.env.CRON_SECRET;
   const REPORT_EMAIL = process.env.REPORT_EMAIL || "arche.boost@gmail.com";
+  const CF_ZONE_ID = process.env.CF_ZONE_ID;
+  const CF_API_TOKEN = process.env.CF_API_TOKEN;
 
-  // Vercel injeta Authorization: Bearer <CRON_SECRET> nas chamadas de cron
   const authHeader = req.headers.get("authorization");
   if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -18,8 +18,66 @@ export async function GET(req: NextRequest) {
 
   const now = new Date();
   const from = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const fromDate = from.toISOString().slice(0, 10);
+  const toDate = now.toISOString().slice(0, 10);
 
-  // ── Buscas na calculadora (Railway backend) ────────────────────────────────
+  // ── 1. Cloudflare Analytics ────────────────────────────────────────────────
+  let cfVisitors = 0;
+  let cfRequests = 0;
+  let cfPageViews = 0;
+  let cfByDay: { date: string; visitors: number; requests: number }[] = [];
+
+  if (CF_ZONE_ID && CF_API_TOKEN) {
+    try {
+      const query = `
+        query {
+          viewer {
+            zones(filter: { zoneTag: "${CF_ZONE_ID}" }) {
+              httpRequests1dGroups(
+                limit: 7
+                filter: { date_geq: "${fromDate}", date_leq: "${toDate}" }
+                orderBy: [date_ASC]
+              ) {
+                date
+                sum { requests pageViews }
+                uniq { uniques }
+              }
+            }
+          }
+        }
+      `;
+
+      const res = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${CF_API_TOKEN}`,
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        const groups = json?.data?.viewer?.zones?.[0]?.httpRequests1dGroups ?? [];
+        for (const g of groups) {
+          cfVisitors += g.uniq?.uniques ?? 0;
+          cfRequests += g.sum?.requests ?? 0;
+          cfPageViews += g.sum?.pageViews ?? 0;
+          cfByDay.push({
+            date: g.date,
+            visitors: g.uniq?.uniques ?? 0,
+            requests: g.sum?.requests ?? 0,
+          });
+        }
+      } else {
+        console.error("[weekly-report] CF error:", res.status, await res.text());
+      }
+    } catch (e) {
+      console.error("[weekly-report] CF Analytics error:", e);
+    }
+  }
+
+  // ── 2. Buscas na calculadora (Railway backend) ─────────────────────────────
   let calculatorTotal = 0;
   let calculatorByDay: { date: string; count: number }[] = [];
 
@@ -41,6 +99,39 @@ export async function GET(req: NextRequest) {
   // ── 3. Monta e envia email ─────────────────────────────────────────────────
   const weekLabel = `${from.toLocaleDateString("pt-BR")} – ${now.toLocaleDateString("pt-BR")}`;
 
+  const cfSection = CF_ZONE_ID && CF_API_TOKEN
+    ? `
+      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px">Tráfego (Cloudflare)</h3>
+      <table cellpadding="8" style="border-collapse:collapse;font-size:14px">
+        <tr>
+          <td style="color:#64748b">Visitantes únicos</td>
+          <td style="font-weight:600">${cfVisitors.toLocaleString("pt-BR")}</td>
+        </tr>
+        <tr>
+          <td style="color:#64748b">Pageviews</td>
+          <td style="font-weight:600">${cfPageViews.toLocaleString("pt-BR")}</td>
+        </tr>
+        <tr>
+          <td style="color:#64748b">Total de requests</td>
+          <td style="font-weight:600">${cfRequests.toLocaleString("pt-BR")}</td>
+        </tr>
+      </table>
+      ${cfByDay.length > 0 ? `
+      <table cellpadding="6" style="border-collapse:collapse;font-size:12px;width:100%;margin-top:8px">
+        <tr style="background:#f1f5f9">
+          <th style="text-align:left">Data</th>
+          <th style="text-align:right">Visitantes</th>
+          <th style="text-align:right">Requests</th>
+        </tr>
+        ${cfByDay.map(d => `<tr>
+          <td style="color:#334155">${d.date}</td>
+          <td style="text-align:right;color:#334155">${d.visitors.toLocaleString("pt-BR")}</td>
+          <td style="text-align:right;color:#334155">${d.requests.toLocaleString("pt-BR")}</td>
+        </tr>`).join("")}
+      </table>` : ""}
+    `
+    : `<p style="color:#94a3b8;font-size:13px">Configure CF_ZONE_ID e CF_API_TOKEN no Vercel para ver tráfego.</p>`;
+
   const calculatorRows =
     calculatorByDay.length > 0
       ? calculatorByDay
@@ -53,16 +144,15 @@ export async function GET(req: NextRequest) {
       <h2 style="margin-bottom:4px">📊 Relatório semanal — carroimportado.com</h2>
       <p style="color:#64748b;font-size:13px;margin-top:0">${weekLabel}</p>
 
-      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px">Calculadora</h3>
+      ${cfSection}
+
+      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Calculadora</h3>
       <table cellpadding="8" style="border-collapse:collapse;font-size:14px">
         <tr>
           <td style="color:#64748b">Buscas na semana</td>
           <td style="font-weight:600">${calculatorTotal}</td>
         </tr>
       </table>
-      <p style="font-size:12px;color:#64748b;margin-top:8px">
-        Visitantes e pageviews: <a href="https://vercel.com/vtatianee-s-projects/carroimportado-frontend/analytics" style="color:#3b82f6">ver no Vercel Analytics</a>
-      </p>
 
       <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Buscas por dia</h3>
       <table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
@@ -77,8 +167,6 @@ export async function GET(req: NextRequest) {
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.warn("[weekly-report] RESEND_API_KEY não configurada — apenas logando.");
-    console.log("[weekly-report]", { analytics, calculatorTotal });
     return NextResponse.json({ ok: true, dry_run: true });
   }
 
