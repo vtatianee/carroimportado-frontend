@@ -29,6 +29,9 @@ export async function GET(req: NextRequest) {
     topPages?: { path: string; visitors: number }[];
   } = {};
 
+  console.log("[weekly-report] token present:", !!VERCEL_ACCESS_TOKEN, "| token length:", VERCEL_ACCESS_TOKEN?.length ?? 0);
+  console.log("[weekly-report] project id:", VERCEL_PROJECT_ID ?? "MISSING");
+
   if (VERCEL_ACCESS_TOKEN && VERCEL_PROJECT_ID) {
     try {
       const params = new URLSearchParams({
@@ -39,31 +42,46 @@ export async function GET(req: NextRequest) {
         ...(VERCEL_TEAM_ID ? { teamId: VERCEL_TEAM_ID } : {}),
       });
 
-      const headers = {
-        Authorization: `Bearer ${VERCEL_ACCESS_TOKEN}`,
-      };
+      const statsUrl = `https://vercel.com/api/v1/web/insights/stats?${params}`;
+      console.log("[weekly-report] fetching:", statsUrl);
+
+      const headers = { Authorization: `Bearer ${VERCEL_ACCESS_TOKEN}` };
 
       const [statsRes, pathsRes] = await Promise.all([
-        fetch(`https://vercel.com/api/v1/web/insights/stats?${params}`, { headers }),
+        fetch(statsUrl, { headers }),
         fetch(`https://vercel.com/api/v1/web/insights/path?${params}&limit=5`, { headers }),
       ]);
 
+      console.log("[weekly-report] stats status:", statsRes.status);
+      console.log("[weekly-report] paths status:", pathsRes.status);
+
       if (statsRes.ok) {
-        const { data } = await statsRes.json();
+        const json = await statsRes.json();
+        console.log("[weekly-report] stats body:", JSON.stringify(json).slice(0, 500));
+        const { data } = json;
         analytics.pageViews = data?.pageViews ?? 0;
         analytics.visitors = data?.visitors ?? 0;
+      } else {
+        const errBody = await statsRes.text();
+        console.error("[weekly-report] stats error body:", errBody.slice(0, 500));
       }
 
       if (pathsRes.ok) {
-        const { data } = await pathsRes.json();
+        const json = await pathsRes.json();
+        const { data } = json;
         analytics.topPages = (data ?? []).map((p: { path: string; visitors: number }) => ({
           path: p.path,
           visitors: p.visitors,
         }));
+      } else {
+        const errBody = await pathsRes.text();
+        console.error("[weekly-report] paths error body:", errBody.slice(0, 500));
       }
     } catch (e) {
       console.error("[weekly-report] Vercel Analytics error:", e);
     }
+  } else {
+    console.warn("[weekly-report] Skipping Analytics — token:", !!VERCEL_ACCESS_TOKEN, "projectId:", !!VERCEL_PROJECT_ID);
   }
 
   // ── 2. Buscas na calculadora (Railway backend) ─────────────────────────────
