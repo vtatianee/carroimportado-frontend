@@ -148,12 +148,12 @@ export async function GET(req: NextRequest) {
   }
 
   const resend = new Resend(apiKey);
-  await resend.emails.send({
+  const result = await resend.emails.send({
     from: "carroimportado.com <onboarding@resend.dev>",
     to: REPORT_EMAIL,
     subject: `Relatório semanal carroimportado.com — ${weekLabel}`,
     html,
   });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, debug: result });
 }
