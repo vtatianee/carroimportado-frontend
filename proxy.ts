@@ -9,7 +9,7 @@ import type { NextRequest } from 'next/server';
  *
  * _next/static, _next/image e api/ ficam de fora — esses têm seu próprio cache.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const response = NextResponse.next();
   response.headers.set('Cache-Control', 'no-cache, must-revalidate');
   response.headers.set('CDN-Cache-Control', 'no-store');
