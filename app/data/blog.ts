@@ -12,6 +12,17 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "icms-importacao-carro-por-estado-brasil-2026",
+    title: "ICMS na importação de carros: qual estado cobra menos e quanto isso muda o custo total",
+    excerpt:
+      "A alíquota de ICMS varia de 12% (SP, SC, RS, PR, MG) a 20% (RJ) — e por causa do cálculo 'por dentro', essa diferença representa R$ 30.000 a R$ 60.000 no custo total de um clássico americano. Entenda como funciona e o que vale simular antes de decidir.",
+    date: "2026-07-09",
+    readTimeMin: 5,
+    tags: ["Impostos", "ICMS", "Estados", "Custos"],
+    published: true,
+    coverImage: "/blog/icms-importacao-carro-por-estado-brasil-2026.jpg",
+  },
+  {
     slug: "cambio-dolar-julho-2026-importacao-carro-americano",
     title: "Dólar a R$ 5,15 vs. R$ 6,27: quanto a queda do câmbio economiza de verdade na importação do seu carro",
     excerpt:
