@@ -12,6 +12,17 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "despachante-aduaneiro-importacao-carro-americano",
+    title: "Despachante aduaneiro para importação de carro americano: o que faz, quanto cobra e como escolher",
+    excerpt:
+      "O despachante aduaneiro é o profissional que conduz o desembaraço do seu carro na alfândega — sem ele, dificilmente o processo avança. Entenda o que está incluído nos honorários (R$ 4.000–10.000), quais custos são cobrados à parte e o que observar antes de contratar.",
+    date: "2026-07-14",
+    readTimeMin: 5,
+    tags: ["Guia", "Despachante", "Processo", "Custos"],
+    published: true,
+    coverImage: "/blog/despachante-aduaneiro-importacao-carro-americano.jpg",
+  },
+  {
     slug: "icms-importacao-carro-por-estado-brasil-2026",
     title: "ICMS na importação de carros: qual estado cobra menos e quanto isso muda o custo total",
     excerpt:
