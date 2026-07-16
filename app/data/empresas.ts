@@ -177,6 +177,24 @@ export const EMPRESAS: Empresa[] = [
   },
 ];
 
+export const CATEGORIAS_RFQ: { id: string; label: string; especialidades: string[] }[] = [
+  {
+    id: "despachante",
+    label: "Despachante aduaneiro",
+    especialidades: ["Despachante", "Despachante EUA"],
+  },
+  {
+    id: "importadora",
+    label: "Importadora (processo completo)",
+    especialidades: ["Importação"],
+  },
+  {
+    id: "exportadora",
+    label: "Exportador / frete marítimo nos EUA",
+    especialidades: ["Exportação", "Frete marítimo", "RORO", "Container"],
+  },
+];
+
 export const ESPECIALIDADE_CORES: Record<string, string> = {
   Exportação: "bg-blue-100 text-blue-700",
   Importação: "bg-green-100 text-green-700",

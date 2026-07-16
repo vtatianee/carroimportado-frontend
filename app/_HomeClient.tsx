@@ -1050,24 +1050,41 @@ function SearchHistory({ entries, onSelect, onClear }: {
 }
 
 // ── Próximos passos ───────────────────────────────────────────────────────────
-function NextSteps() {
+function NextSteps({ result }: { result?: AnalyzeResult | null }) {
+  const rfqParams = result
+    ? new URLSearchParams({
+        price_usd: String(result.car_data.price_usd),
+        year: String(result.car_data.year ?? ""),
+        make: result.car_data.make ?? "",
+        model: result.car_data.model ?? "",
+        is_classic: String(result.car_data.is_classic),
+      }).toString()
+    : "";
+
   return (
     <section className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white">
       <h2 className="font-bold text-base mb-4">O que fazer agora?</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <a href={`/orcamento${rfqParams ? `?${rfqParams}` : ""}`}
+          className="flex items-center gap-3 bg-white text-blue-700 hover:bg-blue-50 rounded-xl px-4 py-3 transition-colors shadow-sm">
+          <span className="text-2xl shrink-0">📩</span>
+          <div>
+            <p className="font-bold text-sm">Solicitar orçamentos reais</p>
+            <p className="text-blue-500 text-xs mt-0.5">Despachante, importadora e frete</p>
+          </div>
+        </a>
         <a href="/guia" className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
           <span className="text-2xl shrink-0">📋</span>
           <div>
             <p className="font-semibold text-sm">Leia o guia completo</p>
-            <p className="text-blue-100 text-xs mt-0.5">8 etapas do processo de importação</p>
+            <p className="text-blue-100 text-xs mt-0.5">8 etapas do processo</p>
           </div>
         </a>
-        <a href="/empresas"
-          className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
+        <a href="/empresas" className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
           <span className="text-2xl shrink-0">🏢</span>
           <div>
-            <p className="font-semibold text-sm">Encontrar empresa importadora</p>
-            <p className="text-blue-100 text-xs mt-0.5">Exportadoras nos EUA e importadoras no Brasil</p>
+            <p className="font-semibold text-sm">Ver empresas importadoras</p>
+            <p className="text-blue-100 text-xs mt-0.5">Exportadoras EUA e importadoras BR</p>
           </div>
         </a>
         <a href="https://wa.me/?text=Calculei%20o%20custo%20de%20importar%20um%20carro%20dos%20EUA%20no%20carroimportado.com%20%F0%9F%9A%97" target="_blank" rel="noopener noreferrer"
@@ -1694,7 +1711,7 @@ export default function Home() {
         {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
 
         {/* Próximos passos — aparece quando há resultado real */}
-        {(urlResult || manualResult) && !loading && <NextSteps />}
+        {(urlResult || manualResult) && !loading && <NextSteps result={urlResult || manualResult} />}
 
         {/* Exemplo pré-calculado — visível apenas antes de qualquer busca */}
         {!hasSearched && !urlResult && !manualResult && !loading && (
