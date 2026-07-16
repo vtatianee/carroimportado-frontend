@@ -12,6 +12,17 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "quanto-tempo-leva-importar-carro-eua-brasil-2026",
+    title: "Do anúncio à garagem: quanto tempo leva importar um carro dos EUA para o Brasil em 2026",
+    excerpt:
+      "Entre 90 e 150 dias — mas cada etapa tem um prazo previsível. Compra e documentação nos EUA, frete marítimo, desembaraço aduaneiro e emplacamento: entenda onde o tempo é gasto e como planejar sem surpresas.",
+    date: "2026-07-15",
+    readTimeMin: 5,
+    tags: ["Guia", "Logística", "Prazo"],
+    published: true,
+    coverImage: "/blog/quanto-tempo-leva-importar-carro-eua-brasil-2026.jpg",
+  },
+  {
     slug: "despachante-aduaneiro-importacao-carro-americano",
     title: "Despachante aduaneiro para importação de carro americano: o que faz, quanto cobra e como escolher",
     excerpt:
