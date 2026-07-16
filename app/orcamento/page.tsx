@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import OrcamentoClient from "./OrcamentoClient";
 
 export const metadata: Metadata = {
@@ -9,5 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default function OrcamentoPage() {
-  return <OrcamentoClient />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
+      <OrcamentoClient />
+    </Suspense>
+  );
 }
