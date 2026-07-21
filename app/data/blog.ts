@@ -12,6 +12,17 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "negociacao-tarifas-eua-brasil-carros-2026",
+    title: "Por que os EUA pediram para o Brasil reduzir o imposto de importação de carros — e o que isso muda para quem quer importar",
+    excerpt:
+      "O USTR incluiu a redução do II de 35% sobre veículos americanos como pedido prioritário nas negociações de julho. As conversas travaram, mas é a primeira vez em anos que a alíquota está explicitamente na mesa. O que pode mudar — e o que não muda — para quem está planejando importar em 2026.",
+    date: "2026-07-21",
+    readTimeMin: 5,
+    tags: ["Impostos", "Política", "Mercado", "Notícias"],
+    published: true,
+    coverImage: "/blog/negociacao-tarifas-eua-brasil-carros-2026.jpg",
+  },
+  {
     slug: "quanto-tempo-leva-importar-carro-eua-brasil-2026",
     title: "Do anúncio à garagem: quanto tempo leva importar um carro dos EUA para o Brasil em 2026",
     excerpt:
