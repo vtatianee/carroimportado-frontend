@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
                 filter: { date_geq: "${fromDate}", date_leq: "${toDate}" }
                 orderBy: [date_ASC]
               ) {
-                date
+                dimensions { date }
                 sum { requests pageViews }
                 uniq { uniques }
               }
@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
           cfRequests += g.sum?.requests ?? 0;
           cfPageViews += g.sum?.pageViews ?? 0;
           cfByDay.push({
-            date: g.date,
+            date: g.dimensions?.date ?? "",
             visitors: g.uniq?.uniques ?? 0,
             requests: g.sum?.requests ?? 0,
           });
