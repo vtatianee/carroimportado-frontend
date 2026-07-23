@@ -12,6 +12,17 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "mustang-camaro-f100-qual-classico-americano-valoriza-mais-brasil",
+    title: "Mustang, F-100 ou Camaro: qual clássico americano valoriza mais no mercado brasileiro",
+    excerpt:
+      "Os cinco clássicos americanos mais importados para o Brasil comparados por custo de importação, liquidez e potencial de valorização. Mustang, F-100, Camaro, C10 e Charger — com tabela de preços e custo desembarcado em SP.",
+    date: "2026-07-23",
+    readTimeMin: 6,
+    tags: ["Guia", "Clássicos", "Mercado", "Valorização"],
+    published: true,
+    coverImage: "/blog/mustang-camaro-f100-qual-classico-americano-valoriza-mais-brasil.jpg",
+  },
+  {
     slug: "negociacao-tarifas-eua-brasil-carros-2026",
     title: "Por que os EUA pediram para o Brasil reduzir o imposto de importação de carros — e o que isso muda para quem quer importar",
     excerpt:
