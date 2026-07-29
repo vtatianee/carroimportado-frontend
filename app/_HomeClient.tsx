@@ -48,28 +48,51 @@ function fmtUSD(n: number) {
   return n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
 
+// Espelha exatamente o retorno de calculateImportCosts() no backend
+// (garageusa_backend/src/calculator/importCosts.js). Antes esta interface era um
+// subconjunto — faltavam breakdown_usd, exchange_rate_usd_brl, destination_state
+// e as 4 chaves de FOB/frete/seguro/CIF do breakdown — o que escondia campos
+// disponíveis. Na Fase 1 isto vira um schema zod compartilhado com o app.
+interface CostBreakdown {
+  fob_vehicle: number;
+  frete_maritimo: number;
+  seguro_maritimo: number;
+  cif: number;
+  ii_imposto_importacao: number;
+  ipi: number;
+  pis: number;
+  cofins: number;
+  icms: number;
+  desembaraco: number;
+  total_taxes: number;
+  total_landed: number;
+}
+
 interface ImportCosts {
+  exchange_rate_usd_brl: number;
+  destination_state: string;
   icms_rate_pct: number;
   ipi_rate_pct: number;
   is_classic: boolean;
+  ipi_note: string;
   effective_tax_rate_pct: number;
   total_landed_brl: number;
   valor_mercado_estimado_brl: number;
+  valor_mercado_estimado_usd: number;
+  market_premium_note: string;
   valor_aduaneiro: {
     fob_usd: number; fob_brl: number; frete_usd: number; frete_brl: number;
     frete_fonte: string; frete_sugerido: { min_usd: number; max_usd: number; nota: string };
-    seguro_usd: number; seguro_brl: number; cif_usd: number; cif_brl: number;
+    seguro_usd: number; seguro_brl: number; seguro_nota: string;
+    cif_usd: number; cif_brl: number; cif_nota: string;
   };
   desembaraco_aduaneiro: {
     despachante_honorarios_usd: number; thc_usd: number;
-    afrmm_usd: number; armazenagem_capatazia_usd: number;
+    afrmm_usd: number; afrmm_nota: string; armazenagem_capatazia_usd: number;
     total_usd: number; total_brl: number;
   };
-  breakdown_brl: {
-    ii_imposto_importacao: number; ipi: number; pis: number;
-    cofins: number; icms: number; desembaraco: number;
-    total_taxes: number; total_landed: number;
-  };
+  breakdown_usd: CostBreakdown;
+  breakdown_brl: CostBreakdown;
 }
 
 interface AnalyzeResult {
@@ -295,18 +318,47 @@ const EXAMPLE_RESULT: AnalyzeResult = {
   car_data: { price_usd: 45000, year: 1969, make: "Ford", model: "Mustang Fastback", mileage_miles: 58420, condition: "Used", photos: [], is_classic: true },
   import_costs: {
     // Mustang 1969 — clássico 30+ anos → IPI = 0% (Lei 9.055/1995)
-    // FOB $45k · Frete $2k · Seguro $675 · CIF $47.675 · Taxa R$5,75
-    // II=35%·FOB · IPI=0 · PIS=2,62%·CIF · COFINS=12,57%·CIF · ICMS=12% por dentro
-    icms_rate_pct: 12, ipi_rate_pct: 0, is_classic: true, effective_tax_rate_pct: 73.4,
-    total_landed_brl: 481336, valor_mercado_estimado_brl: 601670,
+    // FOB $45k · Frete $2k · Seguro $675 · CIF $47.675 · Taxa R$5,75 · SP
+    //
+    // Estes números são a SAÍDA REAL de calculateImportCosts() no backend, não
+    // valores escritos à mão. A versão anterior aplicava II sobre o FOB em vez
+    // do CIF (mesmo erro da calculadora reversa) e mostrava R$481.336 em vez de
+    // R$486.647. Ao mexer aqui, regerar com o backend em vez de estimar:
+    //   node -e 'console.log(JSON.stringify(require("./src/calculator/importCosts")
+    //     ({priceUsd:45000,state:"SP",usdBrlRate:5.75,freteUsd:2000,year:1969}),null,2))'
+    exchange_rate_usd_brl: 5.75,
+    destination_state: "SP",
+    icms_rate_pct: 12, ipi_rate_pct: 0, is_classic: true,
+    ipi_note: "IPI isento — veículo com 30+ anos de fabricação. Lei 9.055/1995.",
+    effective_tax_rate_pct: 75.74,
+    total_landed_brl: 486646.59,
+    valor_mercado_estimado_brl: 608308.24,
+    valor_mercado_estimado_usd: 105792.74,
+    market_premium_note: "Estimativa de revenda com prêmio de 25% típico para clássicos americanos no mercado brasileiro",
     valor_aduaneiro: {
       fob_usd: 45000, fob_brl: 258750,
       frete_usd: 2000, frete_brl: 11500, frete_fonte: "estimativa",
-      frete_sugerido: { min_usd: 1500, max_usd: 2500, nota: "Frete estimado. Solicite cotação a transportadoras especializadas." },
-      seguro_usd: 675, seguro_brl: 3881, cif_usd: 47675, cif_brl: 274131,
+      frete_sugerido: { min_usd: 1200, max_usd: 2500, nota: "Frete estimado. Solicite cotação a transportadoras especializadas." },
+      seguro_usd: 675, seguro_brl: 3881.25,
+      seguro_nota: "1,5% do FOB — padrão Receita Federal (IN RFB nº 1.401/2013)",
+      cif_usd: 47675, cif_brl: 274131.25,
+      cif_nota: "Base de cálculo dos tributos (AVA-GATT / Decreto 6.759/2009)",
     },
-    desembaraco_aduaneiro: { despachante_honorarios_usd: 1500, thc_usd: 500, afrmm_usd: 500, armazenagem_capatazia_usd: 375, total_usd: 2875, total_brl: 16531 },
-    breakdown_brl: { ii_imposto_importacao: 90563, ipi: 0, pis: 7182, cofins: 34450, icms: 57760, desembaraco: 16531, total_taxes: 189955, total_landed: 481336 },
+    desembaraco_aduaneiro: {
+      despachante_honorarios_usd: 1500, thc_usd: 500,
+      afrmm_usd: 500, afrmm_nota: "25% do frete marítimo (Lei 10.893/2004)",
+      armazenagem_capatazia_usd: 375, total_usd: 2875, total_brl: 16531.25,
+    },
+    breakdown_usd: {
+      fob_vehicle: 45000, frete_maritimo: 2000, seguro_maritimo: 675, cif: 47675,
+      ii_imposto_importacao: 16686.25, ipi: 0, pis: 1249.09, cofins: 5992.75,
+      icms: 10156.1, desembaraco: 2875, total_taxes: 34084.19, total_landed: 84634.19,
+    },
+    breakdown_brl: {
+      fob_vehicle: 258750, frete_maritimo: 11500, seguro_maritimo: 3881.25, cif: 274131.25,
+      ii_imposto_importacao: 95945.94, ipi: 0, pis: 7182.27, cofins: 34458.31,
+      icms: 58397.58, desembaraco: 16531.25, total_taxes: 195984.09, total_landed: 486646.59,
+    },
   },
 };
 
@@ -602,27 +654,18 @@ function ShareResult({ result }: { result: AnalyzeResult }) {
 }
 
 // ── Calculadora reversa ───────────────────────────────────────────────────────
-const ICMS_RATES: Record<string, number> = {
-  SP: 0.12, MG: 0.12, SC: 0.12, RS: 0.12, PR: 0.12,
-  RJ: 0.20,
-  OTHER: 0.17,
-};
-
+// As alíquotas NÃO são replicadas aqui de propósito: o cálculo vem de
+// POST /api/reverse, que inverte por bisseção a mesma função usada por
+// /api/analyze e /api/calculate. Manter uma segunda implementação no browser
+// foi o que fez as abas divergirem entre si (o II era aplicado sobre o FOB em
+// vez do CIF, e o seguro marítimo não existia).
 interface ReverseResult {
-  fob: number;
-  freteUsd: number;
-  ii: number;
-  ipi: number;
-  pis: number;
-  cofins: number;
-  desembaraco: number;
-  icms: number;
-  totalUsd: number;
-  totalBrl: number;
-  usdBrlRate: number;
-  icmsRate: number;
-  ipiRate: number;
-  state: string;
+  modo: string;
+  orcamento_brl: number;
+  fob_usd_sugerido: number;
+  faixa_busca: { min_usd: number; max_usd: number };
+  cotacao_dolar: { valor: number; fonte: string; data: string | null; nota: string };
+  import_costs: ImportCosts;
 }
 
 interface SearchListing {
@@ -635,37 +678,6 @@ interface SearchListing {
   listing_url: string;
   year: number | null;
   is_classic: boolean | null;
-}
-
-function calcReverse(
-  budgetBrl: number,
-  state: string,
-  usdBrlRate: number,
-  freteUsd: number,
-  vehicleType: string = "standard",
-): ReverseResult | null {
-  const icmsRate = ICMS_RATES[state] ?? 0.17;
-  const desembaraco = 3000;
-  const ipiRate = (vehicleType === "electric" || vehicleType === "classic") ? 0 : 0.1881;
-  // Coefficient for FOB in the linear equation:
-  // total_usd = (coeff * FOB + fixedCosts) / (1 - icmsRate)
-  const coeff = 1 + 0.35 + 1.35 * ipiRate + 0.0262 + 0.1257;
-  const fixedCosts = freteUsd + desembaraco + freteUsd * 0.0262 + freteUsd * 0.1257;
-  const totalUsdTarget = budgetBrl / usdBrlRate;
-  const fob = (totalUsdTarget * (1 - icmsRate) - fixedCosts) / coeff;
-  if (fob <= 0) return null;
-
-  const cif = fob + freteUsd;
-  const ii = fob * 0.35;
-  const ipi = (fob + ii) * ipiRate;
-  const pis = cif * 0.0262;
-  const cofins = cif * 0.1257;
-  const subtotal = cif + ii + ipi + pis + cofins + desembaraco;
-  const icms = (subtotal / (1 - icmsRate)) * icmsRate;
-  const totalUsd = fob + freteUsd + desembaraco + ii + ipi + pis + cofins + icms;
-  const totalBrl = totalUsd * usdBrlRate;
-
-  return { fob, freteUsd, ii, ipi, pis, cofins, desembaraco, icms, totalUsd, totalBrl, usdBrlRate, icmsRate, state, ipiRate };
 }
 
 function ReverseCalc({
@@ -683,12 +695,81 @@ function ReverseCalc({
 }) {
   const budgetNum = parseFloat(budget.replace(/\./g, "").replace(",", ".")) || 0;
   const cambioNum = parseFloat(cambio.replace(",", ".")) || 0;
-  const freteNum = parseFloat(frete) || 1500;
-  const result = budgetNum > 0 && cambioNum > 0 ? calcReverse(budgetNum, state, cambioNum, freteNum, vehicleType) : null;
+  const freteNum = parseFloat(frete) || 0;
+
+  const [result, setResult] = useState<ReverseResult | null>(null);
+  const [calculating, setCalculating] = useState(false);
+  const [calcError, setCalcError] = useState<string | null>(null);
+  const [insufficient, setInsufficient] = useState(false);
 
   const [listings, setListings] = useState<SearchListing[] | null>(null);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+
+  // O cálculo virou chamada de rede, então é debounced: sem isso dispararíamos
+  // um request por tecla digitada no orçamento.
+  useEffect(() => {
+    if (budgetNum <= 0) {
+      setResult(null);
+      setCalcError(null);
+      setInsufficient(false);
+      return;
+    }
+
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      setCalculating(true);
+      setCalcError(null);
+      setInsufficient(false);
+
+      // O backend deriva "clássico" do ano, não de um tipo próprio: um veículo
+      // com 30+ anos é isento de IPI pela Lei 9.055/1995.
+      const body: Record<string, unknown> = {
+        budget_brl: budgetNum,
+        state,
+        vehicle_type: vehicleType === "electric" ? "electric" : "standard",
+      };
+      if (cambioNum > 0) body.usd_brl_rate = cambioNum;
+      if (freteNum > 0) body.frete_usd = freteNum;
+      if (vehicleType === "classic") body.year = new Date().getFullYear() - 30;
+
+      try {
+        const res = await fetch("/api/reverse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (cancelled) return;
+
+        if (res.status === 422 && data.error === "orcamento_insuficiente") {
+          setResult(null);
+          setInsufficient(true);
+        } else if (!res.ok) {
+          setResult(null);
+          setCalcError("Não foi possível calcular agora. Tente novamente em instantes.");
+        } else {
+          setResult(data);
+          setListings(null);
+          setSearchError(null);
+        }
+      } catch {
+        if (!cancelled) {
+          setResult(null);
+          setCalcError("Erro de conexão ao calcular. Verifique sua internet.");
+        }
+      } finally {
+        if (!cancelled) setCalculating(false);
+      }
+    }, 600);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [budgetNum, state, cambioNum, freteNum, vehicleType]);
+
+  const ic = result?.import_costs;
 
   const handleSearch = async () => {
     if (!result) return;
@@ -696,11 +777,9 @@ function ReverseCalc({
     setSearchError(null);
     setListings(null);
 
-    const fobMin = Math.round(result.fob * 0.85);
-    const fobMax = Math.round(result.fob * 1.15);
     const params = new URLSearchParams({
-      priceMin: String(fobMin),
-      priceMax: String(fobMax),
+      priceMin: String(result.faixa_busca.min_usd),
+      priceMax: String(result.faixa_busca.max_usd),
       count: "5",
     });
     if (vehicleType === "classic") {
@@ -748,17 +827,19 @@ function ReverseCalc({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Câmbio USD/BRL *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Câmbio USD/BRL <span className="text-slate-400 font-normal">— opcional</span>
+          </label>
           <input
             type="text"
             inputMode="decimal"
             value={cambio}
             onChange={(e) => setCambio(e.target.value)}
-            placeholder="ex: 5.10"
+            placeholder="Padrão: PTAX do dia (BCB)"
             className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           />
           <p className="mt-1 text-xs text-slate-400">
-            Consulte a cotação atual no{" "}
+            Deixe vazio para usar a cotação oficial do{" "}
             <a href="https://www.bcb.gov.br/conversao" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
               Banco Central ↗
             </a>
@@ -788,23 +869,26 @@ function ReverseCalc({
         </div>
       </div>
 
-      {result && (
+      {result && ic && (
         <div className="mt-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 space-y-5">
           {/* Headline */}
           <div className="text-center">
-            <p className="text-sm text-slate-500 mb-1">Com <strong className="text-slate-700">R$ {fmt(result.totalBrl)}</strong> você pode pagar até:</p>
+            <p className="text-sm text-slate-500 mb-1">Com <strong className="text-slate-700">R$ {fmt(ic.total_landed_brl)}</strong> você pode pagar até:</p>
             <p className="text-4xl font-bold text-green-700 tracking-tight">
-              US$ {fmtUSD(result.fob)}
+              US$ {fmtUSD(result.fob_usd_sugerido)}
             </p>
             <p className="text-sm text-slate-500 mt-1">pelo veículo nos EUA</p>
             <div className="flex flex-wrap justify-center gap-2 mt-3">
               <span className="bg-white border border-slate-200 text-xs text-slate-600 px-3 py-1 rounded-full">
-                Câmbio: R$ {result.usdBrlRate.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                Câmbio: R$ {ic.exchange_rate_usd_brl.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </span>
               <span className="bg-white border border-slate-200 text-xs text-slate-600 px-3 py-1 rounded-full">
-                {result.state === "OTHER" ? "Outros estados" : result.state} · ICMS {(result.icmsRate * 100).toFixed(0)}%
+                {ic.destination_state === "OTHER" ? "Outros estados" : ic.destination_state} · ICMS {ic.icms_rate_pct.toFixed(0)}%
               </span>
             </div>
+            {!cambioNum && (
+              <p className="text-[11px] text-slate-400 mt-2">{result.cotacao_dolar.fonte}</p>
+            )}
           </div>
 
           {/* Breakdown */}
@@ -819,22 +903,23 @@ function ReverseCalc({
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {[
-                  { label: "Veículo (FOB)", usd: result.fob, highlight: true },
-                  { label: `Frete marítimo`, usd: result.freteUsd },
-                  { label: "II — Imposto de Importação (35%)", usd: result.ii },
-                  { label: result.ipiRate === 0 ? "IPI (0% — isento)" : `IPI (${(result.ipiRate * 100).toFixed(2)}%)`, usd: result.ipi },
-                  { label: "PIS (2,62%)", usd: result.pis },
-                  { label: "COFINS (12,57%)", usd: result.cofins },
-                  { label: "Desembaraço aduaneiro", usd: result.desembaraco },
-                  { label: `ICMS (${(result.icmsRate * 100).toFixed(0)}%)`, usd: result.icms },
-                ].map(({ label, usd, highlight }) => (
+                  { label: "Veículo (FOB)", usd: ic.breakdown_usd.fob_vehicle, brl: ic.breakdown_brl.fob_vehicle, highlight: true },
+                  { label: "Frete marítimo", usd: ic.breakdown_usd.frete_maritimo, brl: ic.breakdown_brl.frete_maritimo },
+                  { label: "Seguro marítimo (1,5% do FOB)", usd: ic.breakdown_usd.seguro_maritimo, brl: ic.breakdown_brl.seguro_maritimo },
+                  { label: "II — Imposto de Importação (35%)", usd: ic.breakdown_usd.ii_imposto_importacao, brl: ic.breakdown_brl.ii_imposto_importacao },
+                  { label: ic.ipi_rate_pct === 0 ? "IPI (0% — isento)" : `IPI (${ic.ipi_rate_pct.toFixed(2)}%)`, usd: ic.breakdown_usd.ipi, brl: ic.breakdown_brl.ipi },
+                  { label: "PIS (2,62%)", usd: ic.breakdown_usd.pis, brl: ic.breakdown_brl.pis },
+                  { label: "COFINS (12,57%)", usd: ic.breakdown_usd.cofins, brl: ic.breakdown_brl.cofins },
+                  { label: "Desembaraço aduaneiro", usd: ic.breakdown_usd.desembaraco, brl: ic.breakdown_brl.desembaraco },
+                  { label: `ICMS (${ic.icms_rate_pct.toFixed(0)}%)`, usd: ic.breakdown_usd.icms, brl: ic.breakdown_brl.icms },
+                ].map(({ label, usd, brl, highlight }) => (
                   <tr key={label} className={highlight ? "bg-green-50/50" : ""}>
                     <td className={`px-4 py-2.5 ${highlight ? "font-semibold text-slate-800" : "text-slate-600"}`}>{label}</td>
                     <td className={`px-4 py-2.5 text-right font-mono ${highlight ? "font-semibold text-slate-800" : "text-slate-600"}`}>
                       {fmtUSD(usd)}
                     </td>
                     <td className={`px-4 py-2.5 text-right font-mono ${highlight ? "font-semibold text-slate-800" : "text-slate-600"}`}>
-                      {fmt(usd * result.usdBrlRate)}
+                      {fmt(brl)}
                     </td>
                   </tr>
                 ))}
@@ -843,10 +928,10 @@ function ReverseCalc({
                 <tr className="bg-slate-50 border-t border-slate-200">
                   <td className="px-4 py-3 font-bold text-slate-900">Total estimado</td>
                   <td className="px-4 py-3 text-right font-bold font-mono text-slate-900">
-                    {fmtUSD(result.totalUsd)}
+                    {fmtUSD(ic.breakdown_usd.total_landed)}
                   </td>
                   <td className="px-4 py-3 text-right font-bold font-mono text-slate-900">
-                    {fmt(result.totalBrl)}
+                    {fmt(ic.total_landed_brl)}
                   </td>
                 </tr>
               </tfoot>
@@ -891,7 +976,7 @@ function ReverseCalc({
               <p className="text-xs text-slate-500 text-center">
                 Anúncios ativos no Cars.com entre{" "}
                 <strong className="text-slate-700">
-                  US$ {fmtUSD(Math.round(result.fob * 0.85))} – {fmtUSD(Math.round(result.fob * 1.15))}
+                  US$ {fmtUSD(result.faixa_busca.min_usd)} – {fmtUSD(result.faixa_busca.max_usd)}
                 </strong>
               </p>
               {listings.map((listing, idx) => (
@@ -980,9 +1065,25 @@ function ReverseCalc({
         </div>
       )}
 
-      {budgetNum > 0 && cambioNum > 0 && !result && (
+      {calculating && !result && (
+        <div className="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-500 flex items-center gap-2">
+          <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+          </svg>
+          Calculando…
+        </div>
+      )}
+
+      {insufficient && (
         <div className="mt-4 bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
-          ⚠️ O orçamento informado é insuficiente para cobrir os custos fixos de importação (frete + desembaraço + impostos mínimos). Tente um valor maior.
+          ⚠️ O orçamento informado é insuficiente para cobrir os custos fixos de importação (frete, seguro, desembaraço e os impostos que incidem sobre eles). Tente um valor maior.
+        </div>
+      )}
+
+      {calcError && (
+        <div className="mt-4 bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+          ⚠️ {calcError}
         </div>
       )}
     </div>

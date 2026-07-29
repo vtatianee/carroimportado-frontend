@@ -91,7 +91,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         )}
 
         {/* Conteúdo do post */}
-        <article className="prose prose-slate prose-sm sm:prose max-w-none">
+        {/* `sm:prose-base` em vez de `sm:prose`: o `prose` cheio reaplica
+            max-width:65ch dentro do media query e vence o `max-w-none`, deixando
+            o corpo do texto (578px) mais estreito que o título (672px). O
+            modificador de tamanho só ajusta a tipografia, sem mexer na largura. */}
+        <article className="prose prose-slate prose-sm sm:prose-base max-w-none prose-headings:font-bold prose-a:text-blue-600 prose-table:text-sm">
           {PostContent ? <PostContent /> : (
             <p className="text-slate-400 italic">Conteúdo em preparação.</p>
           )}
