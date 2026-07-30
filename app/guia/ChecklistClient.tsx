@@ -1,103 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { CHECKLIST_GROUPS as GROUPS, type CheckGroup } from "../data/guia";
 
 const STORAGE_KEY = "carroimportado_checklist_v1";
 
-interface CheckItem {
-  id: string;
-  label: string;
-  note?: string;
-}
-
-interface CheckGroup {
-  id: string;
-  icon: string;
-  title: string;
-  items: CheckItem[];
-}
-
-const GROUPS: CheckGroup[] = [
-  {
-    id: "pesquisa",
-    icon: "🔍",
-    title: "Antes de comprar (EUA)",
-    items: [
-      { id: "title_clean", label: "Certificate of Title limpo (sem gravames)", note: "Verifique liens no DMV do estado" },
-      { id: "carfax", label: "Relatório Carfax ou AutoCheck obtido" },
-      { id: "mecanico", label: "Avaliação com mecânico nos EUA", note: "Recomendado para clássicos" },
-      { id: "frete_cotacao", label: "Cotação de frete marítimo (mín. 2 transportadoras)" },
-      { id: "seguro_cotacao", label: "Cotação de seguro marítimo obtida" },
-    ],
-  },
-  {
-    id: "compra",
-    icon: "📄",
-    title: "Compra e exportação (EUA)",
-    items: [
-      { id: "bill_of_sale", label: "Bill of Sale assinado com o vendedor" },
-      { id: "title_transfer", label: "Certificate of Title transferido para seu nome" },
-      { id: "eei", label: "EEI registrado no CBP (72h antes do embarque)", note: "Automated Export System" },
-      { id: "passaporte", label: "Passaporte ou documento de identidade com cópia" },
-    ],
-  },
-  {
-    id: "radar",
-    icon: "🔐",
-    title: "Habilitação RADAR (Brasil)",
-    items: [
-      { id: "cpf_regular", label: "CPF/CNPJ regular na Receita Federal (sem pendências)" },
-      { id: "radar_solicitado", label: "Solicitação de habilitação RADAR enviada", note: "Prazo: 30–90 dias" },
-      { id: "radar_aprovado", label: "RADAR aprovado e ativo" },
-    ],
-  },
-  {
-    id: "frete",
-    icon: "🚢",
-    title: "Frete marítimo",
-    items: [
-      { id: "transportadora", label: "Transportadora especializada contratada (RoRo ou container)" },
-      { id: "bill_of_lading", label: "Bill of Lading (conhecimento de embarque) recebido" },
-      { id: "seguro_contrato", label: "Contrato de seguro marítimo assinado" },
-      { id: "invoice_frete", label: "Invoice da transportadora recebida" },
-    ],
-  },
-  {
-    id: "licenca",
-    icon: "📋",
-    title: "Licença de Importação e impostos",
-    items: [
-      { id: "despachante", label: "Despachante aduaneiro habilitado contratado" },
-      { id: "li_siscomex", label: "Licença de Importação aberta no Siscomex (SECEX/MDIC)" },
-      { id: "ibama", label: "Laudo IBAMA obtido", note: "Exige análise de emissões — clássicos geralmente aprovados" },
-      { id: "li_aprovada", label: "Licença de Importação aprovada" },
-      { id: "darf_pago", label: "DARF de impostos quitado (II, IPI, PIS, COFINS, ICMS)" },
-    ],
-  },
-  {
-    id: "desembaraco",
-    icon: "🏛",
-    title: "Desembaraço aduaneiro",
-    items: [
-      { id: "thc_pago", label: "THC (Terminal Handling Charge) pago" },
-      { id: "afrmm_pago", label: "AFRMM pago (25% do frete marítimo)" },
-      { id: "armazenagem", label: "Armazenagem e capatazia quitados" },
-      { id: "nota_desembaraco", label: "Nota de desembaraço / DI liberada pela Receita Federal" },
-    ],
-  },
-  {
-    id: "homologacao",
-    icon: "✅",
-    title: "Homologação e emplacamento",
-    items: [
-      { id: "cat_senatrans", label: "CAT (SENATRANS) aprovado", note: "Certificado de Adequação à Legislação de Trânsito" },
-      { id: "inmetro", label: "Laudo INMETRO emitido pelo laboratório credenciado" },
-      { id: "detran_vistoria", label: "Vistoria no DETRAN aprovada" },
-      { id: "crv", label: "CRV emitido (Certificado de Registro do Veículo)" },
-      { id: "placa", label: "Placa brasileira instalada" },
-    ],
-  },
-];
 
 function totalItems(groups: CheckGroup[]) {
   return groups.reduce((acc, g) => acc + g.items.length, 0);
