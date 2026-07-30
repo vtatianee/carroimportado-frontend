@@ -12,6 +12,17 @@ export interface BlogPost {
 // Adicione posts aqui. Só aparecem no site quando published: true.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "roro-ou-conteiner-importar-carro-eua-brasil",
+    title: "RoRo ou contêiner: quando vale pagar mais pela proteção do seu carro",
+    excerpt:
+      "O frete entra na base de cálculo dos impostos — então cada R$ 1 a mais de frete vira R$ 2,28 no custo final. Isso muda a conta entre RoRo e contêiner, e explica por que a resposta depende do valor do carro. Com tabelas de custo real.",
+    date: "2026-07-30",
+    readTimeMin: 6,
+    tags: ["Guia", "Logística", "Frete", "Custos"],
+    published: true,
+    coverImage: "/blog/roro-ou-conteiner-importar-carro-eua-brasil.jpg",
+  },
+  {
     slug: "mustang-camaro-f100-qual-classico-americano-valoriza-mais-brasil",
     title: "Mustang, F-100 ou Camaro: qual clássico americano valoriza mais no mercado brasileiro",
     excerpt:

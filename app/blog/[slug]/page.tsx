@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import NavHeader from "../../components/NavHeader";
 import { getPostBySlug, getPublishedPosts } from "../../data/blog";
+import { formatPostDate } from "../../lib/date";
 
 // Gera as rotas estáticas apenas para posts publicados
 export async function generateStaticParams() {
@@ -75,7 +76,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <p className="text-slate-500 text-base leading-relaxed mb-4">{post.excerpt}</p>
           <div className="flex items-center gap-3 text-xs text-slate-400">
             <span>
-              {new Date(post.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
+              {formatPostDate(post.date)}
             </span>
             <span>·</span>
             <span>{post.readTimeMin} min de leitura</span>

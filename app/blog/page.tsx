@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import NavHeader from "../components/NavHeader";
 import { getPublishedPosts } from "../data/blog";
+import { formatPostDate } from "../lib/date";
 
 export const metadata: Metadata = {
   title: "Blog — Importação de Carros dos EUA",
@@ -66,7 +67,7 @@ export default function BlogPage() {
                       </span>
                     ))}
                     <span className="text-xs text-slate-400 ml-auto">
-                      {new Date(post.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
+                      {formatPostDate(post.date)}
                       {" · "}{post.readTimeMin} min de leitura
                     </span>
                   </div>
