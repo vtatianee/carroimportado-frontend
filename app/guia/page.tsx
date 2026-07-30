@@ -417,9 +417,15 @@ export default function GuiaPage() {
             ))}
           </div>
           <div className="mt-5 bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-600">
-            <p className="font-semibold text-slate-700 mb-1">Exemplo: veículo FOB USD 30.000 (combustão, SP)</p>
-            <p>II ≈ R$ 60.375 · IPI ≈ R$ 43.800 · PIS+COFINS ≈ R$ 26.000 · ICMS ≈ R$ 51.000 · Desembaraço ≈ R$ 17.000</p>
-            <p className="mt-1 font-semibold text-slate-800">Total estimado: ~R$ 330.000 — carga tributária efetiva ~103%</p>
+            {/* Valores gerados por calculateImportCosts() no backend — não estimar à mão.
+                A versão anterior somava ~R$ 370 mil nos componentes mas declarava
+                R$ 330 mil de total, e usava desembaraço/ICMS que não batiam com a
+                fórmula. Regerar com:
+                node -e 'console.log(JSON.stringify(require("./src/calculator/importCosts")
+                  ({priceUsd:30000,state:"SP",usdBrlRate:5.40,freteUsd:1500}).breakdown_brl,null,2))' */}
+            <p className="font-semibold text-slate-700 mb-1">Exemplo: veículo de USD 30.000 (combustão, SP, câmbio R$ 5,40)</p>
+            <p>II ≈ R$ 60.386 · IPI ≈ R$ 43.811 · PIS+COFINS ≈ R$ 26.207 · ICMS ≈ R$ 43.334 · Desembaraço ≈ R$ 14.850</p>
+            <p className="mt-1 font-semibold text-slate-800">Total estimado: ~R$ 361.000 — carga tributária efetiva ~107%</p>
           </div>
           <div className="mt-3 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-700 flex items-center justify-between gap-4 flex-wrap">
             <span>Calcule com os valores exatos do veículo que você encontrou — câmbio PTAX do dia.</span>

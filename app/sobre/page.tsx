@@ -72,7 +72,7 @@ export default function SobrePage() {
           <h2 className="text-xl font-bold text-slate-900 mb-3">O que a calculadora inclui</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             {[
-              { icon: "🏛️", label: "II — Imposto de Importação", desc: "35% sobre o valor FOB" },
+              { icon: "🏛️", label: "II — Imposto de Importação", desc: "35% sobre o valor aduaneiro (CIF)" },
               { icon: "🏭", label: "IPI — Imposto sobre Produtos Industrializados", desc: "18,81% (0% para clássicos +30 anos)" },
               { icon: "📊", label: "PIS e COFINS", desc: "2,62% e 12,57% sobre o CIF" },
               { icon: "🗺️", label: "ICMS por estado", desc: "12% a 20% conforme destino" },

@@ -7,7 +7,7 @@ const FAQ_SCHEMA = [
     name: "Quanto custa importar um carro dos EUA para o Brasil?",
     acceptedAnswer: {
       "@type": "Answer",
-      text: "O custo total inclui o preço do veículo (FOB), frete marítimo (aproximadamente USD 1.500–2.500), Imposto de Importação (35% do FOB), IPI (18,81%), PIS (2,62%), COFINS (12,57%), ICMS (12–20% dependendo do estado) e despesas de desembaraço aduaneiro (~USD 3.000). A carga tributária total costuma superar 100% do valor do veículo nos EUA.",
+      text: "O custo total inclui o preço do veículo nos EUA, frete marítimo (aproximadamente USD 1.500–2.500), seguro marítimo (1,5% do valor do veículo), Imposto de Importação (35% sobre o valor aduaneiro), IPI (18,81%), PIS (2,62%), COFINS (12,57%), ICMS (12–20% dependendo do estado) e despesas de desembaraço aduaneiro (~USD 2.750). A carga tributária total costuma superar 100% do valor do veículo nos EUA.",
     },
   },
   {

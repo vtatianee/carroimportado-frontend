@@ -292,7 +292,7 @@ function CostChart({ result }: { result: AnalyzeResult }) {
   const da = ic.desembaraco_aduaneiro;
 
   const segments: ChartSegment[] = [
-    { label: "Veículo (FOB)", valueBrl: va.fob_brl, color: "#475569" },
+    { label: "Veículo (preço nos EUA)", valueBrl: va.fob_brl, color: "#475569" },
     { label: "Frete + Seguro", valueBrl: va.frete_brl + va.seguro_brl, color: "#94a3b8" },
     { label: "II — Imp. de Importação", valueBrl: bd.ii_imposto_importacao, color: "#ef4444" },
     { label: "IPI", valueBrl: bd.ipi, color: "#f97316" },
@@ -438,7 +438,7 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
               </div>
               <div className="text-right">
                 <p className="text-2xl font-bold text-slate-900">USD {fmtUSD(car.price_usd)}</p>
-                <p className="text-slate-400 text-xs mt-0.5">Preço nos EUA (FOB)</p>
+                <p className="text-slate-400 text-xs mt-0.5">Preço nos EUA</p>
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
@@ -453,7 +453,7 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
         <div className="bg-blue-600 text-white rounded-2xl p-6 shadow-sm">
           <p className="text-blue-100 text-sm mb-1">Total internado no Brasil</p>
           <p className="text-3xl font-bold">R$ {fmt(ic.total_landed_brl)}</p>
-          <p className="text-blue-200 text-xs mt-2">Carga tributária: {ic.effective_tax_rate_pct.toFixed(1)}% sobre FOB</p>
+          <p className="text-blue-200 text-xs mt-2">Carga tributária: {ic.effective_tax_rate_pct.toFixed(1)}% sobre o preço do veículo</p>
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
           <p className="text-slate-500 text-sm mb-1">Valor de mercado estimado</p>
@@ -473,14 +473,14 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
       {/* Valor aduaneiro */}
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         <SectionHeading icon={<IconBox />}>Valor Aduaneiro (CIF)</SectionHeading>
-        <Row label="FOB — Preço do veículo nos EUA" brl={va.fob_brl} usd={va.fob_usd}
-          tooltip="FOB (Free On Board): preço do veículo no porto de origem nos EUA, sem incluir frete nem seguro." />
+        <Row label="Preço do veículo nos EUA" brl={va.fob_brl} usd={va.fob_usd}
+          tooltip="Chamado de FOB (Free On Board) no jargão aduaneiro: o preço do veículo no porto de origem nos EUA, sem incluir frete nem seguro." />
         <Row label={`Frete marítimo (${va.frete_fonte})`} brl={va.frete_brl} usd={va.frete_usd}
           tooltip="Custo do transporte marítimo do porto americano até o porto brasileiro (ex: Santos/SP). Varia entre USD 1.200–2.500 dependendo da rota." />
-        <Row label="Seguro marítimo (1,5% do FOB)" brl={va.seguro_brl} usd={va.seguro_usd}
-          tooltip="Seguro obrigatório calculado em 1,5% do valor FOB, conforme padrão da Receita Federal (IN RFB nº 1.401/2013)." />
-        <Row label="CIF — Valor Aduaneiro total" brl={va.cif_brl} usd={va.cif_usd} bold
-          tooltip="CIF (Cost, Insurance and Freight): FOB + frete + seguro. É a base legal de cálculo de todos os impostos de importação no Brasil (AVA-GATT / Decreto 6.759/2009)." />
+        <Row label="Seguro marítimo (1,5% do veículo)" brl={va.seguro_brl} usd={va.seguro_usd}
+          tooltip="Seguro obrigatório calculado em 1,5% do preço do veículo, conforme padrão da Receita Federal (IN RFB nº 1.401/2013)." />
+        <Row label="Valor Aduaneiro total" brl={va.cif_brl} usd={va.cif_usd} bold
+          tooltip="Chamado de CIF (Cost, Insurance and Freight): preço do veículo + frete + seguro. É a base legal de cálculo de todos os impostos de importação no Brasil (AVA-GATT / Decreto 6.759/2009)." />
         {va.frete_fonte.includes("estimativa") && (
           <p className="mt-3 text-xs text-slate-500 bg-slate-50 rounded-lg p-3">💡 {va.frete_sugerido?.nota}</p>
         )}
@@ -903,9 +903,9 @@ function ReverseCalc({
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {[
-                  { label: "Veículo (FOB)", usd: ic.breakdown_usd.fob_vehicle, brl: ic.breakdown_brl.fob_vehicle, highlight: true },
+                  { label: "Veículo (preço nos EUA)", usd: ic.breakdown_usd.fob_vehicle, brl: ic.breakdown_brl.fob_vehicle, highlight: true },
                   { label: "Frete marítimo", usd: ic.breakdown_usd.frete_maritimo, brl: ic.breakdown_brl.frete_maritimo },
-                  { label: "Seguro marítimo (1,5% do FOB)", usd: ic.breakdown_usd.seguro_maritimo, brl: ic.breakdown_brl.seguro_maritimo },
+                  { label: "Seguro marítimo (1,5% do veículo)", usd: ic.breakdown_usd.seguro_maritimo, brl: ic.breakdown_brl.seguro_maritimo },
                   { label: "II — Imposto de Importação (35%)", usd: ic.breakdown_usd.ii_imposto_importacao, brl: ic.breakdown_brl.ii_imposto_importacao },
                   { label: ic.ipi_rate_pct === 0 ? "IPI (0% — isento)" : `IPI (${ic.ipi_rate_pct.toFixed(2)}%)`, usd: ic.breakdown_usd.ipi, brl: ic.breakdown_brl.ipi },
                   { label: "PIS (2,62%)", usd: ic.breakdown_usd.pis, brl: ic.breakdown_brl.pis },
@@ -1041,7 +1041,7 @@ function ReverseCalc({
                     <p className="font-bold text-slate-900 text-base whitespace-nowrap">
                       USD {listing.price_usd.toLocaleString("en-US")}
                     </p>
-                    <p className="text-[10px] text-slate-400 mt-0.5">Preço nos EUA (FOB)</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Preço nos EUA</p>
                     {cambioNum > 0 && (
                       <p className="text-xs text-slate-500 font-medium mt-1">
                         ≈ R$ {fmt(listing.price_usd * cambioNum)}
@@ -1356,7 +1356,7 @@ function UsefulLinks() {
 const FAQ_ITEMS: { q: string; a: string; guia?: string }[] = [
   {
     q: "Quanto custa importar um carro dos EUA para o Brasil?",
-    a: "O custo total inclui o preço do veículo (FOB), frete marítimo (~USD 1.500–2.500), II (35% do FOB), IPI (18,81% — ou 0% para clássicos 30+ anos), PIS (2,62%), COFINS (12,57%), ICMS (12–20% por estado) e desembaraço aduaneiro (~USD 3.000). A carga tributária costuma superar 100% do valor do veículo.",
+    a: "O custo total inclui o preço do veículo nos EUA, frete marítimo (~USD 1.500–2.500), seguro marítimo (1,5% do veículo), II (35% sobre o valor aduaneiro), IPI (18,81% — ou 0% para clássicos 30+ anos), PIS (2,62%), COFINS (12,57%), ICMS (12–20% por estado) e desembaraço aduaneiro (~USD 2.750). A carga tributária costuma superar 100% do valor do veículo.",
     guia: "guia",
   },
   {
