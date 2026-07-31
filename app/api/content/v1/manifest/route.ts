@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getPublishedPosts } from "../../../../data/blog";
+import { getPublishedPosts } from "../../../../lib/blog";
 import { EMPRESAS, CATEGORIAS_RFQ, ESPECIALIDADE_CORES as CORES_EMPRESAS } from "../../../../data/empresas";
 import { PECAS, ESPECIALIDADE_CORES as CORES_PECAS } from "../../../../data/pecas";
 import { STEPS, COSTS_SUMMARY, CHECKLIST_GROUPS } from "../../../../data/guia";

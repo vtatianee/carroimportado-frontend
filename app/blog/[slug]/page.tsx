@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeSlug from "rehype-slug";
 import NavHeader from "../../components/NavHeader";
-import { getPostBySlug, getPublishedPosts } from "../../data/blog";
+import { getPostBySlug, getPublishedPosts, getPostBody } from "../../lib/blog";
 import { formatPostDate } from "../../lib/date";
 
 // Gera as rotas estáticas apenas para posts publicados
@@ -32,25 +35,69 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-// Importa dinamicamente o conteúdo do post pelo slug
-async function loadPostContent(slug: string): Promise<React.ComponentType | null> {
-  try {
-    const mod = await import(`./content/${slug}`);
-    return mod.default ?? null;
-  } catch {
-    return null;
-  }
-}
+/**
+ * Tabelas do markdown rolam dentro do próprio contêiner. Sem isso, uma tabela
+ * de 4 colunas provoca scroll horizontal na página inteira no celular.
+ */
+const MD_COMPONENTS = {
+  table: (props: React.ComponentProps<"table">) => (
+    <div className="overflow-x-auto my-6">
+      <table {...props} />
+    </div>
+  ),
+};
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
-  const PostContent = await loadPostContent(slug);
+  const body = getPostBody(slug);
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: "carroimportado.com" },
+    publisher: {
+      "@type": "Organization",
+      name: "carroimportado.com",
+      url: "https://www.carroimportado.com",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.carroimportado.com/blog/${post.slug}`,
+    },
+    inLanguage: "pt-BR",
+    keywords: post.tags.join(", "),
+    ...(post.coverImage
+      ? { image: `https://www.carroimportado.com${post.coverImage}` }
+      : {}),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Blog", item: "https://www.carroimportado.com/blog" },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: post.title,
+        item: `https://www.carroimportado.com/blog/${post.slug}`,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([articleSchema, breadcrumbSchema]) }}
+      />
       <NavHeader activePage="blog" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10">
@@ -97,7 +144,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             o corpo do texto (578px) mais estreito que o título (672px). O
             modificador de tamanho só ajusta a tipografia, sem mexer na largura. */}
         <article className="prose prose-slate prose-sm sm:prose-base max-w-none prose-headings:font-bold prose-a:text-blue-600 prose-table:text-sm">
-          {PostContent ? <PostContent /> : (
+          {body ? (
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeSlug]}
+              components={MD_COMPONENTS}
+            >
+              {body}
+            </Markdown>
+          ) : (
             <p className="text-slate-400 italic">Conteúdo em preparação.</p>
           )}
         </article>

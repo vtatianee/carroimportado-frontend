@@ -1,5 +1,5 @@
 import type { BlogPost as ApiBlogPost } from "../contracts";
-import type { BlogPost as SiteBlogPost } from "../../data/blog";
+import type { BlogPost as SiteBlogPost } from "../blog";
 
 /**
  * Converte o post como o site o guarda para o formato que a API entrega.

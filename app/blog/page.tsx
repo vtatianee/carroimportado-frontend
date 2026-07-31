@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import NavHeader from "../components/NavHeader";
-import { getPublishedPosts } from "../data/blog";
+import { getPublishedPosts } from "../lib/blog";
 import { formatPostDate } from "../lib/date";
 
 export const metadata: Metadata = {

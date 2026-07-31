@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getPublishedPosts } from "../../../../data/blog";
+import { getPublishedPosts } from "../../../../lib/blog";
 import { contentResponse } from "../../../../lib/content/respond";
 import { toApiPost } from "../../../../lib/content/blog-api";
 

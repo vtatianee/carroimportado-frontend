@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPublishedPosts } from "./data/blog";
+import { getPublishedPosts } from "./lib/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://www.carroimportado.com";
