@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useConsent } from "../components/ConsentContext";
 import Link from "next/link";
 import NavHeader from "../components/NavHeader";
 
@@ -52,6 +53,44 @@ export default function PrivacyClient() {
 }
 
 const CONTATO = "arche.boost@gmail.com";
+
+/**
+ * Reabre a escolha de cookies.
+ *
+ * Consentimento que não pode ser revogado com a mesma facilidade com que foi
+ * dado não é livre (art. 8º, §5º da LGPD). Sem isto, quem clicasse "Aceitar"
+ * uma vez ficaria preso à decisão — teria que limpar o localStorage à mão.
+ */
+function EscolhasDeCookies({ en }: { en?: boolean }) {
+  const { consentimento, reabrir } = useConsent();
+
+  const estado = en
+    ? { accepted: "accepted", rejected: "rejected", null: "not chosen yet" }
+    : { accepted: "aceito", rejected: "recusado", null: "ainda não escolhido" };
+  const atual = estado[consentimento ?? "null"];
+
+  return (
+    <div className="my-4 p-4 rounded-lg border border-slate-200 bg-slate-50">
+      <p className="text-sm text-slate-600 mb-3">
+        {en ? "Your current choice: " : "Sua escolha atual: "}
+        <strong>{atual}</strong>
+      </p>
+      <button
+        onClick={() => {
+          reabrir();
+          // Recarrega de propósito. Desmontar o <Script> do next/script NÃO
+          // remove a tag já injetada nem descarrega o `window.adsbygoogle`:
+          // sem o reload, revogar mostraria o banner de novo com o AdSense
+          // ainda ativo na página — revogação que não revoga.
+          location.reload();
+        }}
+        className="px-4 py-2 text-sm rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors"
+      >
+        {en ? "Change my cookie choice" : "Alterar minha escolha de cookies"}
+      </button>
+    </div>
+  );
+}
 
 function PrivacyPT() {
   return (
@@ -112,7 +151,9 @@ function PrivacyPT() {
 
       <Section title="5. Cookies e publicidade no site">
         <p>O site usa cookies do <strong>Google AdSense</strong> para exibir anúncios, que podem coletar informações de navegação para personalizá-los. Veja a <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Política de Privacidade do Google</a>.</p>
-        <p>Você pode gerenciar cookies nas configurações do navegador ou optar por não receber publicidade personalizada em <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aboutads.info</a>.</p>
+        <p><strong>Você decide.</strong> No primeiro acesso mostramos um aviso com as opções <strong>Aceitar</strong> e <strong>Recusar</strong>. Enquanto você não escolher, e se recusar, o script do AdSense não é carregado e nenhum cookie de publicidade é gravado. Recusar não limita nenhuma funcionalidade do site.</p>
+        <EscolhasDeCookies />
+        <p>Você também pode gerenciar cookies nas configurações do navegador ou optar por não receber publicidade personalizada em <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aboutads.info</a>.</p>
         <p>O site também usa o <strong>Vercel Analytics</strong>, que produz estatísticas agregadas de audiência sem identificar visitantes individualmente, e a <strong>Cloudflare</strong>, que protege o site contra abuso e gera métricas de tráfego.</p>
       </Section>
 
@@ -272,7 +313,9 @@ function PrivacyEN() {
 
       <Section title="5. Cookies and advertising on the website">
         <p>The website uses <strong>Google AdSense</strong> cookies to display ads, which may collect browsing information to personalize them. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Google&apos;s Privacy Policy</a>.</p>
-        <p>You can manage cookies in your browser settings or opt out of personalized advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aboutads.info</a>.</p>
+        <p><strong>The choice is yours.</strong> On your first visit we show a notice with <strong>Accept</strong> and <strong>Reject</strong> options. Until you choose, and if you reject, the AdSense script is not loaded and no advertising cookie is stored. Rejecting does not limit any feature of the site.</p>
+        <EscolhasDeCookies en />
+        <p>You can also manage cookies in your browser settings or opt out of personalized advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aboutads.info</a>.</p>
         <p>The website also uses <strong>Vercel Analytics</strong>, which produces aggregate audience statistics without identifying individual visitors, and <strong>Cloudflare</strong>, which protects the site against abuse and generates traffic metrics.</p>
       </Section>
 
