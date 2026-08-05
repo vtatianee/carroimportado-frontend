@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import CookieBanner from "./components/CookieBanner";
-import { ConsentProvider } from "./components/ConsentContext";
-import { AdSenseScript } from "./components/AdSenseScript";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -77,23 +74,15 @@ export const metadata: Metadata = {
   verification: {
     google: "66BvD9MJYMgo0TCAWnHIethxLbQK8SZXohMAA66xS5c",
   },
-  other: {
-    "google-adsense-account": "ca-pub-8694151594129435",
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${geist.className} h-full`}>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 antialiased">
-        <ConsentProvider>
-          {children}
-          <AdSenseScript />
-          <CookieBanner />
-        </ConsentProvider>
-        {/* Fora do provider de propósito: o Vercel Analytics não usa cookie e
-            produz só estatística agregada, sem identificar o visitante — é o
-            que a política declara em "Cookies e publicidade no site". */}
+        {children}
+        {/* Vercel Analytics não usa cookie e produz só estatística agregada,
+            sem identificar o visitante — não exige aviso de consentimento. */}
         <Analytics />
       </body>
     </html>

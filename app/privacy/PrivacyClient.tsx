@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useConsent } from "../components/ConsentContext";
 import Link from "next/link";
 import NavHeader from "../components/NavHeader";
 
@@ -54,44 +53,6 @@ export default function PrivacyClient() {
 
 const CONTATO = "arche.boost@gmail.com";
 
-/**
- * Reabre a escolha de cookies.
- *
- * Consentimento que não pode ser revogado com a mesma facilidade com que foi
- * dado não é livre (art. 8º, §5º da LGPD). Sem isto, quem clicasse "Aceitar"
- * uma vez ficaria preso à decisão — teria que limpar o localStorage à mão.
- */
-function EscolhasDeCookies({ en }: { en?: boolean }) {
-  const { consentimento, reabrir } = useConsent();
-
-  const estado = en
-    ? { accepted: "accepted", rejected: "rejected", null: "not chosen yet" }
-    : { accepted: "aceito", rejected: "recusado", null: "ainda não escolhido" };
-  const atual = estado[consentimento ?? "null"];
-
-  return (
-    <div className="my-4 p-4 rounded-lg border border-slate-200 bg-slate-50">
-      <p className="text-sm text-slate-600 mb-3">
-        {en ? "Your current choice: " : "Sua escolha atual: "}
-        <strong>{atual}</strong>
-      </p>
-      <button
-        onClick={() => {
-          reabrir();
-          // Recarrega de propósito. Desmontar o <Script> do next/script NÃO
-          // remove a tag já injetada nem descarrega o `window.adsbygoogle`:
-          // sem o reload, revogar mostraria o banner de novo com o AdSense
-          // ainda ativo na página — revogação que não revoga.
-          location.reload();
-        }}
-        className="px-4 py-2 text-sm rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors"
-      >
-        {en ? "Change my cookie choice" : "Alterar minha escolha de cookies"}
-      </button>
-    </div>
-  );
-}
-
 function PrivacyPT() {
   return (
     <article className="prose prose-slate max-w-none">
@@ -101,9 +62,10 @@ function PrivacyPT() {
       <div className="mb-8 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-slate-700">
         <strong>O que mudou nesta versão:</strong> incluímos o aplicativo para iPhone,
         que antes não estava coberto; descrevemos a publicidade do Google AdMob e o
-        identificador de publicidade (IDFA); passamos a explicar que o pedido de
-        orçamento envia seus dados para as empresas que você escolher; e detalhamos
-        a transferência de dados para fora do Brasil.
+        identificador de publicidade (IDFA), que existe apenas no aplicativo — o site
+        não usa Google AdSense nem qualquer outra publicidade; passamos a explicar que
+        o pedido de orçamento envia seus dados para as empresas que você escolher; e
+        detalhamos a transferência de dados para fora do Brasil.
       </div>
 
       <Section title="1. Quem somos e como falar com a gente">
@@ -150,11 +112,8 @@ function PrivacyPT() {
       </Section>
 
       <Section title="5. Cookies e publicidade no site">
-        <p>O site usa cookies do <strong>Google AdSense</strong> para exibir anúncios, que podem coletar informações de navegação para personalizá-los. Veja a <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Política de Privacidade do Google</a>.</p>
-        <p><strong>Você decide.</strong> No primeiro acesso mostramos um aviso com as opções <strong>Aceitar</strong> e <strong>Recusar</strong>. Enquanto você não escolher, e se recusar, o script do AdSense não é carregado e nenhum cookie de publicidade é gravado. Recusar não limita nenhuma funcionalidade do site.</p>
-        <EscolhasDeCookies />
-        <p>Você também pode gerenciar cookies nas configurações do navegador ou optar por não receber publicidade personalizada em <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aboutads.info</a>.</p>
-        <p>O site também usa o <strong>Vercel Analytics</strong>, que produz estatísticas agregadas de audiência sem identificar visitantes individualmente, e a <strong>Cloudflare</strong>, que protege o site contra abuso e gera métricas de tráfego.</p>
+        <p><strong>O site não exibe publicidade e não usa cookies de publicidade.</strong> Não usamos Google AdSense nem nenhum outro serviço de anúncios no site — a publicidade descrita na seção 4 existe apenas no aplicativo para iPhone.</p>
+        <p>O site usa o <strong>Vercel Analytics</strong>, que produz estatísticas agregadas de audiência sem identificar visitantes individualmente e não grava cookie de rastreamento, e a <strong>Cloudflare</strong>, que protege o site contra abuso e gera métricas de tráfego. Por isso o site não exibe aviso de cookies: não há cookie não essencial para pedir consentimento.</p>
       </Section>
 
       <Section title="6. Com quem compartilhamos dados">
@@ -169,7 +128,7 @@ function PrivacyPT() {
           <li><strong>Resend</strong> — envio dos e-mails dos formulários e da lista de novidades (EUA)</li>
           <li><strong>ScraperAPI</strong> — leitura das páginas públicas de anúncios de veículos (EUA)</li>
           <li><strong>Anthropic</strong> — geração de descrições em português por inteligência artificial (EUA)</li>
-          <li><strong>Google</strong> — publicidade no site (AdSense) e no aplicativo (AdMob) (EUA e Irlanda)</li>
+          <li><strong>Google</strong> — publicidade no aplicativo, via AdMob (EUA e Irlanda). Não usamos Google no site.</li>
           <li><strong>Apple</strong> — SKAdNetwork, medição de publicidade no aplicativo (EUA)</li>
         </ul>
         <p>Também consultamos fontes públicas que <strong>não recebem dado pessoal nenhum</strong>: o Banco Central do Brasil (cotação PTAX) e a Tabela FIPE.</p>
@@ -181,7 +140,7 @@ function PrivacyPT() {
         <p>Essas transferências se fundamentam:</p>
         <ul>
           <li>no <strong>art. 33, V</strong>, quando são necessárias para executar o que você pediu — hospedar o site, ler o anúncio que você colou, calcular os tributos, entregar o e-mail que você enviou;</li>
-          <li>no <strong>art. 33, VIII — seu consentimento específico</strong>, no caso da publicidade personalizada (AdSense no site, AdMob no aplicativo), colhido no aviso de cookies e no formulário exibido no aplicativo.</li>
+          <li>no <strong>art. 33, VIII — seu consentimento específico</strong>, no caso da publicidade personalizada do aplicativo (AdMob), colhido no formulário de consentimento exibido no aplicativo.</li>
         </ul>
         <p>Você pode nos pedir, pelo contato desta política, informações sobre as garantias adotadas em cada transferência.</p>
       </Section>
@@ -193,8 +152,8 @@ function PrivacyPT() {
           <li><strong>Enviar seu pedido de orçamento às empresas</strong> — art. 7º, I: seu consentimento.</li>
           <li><strong>Lista de novidades</strong> — art. 7º, I: seu consentimento.</li>
           <li><strong>Cadastro de empresas e fornecedores no diretório</strong> — art. 7º, V e IX.</li>
-          <li><strong>Publicidade personalizada</strong> (AdSense, AdMob, IDFA) — art. 7º, I: seu consentimento.</li>
-          <li><strong>Publicidade não personalizada</strong> — art. 7º, IX: legítimo interesse em manter o serviço gratuito.</li>
+          <li><strong>Publicidade personalizada no aplicativo</strong> (AdMob, IDFA) — art. 7º, I: seu consentimento.</li>
+          <li><strong>Publicidade não personalizada no aplicativo</strong> — art. 7º, IX: legítimo interesse em manter o aplicativo gratuito.</li>
           <li><strong>Registros de acesso, segurança e prevenção a abuso</strong> — art. 7º, IX e art. 16, I, e art. 15 do Marco Civil da Internet.</li>
           <li><strong>Estatísticas agregadas de uso</strong> — dados anonimizados, art. 12.</li>
         </ul>
@@ -264,8 +223,10 @@ function PrivacyEN() {
       <div className="mb-8 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-slate-700">
         <strong>What changed in this version:</strong> we added the iPhone app, which was
         not covered before; we describe Google AdMob advertising and the advertising
-        identifier (IDFA); we now explain that the quote request sends your data to the
-        companies you select; and we detail transfers of data outside Brazil.
+        identifier (IDFA), which exists only in the app — the website uses no Google
+        AdSense or any other advertising; we now explain that the quote request sends
+        your data to the companies you select; and we detail transfers of data outside
+        Brazil.
       </div>
 
       <Section title="1. Who we are and how to reach us">
@@ -312,11 +273,8 @@ function PrivacyEN() {
       </Section>
 
       <Section title="5. Cookies and advertising on the website">
-        <p>The website uses <strong>Google AdSense</strong> cookies to display ads, which may collect browsing information to personalize them. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Google&apos;s Privacy Policy</a>.</p>
-        <p><strong>The choice is yours.</strong> On your first visit we show a notice with <strong>Accept</strong> and <strong>Reject</strong> options. Until you choose, and if you reject, the AdSense script is not loaded and no advertising cookie is stored. Rejecting does not limit any feature of the site.</p>
-        <EscolhasDeCookies en />
-        <p>You can also manage cookies in your browser settings or opt out of personalized advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aboutads.info</a>.</p>
-        <p>The website also uses <strong>Vercel Analytics</strong>, which produces aggregate audience statistics without identifying individual visitors, and <strong>Cloudflare</strong>, which protects the site against abuse and generates traffic metrics.</p>
+        <p><strong>The website shows no advertising and uses no advertising cookies.</strong> We do not use Google AdSense or any other ad service on the website — the advertising described in section 4 exists only in the iPhone app.</p>
+        <p>The website uses <strong>Vercel Analytics</strong>, which produces aggregate audience statistics without identifying individual visitors and sets no tracking cookie, and <strong>Cloudflare</strong>, which protects the site against abuse and generates traffic metrics. Because of this, the website shows no cookie notice: there is no non-essential cookie to ask consent for.</p>
       </Section>
 
       <Section title="6. Who we share data with">
@@ -331,7 +289,7 @@ function PrivacyEN() {
           <li><strong>Resend</strong> — delivery of form emails and the newsletter (USA)</li>
           <li><strong>ScraperAPI</strong> — reading public vehicle listing pages (USA)</li>
           <li><strong>Anthropic</strong> — AI-generated Portuguese descriptions (USA)</li>
-          <li><strong>Google</strong> — advertising on the website (AdSense) and in the app (AdMob) (USA and Ireland)</li>
+          <li><strong>Google</strong> — advertising in the app, via AdMob (USA and Ireland). We do not use Google on the website.</li>
           <li><strong>Apple</strong> — SKAdNetwork, in-app ad measurement (USA)</li>
         </ul>
         <p>We also query public sources that <strong>receive no personal data at all</strong>: the Central Bank of Brazil (PTAX rate) and the FIPE table.</p>
@@ -343,7 +301,7 @@ function PrivacyEN() {
         <p>These transfers are based on:</p>
         <ul>
           <li><strong>Art. 33, V</strong>, where they are necessary to perform what you requested — hosting the site, reading the listing you pasted, calculating the taxes, delivering the email you sent;</li>
-          <li><strong>Art. 33, VIII — your specific consent</strong>, for personalized advertising (AdSense on the website, AdMob in the app), obtained through the cookie notice and the in-app consent form.</li>
+          <li><strong>Art. 33, VIII — your specific consent</strong>, for the app's personalized advertising (AdMob), obtained through the in-app consent form.</li>
         </ul>
         <p>You may ask us, through the contact in this policy, for information about the safeguards applied to each transfer.</p>
       </Section>
@@ -355,8 +313,8 @@ function PrivacyEN() {
           <li><strong>Sending your quote request to companies</strong> — Art. 7, I: your consent.</li>
           <li><strong>Newsletter</strong> — Art. 7, I: your consent.</li>
           <li><strong>Company and supplier directory listings</strong> — Art. 7, V and IX.</li>
-          <li><strong>Personalized advertising</strong> (AdSense, AdMob, IDFA) — Art. 7, I: your consent.</li>
-          <li><strong>Non-personalized advertising</strong> — Art. 7, IX: legitimate interest in keeping the service free.</li>
+          <li><strong>Personalized advertising in the app</strong> (AdMob, IDFA) — Art. 7, I: your consent.</li>
+          <li><strong>Non-personalized advertising in the app</strong> — Art. 7, IX: legitimate interest in keeping the app free.</li>
           <li><strong>Access logs, security, and abuse prevention</strong> — Art. 7, IX and Art. 16, I, and Art. 15 of the Brazilian Civil Rights Framework for the Internet.</li>
           <li><strong>Aggregate usage statistics</strong> — anonymized data, Art. 12.</li>
         </ul>
