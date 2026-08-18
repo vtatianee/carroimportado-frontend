@@ -6,6 +6,10 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
+    // Diagnóstico temporário: confirma se a env var chega no runtime da
+    // função sem logar o valor. Remover depois de confirmar em produção.
+    console.log("[/api/analyze proxy] INTERNAL_SECRET presente:", !!process.env.INTERNAL_SECRET);
+
     const res = await fetch(`${BACKEND_URL}/api/analyze`, {
       method: "POST",
       headers: {
