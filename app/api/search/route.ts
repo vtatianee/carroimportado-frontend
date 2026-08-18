@@ -10,6 +10,9 @@ export async function GET(req: NextRequest) {
     const res = await fetch(`${BACKEND_URL}/api/search?${params}`, {
       // 30s timeout — scraping pode ser lento
       signal: AbortSignal.timeout(30_000),
+      headers: {
+        ...(process.env.INTERNAL_SECRET ? { "x-internal-secret": process.env.INTERNAL_SECRET } : {}),
+      },
     });
 
     const data = await res.json();

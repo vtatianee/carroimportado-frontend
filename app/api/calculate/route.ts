@@ -8,7 +8,10 @@ export async function POST(req: NextRequest) {
 
     const res = await fetch(`${BACKEND_URL}/api/calculate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.INTERNAL_SECRET ? { "x-internal-secret": process.env.INTERNAL_SECRET } : {}),
+      },
       body: JSON.stringify(body),
     });
 
