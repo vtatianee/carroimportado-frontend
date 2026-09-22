@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { track } from "@vercel/analytics";
 import NavHeader from "./components/NavHeader";
 
 // ── Histórico de pesquisas (localStorage) ─────────────────────────────────────
@@ -752,6 +753,7 @@ function ReverseCalc({
           setResult(data);
           setListings(null);
           setSearchError(null);
+          track("calc_completed", { mode: "orcamento", vehicle_type: vehicleType, state });
         }
       } catch {
         if (!cancelled) {
@@ -1167,6 +1169,7 @@ function NextSteps({ result }: { result?: AnalyzeResult | null }) {
       <h2 className="font-bold text-base mb-4">O que fazer agora?</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <a href={`/orcamento${rfqParams ? `?${rfqParams}` : ""}`}
+          onClick={() => track("cta_click", { cta: "orcamento_real" })}
           className="flex items-center gap-3 bg-white text-blue-700 hover:bg-blue-50 rounded-xl px-4 py-3 transition-colors shadow-sm">
           <span className="text-2xl shrink-0">📩</span>
           <div>
@@ -1174,14 +1177,16 @@ function NextSteps({ result }: { result?: AnalyzeResult | null }) {
             <p className="text-blue-500 text-xs mt-0.5">Despachante, importadora e frete</p>
           </div>
         </a>
-        <a href="/guia" className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
+        <a href="/guia" onClick={() => track("cta_click", { cta: "guia" })}
+          className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
           <span className="text-2xl shrink-0">📋</span>
           <div>
             <p className="font-semibold text-sm">Leia o guia completo</p>
             <p className="text-blue-100 text-xs mt-0.5">8 etapas do processo</p>
           </div>
         </a>
-        <a href="/empresas" className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
+        <a href="/empresas" onClick={() => track("cta_click", { cta: "empresas" })}
+          className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
           <span className="text-2xl shrink-0">🏢</span>
           <div>
             <p className="font-semibold text-sm">Ver empresas importadoras</p>
@@ -1189,6 +1194,7 @@ function NextSteps({ result }: { result?: AnalyzeResult | null }) {
           </div>
         </a>
         <a href="https://wa.me/?text=Calculei%20o%20custo%20de%20importar%20um%20carro%20dos%20EUA%20no%20carroimportado.com%20%F0%9F%9A%97" target="_blank" rel="noopener noreferrer"
+          onClick={() => track("cta_click", { cta: "whatsapp_share" })}
           className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl px-4 py-3 transition-colors">
           <span className="text-2xl shrink-0">💬</span>
           <div>
@@ -1211,12 +1217,14 @@ function EmailCapture() {
     if (!email) return;
     setStatus("loading");
     try {
-      await fetch("/api/subscribe", {
+      const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+      if (!res.ok) throw new Error("subscribe failed");
       setStatus("done");
+      track("newsletter_signup");
     } catch {
       setStatus("error");
     }
@@ -1548,6 +1556,7 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro ao analisar o anúncio.");
       setUrlResult(data);
+      track("calc_completed", { mode: "link", is_classic: !!data.car_data?.is_classic, state });
       // Salva no histórico com o resultado completo para restaurar sem nova chamada
       const cd = data.car_data;
       const title = [cd.year, cd.make, cd.model].filter(Boolean).join(" ") || "Veículo";
@@ -1589,6 +1598,7 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro no cálculo.");
       setManualResult(data);
+      track("calc_completed", { mode: "manual", vehicle_type: manualVehicleType, is_classic: !!data.car_data?.is_classic });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro inesperado.");
     } finally {

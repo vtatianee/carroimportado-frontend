@@ -3,6 +3,18 @@ import { Resend } from "resend";
 
 export const dynamic = "force-dynamic";
 
+const SEARCH_ENGINES = ["google.", "bing.", "yahoo.", "duckduckgo.", "baidu.", "ecosia."];
+const SOCIAL_HOSTS = ["facebook.", "instagram.", "t.co", "twitter.", "x.com", "linkedin.", "tiktok.", "wa.me", "whatsapp."];
+
+function classifyReferrer(host: string): string {
+  const h = host.toLowerCase().trim();
+  if (!h) return "Direto";
+  if (SEARCH_ENGINES.some((s) => h.includes(s))) return "Busca orgânica";
+  if (SOCIAL_HOSTS.some((s) => h.includes(s))) return "Social";
+  if (h.includes("carroimportado.com")) return "Interno";
+  return "Referral";
+}
+
 export async function GET(req: NextRequest) {
   const BACKEND_URL = process.env.API_URL || "https://api.carroimportado.com";
   const STATS_TOKEN = process.env.STATS_TOKEN;
@@ -10,6 +22,15 @@ export async function GET(req: NextRequest) {
   const REPORT_EMAIL = process.env.REPORT_EMAIL || "arche.boost@gmail.com";
   const CF_ZONE_ID = process.env.CF_ZONE_ID;
   const CF_API_TOKEN = process.env.CF_API_TOKEN;
+  // Origem do tráfego (referrer) não existe no dataset de Zone Analytics
+  // (httpRequests1dGroups) usado acima — é log de borda, sem Referer. Só o
+  // dataset de Web Analytics/RUM (rumPageloadEventsAdaptiveGroups) tem essa
+  // dimensão, e ele só tem dado se o beacon JS da Cloudflare Web Analytics
+  // estiver ativo no site (Cloudflare dashboard → Analytics & Logs → Web
+  // Analytics → "Automatically inject the JavaScript snippet"). É escopado
+  // por conta + site tag, não por zona — por isso as credenciais são outras.
+  const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
+  const CF_SITE_TAG = process.env.CF_SITE_TAG;
 
   const authHeader = req.headers.get("authorization");
   if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
@@ -77,6 +98,64 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // ── 1b. Origem do tráfego (Cloudflare Web Analytics / RUM) ─────────────────
+  let referrerRows: { bucket: string; count: number }[] = [];
+  let referrerTotal = 0;
+
+  if (CF_ACCOUNT_ID && CF_API_TOKEN && CF_SITE_TAG) {
+    try {
+      const query = `
+        query {
+          viewer {
+            accounts(filter: { accountTag: "${CF_ACCOUNT_ID}" }) {
+              rumPageloadEventsAdaptiveGroups(
+                limit: 100
+                filter: {
+                  siteTag: "${CF_SITE_TAG}"
+                  datetime_geq: "${from.toISOString()}"
+                  datetime_leq: "${now.toISOString()}"
+                }
+                orderBy: [count_DESC]
+              ) {
+                count
+                dimensions { refererHost }
+              }
+            }
+          }
+        }
+      `;
+
+      const res = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${CF_API_TOKEN}`,
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        const groups = json?.data?.viewer?.accounts?.[0]?.rumPageloadEventsAdaptiveGroups ?? [];
+        const buckets = new Map<string, number>();
+        for (const g of groups) {
+          const host: string = g.dimensions?.refererHost ?? "";
+          const count: number = g.count ?? 0;
+          const bucket = classifyReferrer(host);
+          buckets.set(bucket, (buckets.get(bucket) ?? 0) + count);
+          referrerTotal += count;
+        }
+        referrerRows = [...buckets.entries()]
+          .map(([bucket, count]) => ({ bucket, count }))
+          .sort((a, b) => b.count - a.count);
+      } else {
+        console.error("[weekly-report] CF RUM error:", res.status, await res.text());
+      }
+    } catch (e) {
+      console.error("[weekly-report] CF Web Analytics error:", e);
+    }
+  }
+
   // ── 2. Buscas na calculadora (Railway backend) ─────────────────────────────
   let calculatorTotal = 0;
   let calculatorByDay: { date: string; count: number }[] = [];
@@ -132,6 +211,20 @@ export async function GET(req: NextRequest) {
     `
     : `<p style="color:#94a3b8;font-size:13px">Configure CF_ZONE_ID e CF_API_TOKEN no Vercel para ver tráfego.</p>`;
 
+  const referrerSection = CF_ACCOUNT_ID && CF_API_TOKEN && CF_SITE_TAG
+    ? (referrerRows.length > 0
+        ? `
+      <table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
+        <tr style="background:#f1f5f9"><th style="text-align:left">Origem</th><th style="text-align:right">Visitas</th><th style="text-align:right">%</th></tr>
+        ${referrerRows.map(r => `<tr>
+          <td style="color:#334155">${r.bucket}</td>
+          <td style="text-align:right;color:#334155">${r.count.toLocaleString("pt-BR")}</td>
+          <td style="text-align:right;color:#334155">${referrerTotal > 0 ? Math.round((r.count / referrerTotal) * 100) : 0}%</td>
+        </tr>`).join("")}
+      </table>`
+        : `<p style="color:#94a3b8;font-size:13px">Nenhuma visita com dado de origem nessa semana.</p>`)
+    : `<p style="color:#94a3b8;font-size:13px">Configure CF_ACCOUNT_ID e CF_SITE_TAG no Vercel (e ative o Cloudflare Web Analytics no site) para ver origem do tráfego.</p>`;
+
   const calculatorRows =
     calculatorByDay.length > 0
       ? calculatorByDay
@@ -145,6 +238,9 @@ export async function GET(req: NextRequest) {
       <p style="color:#64748b;font-size:13px;margin-top:0">${weekLabel}</p>
 
       ${cfSection}
+
+      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Origem do tráfego</h3>
+      ${referrerSection}
 
       <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Calculadora</h3>
       <table cellpadding="8" style="border-collapse:collapse;font-size:14px">
