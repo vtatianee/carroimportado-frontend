@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { timingSafeEqual } from "node:crypto";
 import { Resend } from "resend";
 
 export const dynamic = "force-dynamic";
+
+function segredoValido(authHeader: string | null, secret: string): boolean {
+  if (!authHeader) return false;
+  const a = Buffer.from(authHeader);
+  const b = Buffer.from(`Bearer ${secret}`);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
 const SEARCH_ENGINES = ["google.", "bing.", "yahoo.", "duckduckgo.", "baidu.", "ecosia."];
 const SOCIAL_HOSTS = ["facebook.", "instagram.", "t.co", "twitter.", "x.com", "linkedin.", "tiktok.", "wa.me", "whatsapp."];
@@ -32,8 +40,14 @@ export async function GET(req: NextRequest) {
   const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
   const CF_SITE_TAG = process.env.CF_SITE_TAG;
 
-  const authHeader = req.headers.get("authorization");
-  if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
+  // Fail-closed: sem CRON_SECRET configurado a rota fica fechada, em vez de
+  // aberta ao mundo. Ela dispara email real e consome cota da Cloudflare e do
+  // Resend a cada chamada, então "não configurado" não pode significar "livre".
+  if (!CRON_SECRET) {
+    console.error("[weekly-report] CRON_SECRET não configurado — rota bloqueada.");
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!segredoValido(req.headers.get("authorization"), CRON_SECRET)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
