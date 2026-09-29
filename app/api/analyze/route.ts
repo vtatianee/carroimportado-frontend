@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cabecalhosBackend } from "../../lib/backend";
 
 const BACKEND_URL = process.env.API_URL || "https://api.carroimportado.com";
 
@@ -10,7 +11,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(process.env.INTERNAL_SECRET ? { "x-internal-secret": process.env.INTERNAL_SECRET } : {}),
+        ...cabecalhosBackend(req),
       },
       body: JSON.stringify(body),
     });
