@@ -19,6 +19,13 @@ interface FiltroBusca {
   ano: number;
 }
 
+/** Anúncio específico (carros importados), com os mesmos parâmetros de afiliado. */
+export function urlAnuncioCarsCom(urlAnuncio: string): string {
+  const url = new URL(urlAnuncio);
+  for (const [chave, valor] of Object.entries(PARAMETROS_AFILIADO)) url.searchParams.set(chave, valor);
+  return url.toString();
+}
+
 /** Busca de usados daquele modelo e ano no país inteiro. */
 export function urlBuscaCarsCom({ marca, modelo, ano }: FiltroBusca): string {
   const params = new URLSearchParams({

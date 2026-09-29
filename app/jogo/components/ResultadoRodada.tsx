@@ -6,7 +6,7 @@ import BotaoCompartilhar from "./BotaoCompartilhar";
 import type { Carro } from "../../lib/jogo/carros";
 import { etiquetaDesempenho, formatarUsd } from "../../lib/jogo/pontuacao";
 import { resumoResultado } from "../../lib/jogo/compartilhamento";
-import { urlBuscaCarsCom } from "../../lib/jogo/cars-com";
+import { urlAnuncioCarsCom, urlBuscaCarsCom } from "../../lib/jogo/cars-com";
 import { registrarEvento } from "../../lib/jogo/eventos";
 import { dias, diasSeguidos } from "../../lib/jogo/progresso";
 
@@ -34,6 +34,10 @@ export default function ResultadoRodada({
   onJogarNovamente,
 }: Props) {
   const percentual = Math.round((diferenca / carro.precoReal) * 100);
+  // Carro importado leva ao próprio anúncio; os exemplos, à busca do modelo.
+  const linkCarsCom = carro.urlAnuncio
+    ? urlAnuncioCarsCom(carro.urlAnuncio)
+    : carro.carsCom && urlBuscaCarsCom({ ...carro.carsCom, ano: carro.ano });
   const direcao = palpite > carro.precoReal ? "acima" : "abaixo";
 
   return (
@@ -94,11 +98,11 @@ export default function ResultadoRodada({
         </Link>
         <p className="-mt-1 text-xs text-center text-slate-500">Quanto esse carro custaria trazido para o Brasil?</p>
 
-        {carro.carsCom && (
+        {linkCarsCom && (
           // Secundário de propósito: leva o jogador para fora do site, enquanto o
           // CTA da calculadora acima é o que mantém ele aqui.
           <a
-            href={urlBuscaCarsCom({ ...carro.carsCom, ano: carro.ano })}
+            href={linkCarsCom}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() =>
@@ -108,7 +112,7 @@ export default function ResultadoRodada({
           >
             {/* Rótulo curto de propósito: com o nome do modelo ("Chevrolet Corvette
                 Stingray 2017") quebrava em duas linhas e ficava maior que o CTA principal. */}
-            🔎 Ver este modelo no Cars.com
+            🔎 {carro.urlAnuncio ? "Ver este anúncio no Cars.com" : "Ver este modelo no Cars.com"}
             <span aria-hidden="true">↗</span>
             <span className="sr-only">
               ({carro.modelo} {carro.ano}, abre em nova aba)

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import JogoClient from "./JogoClient";
+import { carregarCarros } from "../lib/jogo/carros-servidor";
 
 const URL_PAGINA = "https://www.carroimportado.com/jogo";
 const TITULO = "Adivinhe o Preço — jogo de carros dos EUA";
@@ -27,6 +28,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function JogoPage() {
-  return <JogoClient />;
+// A página continua pré-renderizada, mas refaz a lista de carros no máximo
+// 1x por hora: a importação é semanal, então isso basta para os anúncios
+// novos aparecerem sem deploy.
+export const revalidate = 3600;
+
+export default async function JogoPage() {
+  const { carros, reais } = await carregarCarros();
+  return <JogoClient carros={carros} reais={reais} />;
 }
