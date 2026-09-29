@@ -1,4 +1,3 @@
-import { ondeFica } from "./estados";
 import { formatarUsd } from "./pontuacao";
 
 export const URL_JOGO = "https://carroimportado.com/jogo";
@@ -6,21 +5,22 @@ export const URL_JOGO = "https://carroimportado.com/jogo";
 interface DadosCompartilhamento {
   modelo: string;
   ano: number;
-  estado: string;
   diferenca: number;
-  sequencia: number;
+  pontos: number;
 }
 
-/** Resultado da rodada, sem o link — para redes que recebem texto e URL separados. */
-export function resumoResultado({ modelo, ano, estado, diferenca, sequencia }: DadosCompartilhamento): string {
-  const carro = `${modelo} ${ano} ${ondeFica(estado)}`;
+/**
+ * Resultado da rodada, sem o link — para redes que recebem texto e URL separados.
+ * Ex: "Adivinhei o preço de um Ford Mustang GT 2019 a US$ 1.500 de diferença!
+ * Fiz 980 pontos no Adivinhe o Preço 🚗"
+ */
+export function resumoResultado({ modelo, ano, diferenca, pontos }: DadosCompartilhamento): string {
+  const carro = `${modelo} ${ano}`;
   const resultado =
     diferenca === 0
-      ? `Acertei em cheio o preço de um ${carro}`
-      : `Errei o preço de um ${carro} por US$ ${formatarUsd(diferenca)}`;
-  const fechamento =
-    sequencia > 0 ? ` — ${sequencia} ${sequencia === 1 ? "dia" : "dias"} de sequência!` : "!";
-  return `🗺️🚗 ${resultado}${fechamento}`;
+      ? `Acertei em cheio o preço de um ${carro}!`
+      : `Adivinhei o preço de um ${carro} a US$ ${formatarUsd(diferenca)} de diferença!`;
+  return `${resultado} Fiz ${pontos.toLocaleString("pt-BR")} pontos no Adivinhe o Preço 🚗`;
 }
 
 export function textoCompartilhamento(dados: DadosCompartilhamento): string {

@@ -14,10 +14,13 @@ import { ondeFica } from "../lib/jogo/estados";
 import { carroDoDia, dataHoje } from "../lib/jogo/desafio-diario";
 import { calcularDiferenca, calcularPontos } from "../lib/jogo/pontuacao";
 import {
+  assinarAcumulado,
   assinarHistorico,
   assinarRecorde,
+  interpretarAcumulado,
   interpretarHistorico,
   interpretarRecorde,
+  lerAcumuladoBruto,
   lerHistoricoBruto,
   lerRecordeBruto,
   registrarPontuacao,
@@ -65,6 +68,8 @@ export default function JogoClient() {
   const ultimas = useMemo(() => interpretarHistorico(historicoBruto), [historicoBruto]);
   const recordeBruto = useSyncExternalStore(assinarRecorde, lerRecordeBruto, nadaNoServidor);
   const recorde = useMemo(() => interpretarRecorde(recordeBruto), [recordeBruto]);
+  const acumuladoBruto = useSyncExternalStore(assinarAcumulado, lerAcumuladoBruto, nadaNoServidor);
+  const acumulado = useMemo(() => interpretarAcumulado(acumuladoBruto, ultimas), [acumuladoBruto, ultimas]);
 
   const carroHoje = hoje ? carroDoDia(CARROS, hoje) : null;
   const sequencia = hoje ? sequenciaVigente(progresso, hoje) : 0;
@@ -102,9 +107,11 @@ export default function JogoClient() {
     const diferenca = calcularDiferenca(palpite, rodada.carro.precoReal);
     const pontos = calcularPontos(diferenca, rodada.carro.precoReal);
     const agora = Date.now();
-    const registro = registrarPontuacao(ultimas, recorde, {
+    const registro = registrarPontuacao(ultimas, recorde, acumulado, {
       id: String(agora),
       pontos,
+      palpite,
+      precoReal: rodada.carro.precoReal,
       modelo: rodada.carro.modelo,
       ano: rodada.carro.ano,
       estado: rodada.carro.estado,
@@ -233,7 +240,7 @@ export default function JogoClient() {
 
         {/* Some durante o palpite (para não distrair) e antes de hidratar
             (o histórico só existe no navegador). */}
-        {hoje && !(rodada && !resultado) && <PainelPontuacoes recorde={recorde} ultimas={ultimas} />}
+        {hoje && !(rodada && !resultado) && <PainelPontuacoes recorde={recorde} ultimas={ultimas} acumulado={acumulado} />}
 
         <footer className="text-center text-xs text-slate-500 pt-4 space-y-1.5">
           <p>Pontos: até 1.000, descontando o quanto o seu palpite errou em percentual (errou 10% = 900 pontos).</p>

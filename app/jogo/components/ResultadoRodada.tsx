@@ -4,7 +4,7 @@ import Link from "next/link";
 import { track } from "@vercel/analytics";
 import BotaoCompartilhar from "./BotaoCompartilhar";
 import type { Carro } from "../../lib/jogo/carros";
-import { formatarUsd } from "../../lib/jogo/pontuacao";
+import { etiquetaDesempenho, formatarUsd } from "../../lib/jogo/pontuacao";
 import { resumoResultado } from "../../lib/jogo/compartilhamento";
 import { urlBuscaCarsCom } from "../../lib/jogo/cars-com";
 import { registrarEvento } from "../../lib/jogo/eventos";
@@ -19,15 +19,6 @@ interface Props {
   sequencia: number;
   melhorSequencia: number;
   onJogarNovamente: () => void;
-}
-
-function manchete(diferenca: number, pontos: number): string {
-  // Pela diferença, não pelos pontos: o arredondamento dá 1000 a quem errou
-  // por poucos dólares, e "na mosca" deve ser só o acerto exato.
-  if (diferenca === 0) return "🎯 Na mosca!";
-  if (pontos >= 700) return "🔥 Quase lá!";
-  if (pontos > 0) return "👏 Chegou perto!";
-  return "😅 Passou longe!";
 }
 
 export default function ResultadoRodada({
@@ -51,7 +42,7 @@ export default function ResultadoRodada({
           🏆 Novo recorde!
         </p>
       )}
-      <p className="text-2xl font-bold text-slate-900 text-center">{manchete(diferenca, pontos)}</p>
+      <p className="text-2xl font-bold text-slate-900 text-center">{etiquetaDesempenho(pontos)}</p>
 
       <div className="mt-4 text-center">
         <p className="text-sm text-slate-500">Preço real do {carro.modelo} {carro.ano}</p>
@@ -88,9 +79,8 @@ export default function ResultadoRodada({
           resumo={resumoResultado({
             modelo: carro.modelo,
             ano: carro.ano,
-            estado: carro.estado,
             diferenca,
-            sequencia,
+            pontos,
           })}
         />
 
