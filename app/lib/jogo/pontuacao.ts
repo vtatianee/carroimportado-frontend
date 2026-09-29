@@ -18,7 +18,7 @@ export const PONTOS_BOM_PALPITE = 700;
 /** Etiqueta de desempenho da rodada, usada no resultado e no ranking pessoal. */
 export function etiquetaDesempenho(pontos: number): string {
   if (pontos >= PONTOS_MAXIMOS) return "🎯 Na mosca!";
-  if (pontos >= 900) return "🔥 Muito perto!";
+  if (pontos >= 900) return "✨ Muito perto!";
   if (pontos >= PONTOS_BOM_PALPITE) return "👍 Bom palpite";
   if (pontos >= 400) return "😐 Razoável";
   return "🧊 Passou longe";
