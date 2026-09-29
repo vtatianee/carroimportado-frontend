@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cabecalhosBackend } from "../../lib/backend";
 
 const BACKEND_URL = process.env.API_URL || "https://api.carroimportado.com";
 
@@ -11,7 +12,7 @@ export async function GET(req: NextRequest) {
       // 30s timeout — scraping pode ser lento
       signal: AbortSignal.timeout(30_000),
       headers: {
-        ...(process.env.INTERNAL_SECRET ? { "x-internal-secret": process.env.INTERNAL_SECRET } : {}),
+        ...cabecalhosBackend(req),
       },
     });
 
