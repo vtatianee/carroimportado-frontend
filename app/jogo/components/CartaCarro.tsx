@@ -1,30 +1,52 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import type { Carro } from "../../lib/jogo/carros";
 import { estadoPorSigla } from "../../lib/jogo/estados";
+import { FOTO_PLACEHOLDER } from "../../lib/jogo/foto";
 
 const KM_POR_MILHA = 1.609344;
 
 export default function CartaCarro({ carro }: { carro: Carro }) {
   const estado = estadoPorSigla(carro.estado);
+  // Guarda qual URL falhou, não um booleano: quando a rodada troca de carro,
+  // a foto nova é tentada sem precisar de efeito para "resetar" o estado.
+  const [fotoQueFalhou, setFotoQueFalhou] = useState<string | null>(null);
+  const semFoto = fotoQueFalhou === carro.fotoUrl;
+  const src = semFoto ? FOTO_PLACEHOLDER : carro.fotoUrl;
 
   return (
     <article className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="relative aspect-[16/10] bg-slate-100">
         {/* unoptimized: fotos de anúncio vêm de hosts externos variados, e
-            otimizar exigiria listar cada um em images.remotePatterns. */}
+            otimizar exigiria listar cada um em images.remotePatterns.
+            no-referrer: é hotlink, e há CDN que recusa Referer de outro site. */}
         <Image
-          src={carro.fotoUrl}
+          key={src}
+          src={src}
           alt={`${carro.modelo} ${carro.ano}`}
           width={800}
           height={500}
           unoptimized
           loading="lazy"
+          referrerPolicy="no-referrer"
+          onError={() => {
+            // O placeholder é local; se até ele falhar, não há para onde ir.
+            if (!semFoto) setFotoQueFalhou(carro.fotoUrl);
+          }}
           className="w-full h-full object-cover"
         />
-        {carro.fonte === "exemplo" && (
+        {carro.fonte === "exemplo" ? (
           <span className="absolute top-3 left-3 bg-white/90 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
             Anúncio de exemplo
           </span>
+        ) : (
+          semFoto && (
+            <span className="absolute top-3 left-3 bg-white/90 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
+              Foto indisponível
+            </span>
+          )
         )}
       </div>
 

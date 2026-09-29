@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Silhueta de carro">
+  <rect width="800" height="500" fill="#e2e8f0"/>
+  <g transform="translate(0 -22)">
+    <path d="M178 318V292q2-24 27-30l85-14 55-43q15-13 40-15h115q25 0 40 14l45 44 25 6q18 6 18 26v38z" fill="#94a3b8"/>
+    <path d="M305 250l47-38q8-7 20-7h68v45zM452 205h48q15 0 25 10l35 35h-108z" fill="#cbd5e1"/>
+    <circle cx="270" cy="318" r="48" fill="#e2e8f0"/>
+    <circle cx="540" cy="318" r="48" fill="#e2e8f0"/>
+    <ellipse cx="405" cy="360" rx="255" ry="9" fill="#cbd5e1"/>
+    <circle cx="270" cy="318" r="40" fill="#64748b"/>
+    <circle cx="540" cy="318" r="40" fill="#64748b"/>
+    <circle cx="270" cy="318" r="17" fill="#cbd5e1"/>
+    <circle cx="540" cy="318" r="17" fill="#cbd5e1"/>
+  </g>
+</svg>

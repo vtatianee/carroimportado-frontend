@@ -6,7 +6,7 @@
     "milhas": 45000,
     "estado": "TX",
     "precoReal": 24500,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Ford+Mustang+GT+2019",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "ford",
@@ -20,7 +20,7 @@
     "milhas": 52000,
     "estado": "CA",
     "precoReal": 31900,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Toyota+Tacoma+TRD+2020",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "toyota",
@@ -34,7 +34,7 @@
     "milhas": 28000,
     "estado": "FL",
     "precoReal": 41500,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Chevrolet+Corvette+2017",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "chevrolet",
@@ -48,7 +48,7 @@
     "milhas": 38000,
     "estado": "NY",
     "precoReal": 19800,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Honda+Civic+EX+2021",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "honda",
@@ -62,7 +62,7 @@
     "milhas": 61000,
     "estado": "AZ",
     "precoReal": 26400,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Jeep+Wrangler+2018",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "jeep",
@@ -76,7 +76,7 @@
     "milhas": 34000,
     "estado": "GA",
     "precoReal": 28700,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Dodge+Challenger+2020",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "dodge",
@@ -90,7 +90,7 @@
     "milhas": 72000,
     "estado": "IL",
     "precoReal": 27300,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Chevrolet+Silverado+2019",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "chevrolet",
@@ -104,7 +104,7 @@
     "milhas": 41000,
     "estado": "WA",
     "precoReal": 23600,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Subaru+Outback+2021",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "subaru",
@@ -118,7 +118,7 @@
     "milhas": 83000,
     "estado": "CO",
     "precoReal": 29500,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Toyota+4Runner+2018",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "toyota",
@@ -132,7 +132,7 @@
     "milhas": 47000,
     "estado": "NC",
     "precoReal": 25200,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=BMW+330i+2020",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "bmw",
@@ -146,7 +146,7 @@
     "milhas": 55000,
     "estado": "OH",
     "precoReal": 33800,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Ford+F-150+XLT+2021",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "ford",
@@ -160,7 +160,7 @@
     "milhas": 49000,
     "estado": "MI",
     "precoReal": 24900,
-    "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Tesla+Model+3+2021",
+    "fotoUrl": "/jogo/carro-placeholder.svg",
     "fonte": "exemplo",
     "carsCom": {
       "marca": "tesla",
