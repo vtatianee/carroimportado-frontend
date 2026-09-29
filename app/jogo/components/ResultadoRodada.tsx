@@ -8,6 +8,7 @@ import { etiquetaDesempenho, formatarUsd } from "../../lib/jogo/pontuacao";
 import { resumoResultado } from "../../lib/jogo/compartilhamento";
 import { urlBuscaCarsCom } from "../../lib/jogo/cars-com";
 import { registrarEvento } from "../../lib/jogo/eventos";
+import { dias, diasSeguidos } from "../../lib/jogo/progresso";
 
 interface Props {
   carro: Carro;
@@ -70,7 +71,7 @@ export default function ResultadoRodada({
       </dl>
 
       <p className="mt-4 text-center text-sm text-slate-600">
-        🔥 Sequência atual: <strong>{sequencia}</strong> · Melhor sequência: <strong>{melhorSequencia}</strong>
+        📅 <strong>{diasSeguidos(sequencia)}</strong> · Melhor: <strong>{dias(melhorSequencia)}</strong>
       </p>
 
       <div className="mt-5 space-y-3">

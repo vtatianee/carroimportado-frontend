@@ -63,3 +63,13 @@ export function interpretarProgresso(bruto: string | null): Progresso {
     return PROGRESSO_VAZIO;
   }
 }
+
+/** "1 dia" / "3 dias" — contagem da sequência do desafio diário. */
+export function dias(n: number): string {
+  return `${n.toLocaleString("pt-BR")} ${n === 1 ? "dia" : "dias"}`;
+}
+
+/** "1 dia seguido" / "3 dias seguidos". */
+export function diasSeguidos(n: number): string {
+  return `${dias(n)} ${n === 1 ? "seguido" : "seguidos"}`;
+}

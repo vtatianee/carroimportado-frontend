@@ -28,6 +28,8 @@ import {
 } from "../lib/jogo/historico";
 import {
   assinarProgresso,
+  dias,
+  diasSeguidos,
   interpretarProgresso,
   lerProgressoBruto,
   registrarConclusaoDiaria,
@@ -210,8 +212,9 @@ export default function JogoClient() {
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">🗺️ Adivinhe o Preço</h1>
           <p className="text-slate-600 mt-1">Escolha um estado, veja o carro e chute quanto ele custa nos EUA.</p>
           <p className="text-sm text-slate-500 mt-2">
-            🔥 Sequência: <strong>{hoje ? sequencia : "–"}</strong> · Melhor sequência:{" "}
-            <strong>{hoje ? progresso.melhor : "–"}</strong>
+            {/* 📅 conta dias do desafio diário; o 🔥 fica para a sequência de palpites bons. */}
+            📅 <strong>{hoje ? diasSeguidos(sequencia) : "– dias seguidos"}</strong> · Melhor:{" "}
+            <strong>{hoje ? dias(progresso.melhor) : "–"}</strong>
           </p>
         </header>
 
