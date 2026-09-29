@@ -7,7 +7,11 @@
     "estado": "TX",
     "precoReal": 24500,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Ford+Mustang+GT+2019",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "ford",
+      "modelo": "ford-mustang"
+    }
   },
   {
     "id": "tacoma-trd-offroad-2020-ca",
@@ -17,7 +21,11 @@
     "estado": "CA",
     "precoReal": 31900,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Toyota+Tacoma+TRD+2020",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "toyota",
+      "modelo": "toyota-tacoma"
+    }
   },
   {
     "id": "corvette-stingray-2017-fl",
@@ -27,7 +35,11 @@
     "estado": "FL",
     "precoReal": 41500,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Chevrolet+Corvette+2017",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "chevrolet",
+      "modelo": "chevrolet-corvette"
+    }
   },
   {
     "id": "civic-ex-2021-ny",
@@ -37,7 +49,11 @@
     "estado": "NY",
     "precoReal": 19800,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Honda+Civic+EX+2021",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "honda",
+      "modelo": "honda-civic"
+    }
   },
   {
     "id": "wrangler-sahara-2018-az",
@@ -47,7 +63,11 @@
     "estado": "AZ",
     "precoReal": 26400,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Jeep+Wrangler+2018",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "jeep",
+      "modelo": "jeep-wrangler_unlimited"
+    }
   },
   {
     "id": "challenger-rt-2020-ga",
@@ -57,7 +77,11 @@
     "estado": "GA",
     "precoReal": 28700,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Dodge+Challenger+2020",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "dodge",
+      "modelo": "dodge-challenger"
+    }
   },
   {
     "id": "silverado-lt-2019-il",
@@ -67,7 +91,11 @@
     "estado": "IL",
     "precoReal": 27300,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Chevrolet+Silverado+2019",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "chevrolet",
+      "modelo": "chevrolet-silverado_1500"
+    }
   },
   {
     "id": "outback-premium-2021-wa",
@@ -77,7 +105,11 @@
     "estado": "WA",
     "precoReal": 23600,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Subaru+Outback+2021",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "subaru",
+      "modelo": "subaru-outback"
+    }
   },
   {
     "id": "4runner-sr5-2018-co",
@@ -87,7 +119,11 @@
     "estado": "CO",
     "precoReal": 29500,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Toyota+4Runner+2018",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "toyota",
+      "modelo": "toyota-4runner"
+    }
   },
   {
     "id": "bmw-330i-2020-nc",
@@ -97,7 +133,11 @@
     "estado": "NC",
     "precoReal": 25200,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=BMW+330i+2020",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "bmw",
+      "modelo": "bmw-330"
+    }
   },
   {
     "id": "f150-xlt-2021-oh",
@@ -107,7 +147,11 @@
     "estado": "OH",
     "precoReal": 33800,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Ford+F-150+XLT+2021",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "ford",
+      "modelo": "ford-f_150"
+    }
   },
   {
     "id": "model3-long-range-2021-mi",
@@ -117,6 +161,10 @@
     "estado": "MI",
     "precoReal": 24900,
     "fotoUrl": "https://placehold.co/800x500/e2e8f0/475569.png?text=Tesla+Model+3+2021",
-    "fonte": "exemplo"
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "tesla",
+      "modelo": "tesla-model_3"
+    }
   }
 ]

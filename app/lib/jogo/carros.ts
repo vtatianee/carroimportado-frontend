@@ -11,6 +11,8 @@ export interface Carro {
   fotoUrl: string;
   /** "exemplo" enquanto os dados forem fictícios; mostra o selo "Anúncio de exemplo". */
   fonte: string;
+  /** Slugs da busca do Cars.com (ver lib/jogo/cars-com.ts). Sem eles, não há botão de anúncios. */
+  carsCom?: { marca: string; modelo: string };
 }
 
 // TODO(fotos reais): `fotoUrl` em app/data/carros.json hoje aponta para

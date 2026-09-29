@@ -6,6 +6,8 @@ import BotaoCompartilhar from "./BotaoCompartilhar";
 import type { Carro } from "../../lib/jogo/carros";
 import { formatarUsd } from "../../lib/jogo/pontuacao";
 import { resumoResultado } from "../../lib/jogo/compartilhamento";
+import { urlBuscaCarsCom } from "../../lib/jogo/cars-com";
+import { registrarEvento } from "../../lib/jogo/eventos";
 
 interface Props {
   carro: Carro;
@@ -100,6 +102,28 @@ export default function ResultadoRodada({
           🧮 Calcular custo de importação
         </Link>
         <p className="-mt-1 text-xs text-center text-slate-500">Quanto esse carro custaria trazido para o Brasil?</p>
+
+        {carro.carsCom && (
+          // Secundário de propósito: leva o jogador para fora do site, enquanto o
+          // CTA da calculadora acima é o que mantém ele aqui.
+          <a
+            href={urlBuscaCarsCom({ ...carro.carsCom, ano: carro.ano })}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() =>
+              registrarEvento({ nome: "jogo_ver_anuncios", modo, carroId: carro.id, estado: carro.estado })
+            }
+            className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition-colors"
+          >
+            {/* Rótulo curto de propósito: com o nome do modelo ("Chevrolet Corvette
+                Stingray 2017") quebrava em duas linhas e ficava maior que o CTA principal. */}
+            🔎 Ver este modelo no Cars.com
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only">
+              ({carro.modelo} {carro.ano}, abre em nova aba)
+            </span>
+          </a>
+        )}
 
         <button
           type="button"
