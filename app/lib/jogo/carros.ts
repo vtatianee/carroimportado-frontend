@@ -5,32 +5,37 @@ export interface Carro {
   id: string;
   modelo: string;
   ano: number;
-  milhas: number;
+  /** null quando o anúncio não informa. */
+  milhas: number | null;
   /** Sigla do estado americano, ex: "TX". */
   estado: string;
   precoReal: number;
   fotoUrl: string;
-  /** "exemplo" enquanto os dados forem fictícios; mostra o selo "Anúncio de exemplo". */
+  /** "exemplo" nos fictícios (mostra o selo "Anúncio de exemplo"); "cars.com" nos importados. */
   fonte: string;
-  /** Slugs da busca do Cars.com (ver lib/jogo/cars-com.ts). Sem eles, não há botão de anúncios. */
+  /** Slugs da busca do Cars.com (ver lib/jogo/cars-com.ts), usados pelos exemplos. */
   carsCom?: { marca: string; modelo: string };
+  /** Anúncio real de onde o carro veio; tem prioridade sobre a busca por modelo. */
+  urlAnuncio?: string;
+  /** Data (yyyy-mm-dd, UTC) em que o anúncio entrou na base — ver elegiveisParaODia. */
+  importadoEm?: string;
 }
 
-// TODO(fotos reais): `fotoUrl` em app/data/carros.json hoje aponta para a
-// silhueta genérica (FOTO_PLACEHOLDER). Troque pela URL da foto do anúncio
-// real (hotlink, sem baixar) e mude `fonte` para a origem (ex: "cars.com") —
-// o selo "Anúncio de exemplo" da CartaCarro some sozinho quando `fonte`
-// deixa de ser "exemplo".
+// Os 12 carros fictícios de app/data/carros.json, com a silhueta genérica no
+// lugar da foto. O jogo só usa estes quando a base de anúncios reais do
+// backend está vazia (ver carros-servidor.ts).
 //
 // Carro sem foto utilizável não entra no jogo: todo carro exibido tem imagem.
-export const CARROS: readonly Carro[] = dados.filter((c) => fotoUtilizavel(c.fotoUrl));
+export const CARROS_EXEMPLO: readonly Carro[] = dados.filter((c) => fotoUtilizavel(c.fotoUrl));
 
-export const ESTADOS_COM_CARRO: ReadonlySet<string> = new Set(CARROS.map((c) => c.estado));
-
-export function carrosDoEstado(sigla: string): Carro[] {
-  return CARROS.filter((c) => c.estado === sigla);
+export function estadosComCarro(carros: readonly Carro[]): ReadonlySet<string> {
+  return new Set(carros.map((c) => c.estado));
 }
 
-export function carroPorId(id: string): Carro | undefined {
-  return CARROS.find((c) => c.id === id);
+export function carrosDoEstado(carros: readonly Carro[], sigla: string): Carro[] {
+  return carros.filter((c) => c.estado === sigla);
+}
+
+export function carroPorId(carros: readonly Carro[], id: string): Carro | undefined {
+  return carros.find((c) => c.id === id);
 }

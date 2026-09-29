@@ -35,9 +35,20 @@ function hash(texto: string): number {
 
 /**
  * Carro do desafio de uma data — o mesmo para todos os jogadores naquele dia.
- * Adicionar ou remover carros da base muda o sorteio (é hash % total), então
- * faça isso de preferência logo após a meia-noite de Brasília.
+ * Adicionar ou remover carros da base muda o sorteio (é hash % total): passe
+ * a lista por elegiveisParaODia, e em ordem estável (o backend embaralha).
  */
 export function carroDoDia<T>(carros: readonly T[], data: string): T {
   return carros[hash(data) % carros.length];
+}
+
+/**
+ * Só os carros que já estavam na base antes de hoje. A importação semanal
+ * acrescenta anúncios, e sem este corte o carro do dia trocaria no meio do dia
+ * para quem abrisse a página depois dela. Se nada sobrar (base toda nova),
+ * vale a lista inteira.
+ */
+export function elegiveisParaODia<T extends { importadoEm?: string }>(carros: readonly T[], data: string): readonly T[] {
+  const anteriores = carros.filter((c) => !c.importadoEm || c.importadoEm < data);
+  return anteriores.length > 0 ? anteriores : carros;
 }

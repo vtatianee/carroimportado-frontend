@@ -1,6 +1,10 @@
 {
   "crons": [
     {
+      "path": "/api/jogo/import",
+      "schedule": "5 3 * * 1"
+    },
+    {
       "path": "/api/weekly-report",
       "schedule": "0 12 * * 1"
     }

@@ -9,9 +9,9 @@ import CartaCarro from "./components/CartaCarro";
 import PalpitePreco from "./components/PalpitePreco";
 import ResultadoRodada from "./components/ResultadoRodada";
 import PainelPontuacoes from "./components/PainelPontuacoes";
-import { CARROS, ESTADOS_COM_CARRO, carroPorId, carrosDoEstado, type Carro } from "../lib/jogo/carros";
+import { carroPorId, carrosDoEstado, estadosComCarro, type Carro } from "../lib/jogo/carros";
 import { ondeFica } from "../lib/jogo/estados";
-import { carroDoDia, dataHoje } from "../lib/jogo/desafio-diario";
+import { carroDoDia, dataHoje, elegiveisParaODia } from "../lib/jogo/desafio-diario";
 import { calcularDiferenca, calcularPontos } from "../lib/jogo/pontuacao";
 import {
   assinarAcumulado,
@@ -55,7 +55,14 @@ const semAssinatura = () => () => {};
 const nadaNoServidor = () => null;
 const NENHUM: ReadonlySet<string> = new Set();
 
-export default function JogoClient() {
+interface Props {
+  /** Carros da rodada, em ordem estável (ver carregarCarros). */
+  carros: readonly Carro[];
+  /** false = jogando com os exemplos fictícios. */
+  reais: boolean;
+}
+
+export default function JogoClient({ carros, reais }: Props) {
   const [modo, setModo] = useState<Modo>("diario");
   const [rodada, setRodada] = useState<Rodada | null>(null);
   const [resultado, setResultado] = useState<Palpite | null>(null);
@@ -73,15 +80,16 @@ export default function JogoClient() {
   const acumuladoBruto = useSyncExternalStore(assinarAcumulado, lerAcumuladoBruto, nadaNoServidor);
   const acumulado = useMemo(() => interpretarAcumulado(acumuladoBruto, ultimas), [acumuladoBruto, ultimas]);
 
-  const carroHoje = hoje ? carroDoDia(CARROS, hoje) : null;
+  const comCarro = useMemo(() => estadosComCarro(carros), [carros]);
+  const carroHoje = hoje ? carroDoDia(elegiveisParaODia(carros, hoje), hoje) : null;
   const sequencia = hoje ? sequenciaVigente(progresso, hoje) : 0;
   const salvoHoje = hoje && progresso.diario?.data === hoje ? progresso.diario : null;
-  const carroSalvoHoje = salvoHoje ? carroPorId(salvoHoje.carroId) : undefined;
+  const carroSalvoHoje = salvoHoje ? carroPorId(carros, salvoHoje.carroId) : undefined;
 
   const clicaveis = useMemo<ReadonlySet<string>>(() => {
-    if (modo === "treino") return ESTADOS_COM_CARRO;
+    if (modo === "treino") return comCarro;
     return carroHoje ? new Set([carroHoje.estado]) : NENHUM;
-  }, [modo, carroHoje]);
+  }, [modo, carroHoje, comCarro]);
 
   function trocarModo(novo: Modo) {
     setModo(novo);
@@ -95,7 +103,7 @@ export default function JogoClient() {
       if (carroHoje?.estado !== sigla) return;
       carro = carroHoje;
     } else {
-      const opcoes = carrosDoEstado(sigla);
+      const opcoes = carrosDoEstado(carros, sigla);
       carro = opcoes[Math.floor(Math.random() * opcoes.length)];
     }
     if (!carro) return;
@@ -194,7 +202,7 @@ export default function JogoClient() {
         {/* key={modo}: trocar de modo limpa o estado selecionado no mapa */}
         <MapaEUA
           key={modo}
-          comCarro={ESTADOS_COM_CARRO}
+          comCarro={comCarro}
           clicaveis={clicaveis}
           destaque={modo === "diario" ? (carroHoje?.estado ?? null) : null}
           onJogar={selecionarEstado}
@@ -247,7 +255,11 @@ export default function JogoClient() {
 
         <footer className="text-center text-xs text-slate-500 pt-4 space-y-1.5">
           <p>Pontos: até 1.000, descontando o quanto o seu palpite errou em percentual (errou 10% = 900 pontos).</p>
-          <p>Carros e preços de exemplo, só para diversão — não são ofertas de venda.</p>
+          <p>
+            {reais
+              ? "Anúncios reais do Cars.com, atualizados toda semana. O preço pode ter mudado desde então."
+              : "Carros e preços de exemplo, só para diversão — não são ofertas de venda."}
+          </p>
           <p>
             <Link href="/" className="underline hover:text-slate-700">
               Calculadora de importação

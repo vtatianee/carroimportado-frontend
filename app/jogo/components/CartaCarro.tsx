@@ -63,10 +63,16 @@ export default function CartaCarro({ carro }: { carro: Carro }) {
           <div className="bg-slate-50 rounded-xl px-3 py-2">
             <dt className="text-slate-500 text-xs">Quilometragem</dt>
             <dd className="font-semibold text-slate-900">
-              {carro.milhas.toLocaleString("pt-BR")} mi{" "}
-              <span className="font-normal text-slate-500">
-                (~{Math.round(carro.milhas * KM_POR_MILHA).toLocaleString("pt-BR")} km)
-              </span>
+              {carro.milhas === null ? (
+                <span className="font-normal text-slate-500">Não informada</span>
+              ) : (
+                <>
+                  {carro.milhas.toLocaleString("pt-BR")} mi{" "}
+                  <span className="font-normal text-slate-500">
+                    (~{Math.round(carro.milhas * KM_POR_MILHA).toLocaleString("pt-BR")} km)
+                  </span>
+                </>
+              )}
             </dd>
           </div>
         </dl>
