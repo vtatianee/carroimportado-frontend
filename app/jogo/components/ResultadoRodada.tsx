@@ -4,7 +4,7 @@ import Link from "next/link";
 import { track } from "@vercel/analytics";
 import BotaoCompartilhar from "./BotaoCompartilhar";
 import type { Carro } from "../../lib/jogo/carros";
-import { formatarUsd, PONTOS_MAXIMOS } from "../../lib/jogo/pontuacao";
+import { formatarUsd } from "../../lib/jogo/pontuacao";
 import { textoCompartilhamento } from "../../lib/jogo/compartilhamento";
 
 interface Props {
@@ -18,8 +18,10 @@ interface Props {
   onJogarNovamente: () => void;
 }
 
-function manchete(pontos: number): string {
-  if (pontos === PONTOS_MAXIMOS) return "🎯 Na mosca!";
+function manchete(diferenca: number, pontos: number): string {
+  // Pela diferença, não pelos pontos: o arredondamento dá 1000 a quem errou
+  // por poucos dólares, e "na mosca" deve ser só o acerto exato.
+  if (diferenca === 0) return "🎯 Na mosca!";
   if (pontos >= 700) return "🔥 Quase lá!";
   if (pontos > 0) return "👏 Chegou perto!";
   return "😅 Passou longe!";
@@ -40,7 +42,7 @@ export default function ResultadoRodada({
 
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
-      <p className="text-2xl font-bold text-slate-900 text-center">{manchete(pontos)}</p>
+      <p className="text-2xl font-bold text-slate-900 text-center">{manchete(diferenca, pontos)}</p>
 
       <div className="mt-4 text-center">
         <p className="text-sm text-slate-500">Preço real do {carro.modelo} {carro.ano}</p>

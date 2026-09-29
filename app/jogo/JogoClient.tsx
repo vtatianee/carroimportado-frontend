@@ -84,7 +84,7 @@ export default function JogoClient() {
   function enviarPalpite(palpite: number) {
     if (!rodada) return;
     const diferenca = calcularDiferenca(palpite, rodada.carro.precoReal);
-    const pontos = calcularPontos(diferenca);
+    const pontos = calcularPontos(diferenca, rodada.carro.precoReal);
     setResultado({ palpite, diferenca, pontos });
     track("palpite_enviado", { modo: rodada.modo, diferenca, pontos });
 
@@ -197,7 +197,7 @@ export default function JogoClient() {
         {conteudo}
 
         <footer className="text-center text-xs text-slate-500 pt-4 space-y-1.5">
-          <p>Pontos: 1.000 menos a diferença em dólares entre o seu palpite e o preço real.</p>
+          <p>Pontos: até 1.000, descontando o quanto o seu palpite errou em percentual (errou 10% = 900 pontos).</p>
           <p>Carros e preços de exemplo, só para diversão — não são ofertas de venda.</p>
           <p>
             <Link href="/" className="underline hover:text-slate-700">
