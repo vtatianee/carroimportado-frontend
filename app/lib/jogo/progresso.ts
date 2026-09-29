@@ -1,3 +1,4 @@
+import { criarArmazenamento, numeroValido } from "./armazenamento";
 import { diaAnterior } from "./desafio-diario";
 
 export interface ResultadoDiario {
@@ -32,50 +33,10 @@ export function sequenciaVigente(p: Progresso, hoje: string): number {
   return 0;
 }
 
-// ── Armazenamento (localStorage) no formato de store externo ─────────────────
-// Lido via useSyncExternalStore: o HTML pré-renderizado sai com o snapshot do
-// servidor (null) e o cliente troca pelo valor salvo logo após hidratar, sem
-// erro de hidratação e sem setState dentro de useEffect.
-
-const CHAVE = "jogo_adivinhe_preco_v1";
-const ouvintes = new Set<() => void>();
-// Fallback em memória: em aba anônima do Safari o localStorage pode lançar
-// exceção, e a sequência ainda precisa funcionar durante a visita.
-let emMemoria: string | null = null;
-
-export function assinarProgresso(ouvinte: () => void): () => void {
-  ouvintes.add(ouvinte);
-  const outraAba = (e: StorageEvent) => {
-    if (e.key === CHAVE) ouvinte();
-  };
-  window.addEventListener("storage", outraAba);
-  return () => {
-    ouvintes.delete(ouvinte);
-    window.removeEventListener("storage", outraAba);
-  };
-}
-
-export function lerProgressoBruto(): string | null {
-  try {
-    return window.localStorage.getItem(CHAVE) ?? emMemoria;
-  } catch {
-    return emMemoria;
-  }
-}
-
-export function salvarProgresso(p: Progresso): void {
-  emMemoria = JSON.stringify(p);
-  try {
-    window.localStorage.setItem(CHAVE, emMemoria);
-  } catch {
-    // sem localStorage: fica só em memória nesta visita
-  }
-  ouvintes.forEach((o) => o());
-}
-
-function numero(v: unknown): number {
-  return typeof v === "number" && Number.isFinite(v) ? v : 0;
-}
+const armazenamento = criarArmazenamento("jogo_adivinhe_preco_v1");
+export const assinarProgresso = armazenamento.assinar;
+export const lerProgressoBruto = armazenamento.ler;
+export const salvarProgresso: (p: Progresso) => void = armazenamento.salvar;
 
 export function interpretarProgresso(bruto: string | null): Progresso {
   if (!bruto) return PROGRESSO_VAZIO;
@@ -84,11 +45,17 @@ export function interpretarProgresso(bruto: string | null): Progresso {
     const d = p?.diario;
     const diario: ResultadoDiario | null =
       d && typeof d.data === "string" && typeof d.carroId === "string"
-        ? { data: d.data, carroId: d.carroId, palpite: numero(d.palpite), diferenca: numero(d.diferenca), pontos: numero(d.pontos) }
+        ? {
+            data: d.data,
+            carroId: d.carroId,
+            palpite: numeroValido(d.palpite),
+            diferenca: numeroValido(d.diferenca),
+            pontos: numeroValido(d.pontos),
+          }
         : null;
     return {
-      atual: numero(p?.atual),
-      melhor: numero(p?.melhor),
+      atual: numeroValido(p?.atual),
+      melhor: numeroValido(p?.melhor),
       ultimaData: typeof p?.ultimaData === "string" ? p.ultimaData : null,
       diario,
     };

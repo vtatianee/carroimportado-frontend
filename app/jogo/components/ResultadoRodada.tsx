@@ -5,13 +5,14 @@ import { track } from "@vercel/analytics";
 import BotaoCompartilhar from "./BotaoCompartilhar";
 import type { Carro } from "../../lib/jogo/carros";
 import { formatarUsd } from "../../lib/jogo/pontuacao";
-import { textoCompartilhamento } from "../../lib/jogo/compartilhamento";
+import { resumoResultado } from "../../lib/jogo/compartilhamento";
 
 interface Props {
   carro: Carro;
   palpite: number;
   diferenca: number;
   pontos: number;
+  novoRecorde: boolean;
   modo: "diario" | "treino";
   sequencia: number;
   melhorSequencia: number;
@@ -32,6 +33,7 @@ export default function ResultadoRodada({
   palpite,
   diferenca,
   pontos,
+  novoRecorde,
   modo,
   sequencia,
   melhorSequencia,
@@ -42,6 +44,11 @@ export default function ResultadoRodada({
 
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
+      {novoRecorde && (
+        <p className="mb-3 mx-auto w-fit rounded-full bg-amber-100 text-amber-900 text-sm font-bold px-4 py-1.5">
+          🏆 Novo recorde!
+        </p>
+      )}
       <p className="text-2xl font-bold text-slate-900 text-center">{manchete(diferenca, pontos)}</p>
 
       <div className="mt-4 text-center">
@@ -70,13 +77,13 @@ export default function ResultadoRodada({
       </dl>
 
       <p className="mt-4 text-center text-sm text-slate-600">
-        🔥 Sequência atual: <strong>{sequencia}</strong> · 🏆 Melhor: <strong>{melhorSequencia}</strong>
+        🔥 Sequência atual: <strong>{sequencia}</strong> · Melhor sequência: <strong>{melhorSequencia}</strong>
       </p>
 
       <div className="mt-5 space-y-3">
         <BotaoCompartilhar
           modo={modo}
-          texto={textoCompartilhamento({
+          resumo={resumoResultado({
             modelo: carro.modelo,
             ano: carro.ano,
             estado: carro.estado,

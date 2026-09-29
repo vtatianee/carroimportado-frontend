@@ -8,10 +8,21 @@ import MapaEUA from "./components/MapaEUA";
 import CartaCarro from "./components/CartaCarro";
 import PalpitePreco from "./components/PalpitePreco";
 import ResultadoRodada from "./components/ResultadoRodada";
+import PainelPontuacoes from "./components/PainelPontuacoes";
 import { CARROS, ESTADOS_COM_CARRO, carroPorId, carrosDoEstado, type Carro } from "../lib/jogo/carros";
 import { ondeFica } from "../lib/jogo/estados";
 import { carroDoDia, dataHoje } from "../lib/jogo/desafio-diario";
 import { calcularDiferenca, calcularPontos } from "../lib/jogo/pontuacao";
+import {
+  assinarHistorico,
+  assinarRecorde,
+  interpretarHistorico,
+  interpretarRecorde,
+  lerHistoricoBruto,
+  lerRecordeBruto,
+  registrarPontuacao,
+  salvarPontuacao,
+} from "../lib/jogo/historico";
 import {
   assinarProgresso,
   interpretarProgresso,
@@ -32,6 +43,7 @@ interface Palpite {
   palpite: number;
   diferenca: number;
   pontos: number;
+  novoRecorde: boolean;
 }
 
 const semAssinatura = () => () => {};
@@ -49,6 +61,10 @@ export default function JogoClient() {
   const hoje = useSyncExternalStore(semAssinatura, dataHoje, nadaNoServidor);
   const progressoBruto = useSyncExternalStore(assinarProgresso, lerProgressoBruto, nadaNoServidor);
   const progresso = useMemo(() => interpretarProgresso(progressoBruto), [progressoBruto]);
+  const historicoBruto = useSyncExternalStore(assinarHistorico, lerHistoricoBruto, nadaNoServidor);
+  const ultimas = useMemo(() => interpretarHistorico(historicoBruto), [historicoBruto]);
+  const recordeBruto = useSyncExternalStore(assinarRecorde, lerRecordeBruto, nadaNoServidor);
+  const recorde = useMemo(() => interpretarRecorde(recordeBruto), [recordeBruto]);
 
   const carroHoje = hoje ? carroDoDia(CARROS, hoje) : null;
   const sequencia = hoje ? sequenciaVigente(progresso, hoje) : 0;
@@ -85,7 +101,18 @@ export default function JogoClient() {
     if (!rodada) return;
     const diferenca = calcularDiferenca(palpite, rodada.carro.precoReal);
     const pontos = calcularPontos(diferenca, rodada.carro.precoReal);
-    setResultado({ palpite, diferenca, pontos });
+    const agora = Date.now();
+    const registro = registrarPontuacao(ultimas, recorde, {
+      id: String(agora),
+      pontos,
+      modelo: rodada.carro.modelo,
+      ano: rodada.carro.ano,
+      estado: rodada.carro.estado,
+      modo: rodada.modo,
+      jogado_em: agora,
+    });
+    salvarPontuacao(registro);
+    setResultado({ palpite, diferenca, pontos, novoRecorde: registro.novoRecorde });
     track("palpite_enviado", { modo: rodada.modo, diferenca, pontos });
 
     if (rodada.modo === "diario" && hoje) {
@@ -138,6 +165,7 @@ export default function JogoClient() {
         palpite={salvoHoje.palpite}
         diferenca={salvoHoje.diferenca}
         pontos={salvoHoje.pontos}
+        novoRecorde={false}
         modo="diario"
         sequencia={sequencia}
         melhorSequencia={progresso.melhor}
@@ -149,12 +177,19 @@ export default function JogoClient() {
       <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-3 sm:p-6">
         <p className="text-sm text-slate-700 text-center mb-3 px-2">
           {modo === "treino"
-            ? "Toque em um estado azul para ver um carro à venda lá."
+            ? "Escolha um estado marcado com um ponto para ver um carro à venda lá."
             : carroHoje
-              ? `O carro de hoje está ${ondeFica(carroHoje.estado)}. Toque no estado azul.`
+              ? `O carro de hoje está ${ondeFica(carroHoje.estado)}. Toque no estado marcado.`
               : "Carregando o desafio de hoje…"}
         </p>
-        <MapaEUA comCarro={ESTADOS_COM_CARRO} clicaveis={clicaveis} onSelecionar={selecionarEstado} />
+        {/* key={modo}: trocar de modo limpa o estado selecionado no mapa */}
+        <MapaEUA
+          key={modo}
+          comCarro={ESTADOS_COM_CARRO}
+          clicaveis={clicaveis}
+          destaque={modo === "diario" ? (carroHoje?.estado ?? null) : null}
+          onJogar={selecionarEstado}
+        />
       </section>
     );
   }
@@ -168,7 +203,7 @@ export default function JogoClient() {
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">🗺️ Adivinhe o Preço</h1>
           <p className="text-slate-600 mt-1">Escolha um estado, veja o carro e chute quanto ele custa nos EUA.</p>
           <p className="text-sm text-slate-500 mt-2">
-            🔥 Sequência: <strong>{hoje ? sequencia : "–"}</strong> · 🏆 Melhor:{" "}
+            🔥 Sequência: <strong>{hoje ? sequencia : "–"}</strong> · Melhor sequência:{" "}
             <strong>{hoje ? progresso.melhor : "–"}</strong>
           </p>
         </header>
@@ -195,6 +230,10 @@ export default function JogoClient() {
         </div>
 
         {conteudo}
+
+        {/* Some durante o palpite (para não distrair) e antes de hidratar
+            (o histórico só existe no navegador). */}
+        {hoje && !(rodada && !resultado) && <PainelPontuacoes recorde={recorde} ultimas={ultimas} />}
 
         <footer className="text-center text-xs text-slate-500 pt-4 space-y-1.5">
           <p>Pontos: até 1.000, descontando o quanto o seu palpite errou em percentual (errou 10% = 900 pontos).</p>
