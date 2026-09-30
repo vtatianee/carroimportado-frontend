@@ -43,6 +43,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: `${base}/jogo`,
+      lastModified: new Date("2026-09-29"),
+      // Desafio novo todo dia e anúncios novos toda semana.
+      changeFrequency: "daily",
+      priority: 0.7,
+    },
+    {
       url: `${base}/sobre`,
       lastModified: new Date("2026-05-27"),
       changeFrequency: "yearly",
