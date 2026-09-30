@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 interface NavHeaderProps {
-  activePage?: "home" | "guia" | "empresas" | "pecas" | "blog";
+  activePage?: "home" | "guia" | "empresas" | "pecas" | "blog" | "jogo";
   rightContent?: React.ReactNode;
 }
 
@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { href: "/empresas",  label: "Empresas",    key: "empresas" },
   { href: "/pecas",     label: "Peças",       key: "pecas"    },
   { href: "/blog",      label: "Blog",        key: "blog"     },
+  { href: "/jogo",      label: "Jogo",        key: "jogo"     },
 ] as const;
 
 export default function NavHeader({ activePage, rightContent }: NavHeaderProps) {
@@ -37,7 +38,7 @@ export default function NavHeader({ activePage, rightContent }: NavHeaderProps) 
           {rightContent}
 
           {/* Nav desktop */}
-          <nav className="hidden sm:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.key}
@@ -59,9 +60,10 @@ export default function NavHeader({ activePage, rightContent }: NavHeaderProps) 
             </Link>
           </nav>
 
-          {/* Botão hamburguer — só em mobile */}
+          {/* Botão hamburguer — abaixo de 768px (md). Com 6 links + Checklist, o menu
+              inteiro não cabe entre 640 e ~740px: passava da borda da tela. */}
           <button
-            className="sm:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+            className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Fechar menu" : "Abrir menu"}
           >
@@ -80,7 +82,7 @@ export default function NavHeader({ activePage, rightContent }: NavHeaderProps) 
 
       {/* Menu mobile expandido */}
       {open && (
-        <nav className="sm:hidden border-t border-slate-100 bg-white px-4 py-3 flex flex-col gap-1">
+        <nav className="md:hidden border-t border-slate-100 bg-white px-4 py-3 flex flex-col gap-1">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.key}

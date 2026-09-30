@@ -213,7 +213,7 @@ export default function JogoClient({ carros, reais }: Props) {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      <NavHeader />
+      <NavHeader activePage="jogo" />
 
       <main className="max-w-2xl w-full mx-auto px-4 py-6 sm:py-10 flex-1 space-y-5">
         <header className="text-center">

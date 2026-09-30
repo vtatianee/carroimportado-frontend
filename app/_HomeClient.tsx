@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { track } from "@vercel/analytics";
 import NavHeader from "./components/NavHeader";
+import ChamadaJogo from "./components/ChamadaJogo";
 
 // ── Histórico de pesquisas (localStorage) ─────────────────────────────────────
 const HISTORY_KEY = "search_history";
@@ -1840,6 +1841,9 @@ export default function Home() {
         {!hasSearched && !urlResult && !manualResult && !loading && (
           <Results result={EXAMPLE_RESULT} isExample />
         )}
+
+        {/* Chamada para o jogo */}
+        <ChamadaJogo />
 
         {/* Como funciona */}
         <HowItWorks />
