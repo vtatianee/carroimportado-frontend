@@ -1,0 +1,170 @@
+[
+  {
+    "id": "mustang-gt-2019-tx",
+    "modelo": "Ford Mustang GT",
+    "ano": 2019,
+    "milhas": 45000,
+    "estado": "TX",
+    "precoReal": 24500,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "ford",
+      "modelo": "ford-mustang"
+    }
+  },
+  {
+    "id": "tacoma-trd-offroad-2020-ca",
+    "modelo": "Toyota Tacoma TRD Off-Road",
+    "ano": 2020,
+    "milhas": 52000,
+    "estado": "CA",
+    "precoReal": 31900,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "toyota",
+      "modelo": "toyota-tacoma"
+    }
+  },
+  {
+    "id": "corvette-stingray-2017-fl",
+    "modelo": "Chevrolet Corvette Stingray",
+    "ano": 2017,
+    "milhas": 28000,
+    "estado": "FL",
+    "precoReal": 41500,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "chevrolet",
+      "modelo": "chevrolet-corvette"
+    }
+  },
+  {
+    "id": "civic-ex-2021-ny",
+    "modelo": "Honda Civic EX",
+    "ano": 2021,
+    "milhas": 38000,
+    "estado": "NY",
+    "precoReal": 19800,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "honda",
+      "modelo": "honda-civic"
+    }
+  },
+  {
+    "id": "wrangler-sahara-2018-az",
+    "modelo": "Jeep Wrangler Unlimited Sahara",
+    "ano": 2018,
+    "milhas": 61000,
+    "estado": "AZ",
+    "precoReal": 26400,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "jeep",
+      "modelo": "jeep-wrangler_unlimited"
+    }
+  },
+  {
+    "id": "challenger-rt-2020-ga",
+    "modelo": "Dodge Challenger R/T",
+    "ano": 2020,
+    "milhas": 34000,
+    "estado": "GA",
+    "precoReal": 28700,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "dodge",
+      "modelo": "dodge-challenger"
+    }
+  },
+  {
+    "id": "silverado-lt-2019-il",
+    "modelo": "Chevrolet Silverado 1500 LT",
+    "ano": 2019,
+    "milhas": 72000,
+    "estado": "IL",
+    "precoReal": 27300,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "chevrolet",
+      "modelo": "chevrolet-silverado_1500"
+    }
+  },
+  {
+    "id": "outback-premium-2021-wa",
+    "modelo": "Subaru Outback Premium",
+    "ano": 2021,
+    "milhas": 41000,
+    "estado": "WA",
+    "precoReal": 23600,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "subaru",
+      "modelo": "subaru-outback"
+    }
+  },
+  {
+    "id": "4runner-sr5-2018-co",
+    "modelo": "Toyota 4Runner SR5",
+    "ano": 2018,
+    "milhas": 83000,
+    "estado": "CO",
+    "precoReal": 29500,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "toyota",
+      "modelo": "toyota-4runner"
+    }
+  },
+  {
+    "id": "bmw-330i-2020-nc",
+    "modelo": "BMW 330i",
+    "ano": 2020,
+    "milhas": 47000,
+    "estado": "NC",
+    "precoReal": 25200,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "bmw",
+      "modelo": "bmw-330"
+    }
+  },
+  {
+    "id": "f150-xlt-2021-oh",
+    "modelo": "Ford F-150 XLT",
+    "ano": 2021,
+    "milhas": 55000,
+    "estado": "OH",
+    "precoReal": 33800,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "ford",
+      "modelo": "ford-f_150"
+    }
+  },
+  {
+    "id": "model3-long-range-2021-mi",
+    "modelo": "Tesla Model 3 Long Range",
+    "ano": 2021,
+    "milhas": 49000,
+    "estado": "MI",
+    "precoReal": 24900,
+    "fotoUrl": "/jogo/carro-placeholder.svg",
+    "fonte": "exemplo",
+    "carsCom": {
+      "marca": "tesla",
+      "modelo": "tesla-model_3"
+    }
+  }
+]

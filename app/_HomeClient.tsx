@@ -1528,6 +1528,18 @@ export default function Home() {
   const [manualCambio, setManualCambio] = useState("");
   const [manualVehicleType, setManualVehicleType] = useState("standard");
 
+  // ?preco=24500 (vindo do /jogo) abre a aba Manual com o preço preenchido.
+  // Lido da URL no efeito, e não com useSearchParams: sem um <Suspense> em
+  // volta, o hook faria a home inteira deixar de ser pré-renderizada.
+  useEffect(() => {
+    const preco = new URLSearchParams(window.location.search).get("preco");
+    if (!preco || !/^[1-9]\d{0,6}$/.test(preco)) return;
+    /* eslint-disable react-hooks/set-state-in-effect -- a URL só existe no navegador; ler antes da hidratação quebraria o HTML pré-renderizado */
+    setTab("manual");
+    setPriceUsd(preco);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
   // Calculadora reversa
   const [revBudget, setRevBudget] = useState("");
   const [revState, setRevState] = useState("SP");
@@ -1639,7 +1651,7 @@ export default function Home() {
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
 
         {/* Form card */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <section id="calculadora" className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 scroll-mt-20">
           <p className="text-slate-500 mb-6 text-sm">
             Cole o link de um anúncio do{" "}
             <a href="https://www.cars.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:underline">Cars.com</a>
