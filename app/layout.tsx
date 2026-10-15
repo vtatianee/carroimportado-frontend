@@ -7,9 +7,9 @@ const geist = Geist({ subsets: ["latin"] });
 
 const SITE_URL = "https://www.carroimportado.com";
 const SITE_NAME = "Carro Importado";
-const TITLE = "Importar Carro dos EUA para o Brasil: Calcule o Custo Real (2026)";
+const TITLE = "Quanto Custa Importar um Carro dos EUA? Calculadora 2026";
 const DESCRIPTION =
-  "Cole o link do Cars.com e calcule em segundos o II (35%), IPI, PIS, COFINS e ICMS por estado: o custo total de importação, grátis e sem cadastro.";
+  "Simule em segundos quanto custa importar um carro dos EUA para o Brasil: II, IPI, PIS, COFINS, ICMS do seu estado, frete e despachante. Grátis.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
