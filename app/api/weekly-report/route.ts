@@ -173,6 +173,10 @@ export async function GET(req: NextRequest) {
   // ── 2. Buscas na calculadora (Railway backend) ─────────────────────────────
   let calculatorTotal = 0;
   let calculatorByDay: { date: string; count: number }[] = [];
+  let calculatorByMode: { modo: string; origem: string; count: number }[] = [];
+  // Falha ao ler o backend aparece no e-mail. Antes, um 401 virava "0 buscas"
+  // em silêncio (a rota de estatísticas ficou semanas atrás do App Attest).
+  let statsErro: string | null = STATS_TOKEN ? null : "STATS_TOKEN não configurado no Vercel";
 
   if (STATS_TOKEN) {
     try {
@@ -183,8 +187,13 @@ export async function GET(req: NextRequest) {
         const data = await res.json();
         calculatorTotal = data.total_week ?? 0;
         calculatorByDay = data.by_day ?? [];
+        calculatorByMode = data.by_mode ?? [];
+      } else {
+        statsErro = `backend respondeu HTTP ${res.status}`;
+        console.error("[weekly-report] Backend stats:", res.status, await res.text().catch(() => ""));
       }
     } catch (e) {
+      statsErro = "backend não respondeu";
       console.error("[weekly-report] Backend stats error:", e);
     }
   }
@@ -246,6 +255,35 @@ export async function GET(req: NextRequest) {
           .join("")
       : `<tr><td colspan="2" style="color:#94a3b8;font-size:13px">Nenhuma busca registrada ainda.</td></tr>`;
 
+  const MODOS = [
+    ["link", "Link do Cars.com"],
+    ["manual", "Manual"],
+    ["orcamento", "Por orçamento"],
+  ] as const;
+  const contar = (modo: string, origem?: string) =>
+    calculatorByMode
+      .filter((r) => r.modo === modo && (!origem || r.origem === origem))
+      .reduce((soma, r) => soma + r.count, 0);
+  const celula = "padding:6px;border-bottom:1px solid #f1f5f9";
+  const modoSection = statsErro
+    ? `<p style="color:#b91c1c;font-size:13px">⚠️ Não foi possível ler os cálculos: ${statsErro}.</p>`
+    : calculatorByMode.length === 0
+      ? `<p style="color:#94a3b8;font-size:13px">Nenhum cálculo com modo registrado nesta semana (a contagem por modo começou em out/2026).</p>`
+      : `
+      <table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
+        <tr style="background:#f1f5f9">
+          <th style="text-align:left">Modo</th><th style="text-align:right">Site</th><th style="text-align:right">App</th><th style="text-align:right">Total</th>
+        </tr>
+        ${MODOS.map(
+          ([modo, rotulo]) => `<tr>
+          <td style="${celula};color:#334155">${rotulo}</td>
+          <td style="${celula};text-align:right;color:#334155">${contar(modo, "site")}</td>
+          <td style="${celula};text-align:right;color:#334155">${contar(modo, "app")}</td>
+          <td style="${celula};text-align:right;font-weight:600">${contar(modo)}</td>
+        </tr>`,
+        ).join("")}
+      </table>`;
+
   const html = `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#0f172a">
       <h2 style="margin-bottom:4px">📊 Relatório semanal — carroimportado.com</h2>
@@ -264,6 +302,9 @@ export async function GET(req: NextRequest) {
         </tr>
       </table>
 
+      <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Cálculos por modo</h3>
+      ${modoSection}
+
       <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Buscas por dia</h3>
       <table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
         <tr style="background:#f1f5f9"><th style="text-align:left">Data</th><th style="text-align:right">Buscas</th></tr>
@@ -277,7 +318,8 @@ export async function GET(req: NextRequest) {
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    return NextResponse.json({ ok: true, dry_run: true });
+    // Sem Resend (dev local): devolve o HTML para conferir o e-mail sem enviar.
+    return NextResponse.json({ ok: true, dry_run: true, html });
   }
 
   const resend = new Resend(apiKey);
