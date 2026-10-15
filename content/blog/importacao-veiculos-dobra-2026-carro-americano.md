@@ -18,14 +18,14 @@ O que explodiu em 2026 foi a importação feita por **montadoras e grandes distr
 
 | | Importação em massa | Você, pessoa física |
 |---|---|---|
-| Quem importa | Montadora ou distribuidora com RADAR pleno | Você, com RADAR de pessoa física ou via despachante |
+| Quem importa | Montadora ou distribuidora com RADAR pleno | Você, com RADAR de pessoa física ou via [despachante](https://www.carroimportado.com/blog/despachante-aduaneiro-importacao-carro-americano) |
 | O que entra | Carro novo, muitas vezes em kit (CKD/SKD) | Veículo usado, com 30+ anos |
 | Imposto de Importação | 14% a 18% no kit desmontado | **35%**, sem exceção |
 | Volume | Centenas de unidades por embarque | Uma unidade |
 
 Aquela alíquota de 14% a 18% que aparece nas notícias é do **kit desmontado**, que chega em peças e é montado aqui. É um regime de política industrial, feito para atrair fábrica — não uma brecha para quem quer um carro pronto.
 
-Para o veículo montado, usado, com mais de 30 anos, que é o caso do clássico americano, a alíquota continua sendo **35% sobre o valor aduaneiro** (CIF), exatamente como no ano passado e no anterior.
+Para o veículo montado, usado, com mais de 30 anos, que é o caso do [clássico americano](https://www.carroimportado.com/blog/mustang-camaro-f100-qual-classico-americano-valoriza-mais-brasil), a alíquota continua sendo **35% sobre o valor aduaneiro** (CIF), exatamente como no ano passado e no anterior.
 
 ## O risco escondido no número
 
@@ -48,7 +48,7 @@ Puxando a série do Banco Central, a média do dólar PTAX foi:
 
 Uma queda de cerca de **8%**. Num processo com impostos em cascata, isso não cai 8% no custo — cai proporcionalmente em tudo, porque o câmbio multiplica a base de cálculo inteira antes dos tributos incidirem.
 
-Rodando na nossa calculadora um **Ford Mustang 1994 de US$ 35.000, destino São Paulo**, com frete e desembaraço padrão:
+Rodando na nossa [calculadora](https://www.carroimportado.com/) um **Ford Mustang 1994 de US$ 35.000, destino São Paulo**, com frete e desembaraço padrão:
 
 | Câmbio | Custo total no Brasil | Carga tributária |
 |---|---|---|

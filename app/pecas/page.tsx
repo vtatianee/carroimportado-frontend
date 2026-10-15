@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import PecasClient from "./PecasClient";
 
 export const metadata: Metadata = {
-  title: "Peças para Carros Americanos — Fornecedores EUA e Brasil",
+  title: { absolute: "Peças para Carros Americanos — Fornecedores EUA e Brasil" },
   description:
-    "Diretório curado de fornecedoras de peças de reposição para veículos americanos nos EUA e importadoras no Brasil. Motor, suspensão, freios, elétrica e peças raras para Mustang, Camaro, Corvette e outros.",
+    "Fornecedores de peças para carros americanos nos EUA e no Brasil: motor, suspensão, freios, elétrica e peças raras para Mustang, Camaro e Corvette.",
   keywords: [
     "peças carro americano brasil",
     "importar peças EUA brasil",

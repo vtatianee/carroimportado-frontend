@@ -8,7 +8,7 @@ tags: [Guia, Despachante, Processo, Custos]
 published: true
 coverImage: /blog/despachante-aduaneiro-importacao-carro-americano.jpg
 ---
-Em todo processo de importação de veículo dos EUA para o Brasil, há um profissional que aparece como obrigatório em quase todas as etapas: o despachante aduaneiro. Mas quem é exatamente essa pessoa, o que ela faz, quanto cobra — e o que acontece se você tentar dispensá-la?
+Em todo processo de importação de veículo dos EUA para o Brasil, há um profissional que aparece como obrigatório em quase [todas as etapas](https://www.carroimportado.com/guia): o despachante aduaneiro. Mas quem é exatamente essa pessoa, o que ela faz, quanto cobra — e o que acontece se você tentar dispensá-la?
 
 ## O que é o despachante aduaneiro
 
@@ -36,11 +36,11 @@ Além dos honorários, há custos que o despachante administra mas não paga por
 | --- | ---: |
 | Honorários do despachante | US$ 1.200 – 1.800 |
 | THC (Terminal Handling Charge) | US$ 400 – 600 |
-| AFRMM (Adicional de Frete) | ≈ 25% do frete marítimo |
+| [AFRMM](https://www.carroimportado.com/blog/custos-ocultos-importacao-carro-eua-brasil) (Adicional de Frete) | ≈ 25% do frete marítimo |
 | Armazenagem no terminal | US$ 300 – 500 |
 | Capatazia | US$ 100 – 200 |
 
-No total, os custos de desembaraço (honorários + encargos portuários) ficam entre **US$ 2.500 e US$ 4.000** para a maioria dos veículos americanos — é esse valor que a calculadora usa como referência na linha "Desembaraço aduaneiro".
+No total, os custos de desembaraço (honorários + encargos portuários) ficam entre **US$ 2.500 e US$ 4.000** para a maioria dos veículos americanos — é esse valor que a [calculadora](https://www.carroimportado.com/) usa como referência na linha "Desembaraço aduaneiro".
 
 ## Despachante aduaneiro vs. importadora: qual a diferença
 

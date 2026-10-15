@@ -12,7 +12,7 @@ O dólar fechou 2024 em R$ 6,18 — e chegou a bater R$ 6,27 em 18 de dezembro, 
 
 ## Por que a queda no câmbio vale mais do que parece
 
-A tentação é calcular assim: "comprei um carro por US$ 25.000 e o dólar caiu R$ 1,10 — economizei R$ 27.500." O raciocínio está certo na base, mas subestima o efeito real. Os impostos de importação (II, IPI, PIS/COFINS, ICMS) são calculados sobre o **valor aduaneiro em reais** — quanto menor o câmbio, menor a base de cálculo, e menor o imposto. O efeito se multiplica em cascata.
+A tentação é calcular assim: "comprei um carro por US$ 25.000 e o dólar caiu R$ 1,10 — economizei R$ 27.500." O raciocínio está certo na base, mas subestima o efeito real. Os impostos de importação (II, IPI, PIS/COFINS, [ICMS](https://www.carroimportado.com/blog/icms-importacao-carro-por-estado-brasil-2026)) são calculados sobre o **valor aduaneiro em reais** — quanto menor o câmbio, menor a base de cálculo, e menor o imposto. O efeito se multiplica em cascata.
 
 Num carro hipotético de US$ 25.000 com frete de US$ 2.500 (CIF = US$ 27.500):
 
@@ -25,13 +25,13 @@ A diferença no câmbio gerou **~R$ 66.000 de economia** no custo total — mais
 
 ## O que esse câmbio significa para clássicos americanos (30+ anos)
 
-Para um Mustang, Camaro ou Corvette com mais de 30 anos de fabricação, a equação é ainda mais favorável: além da queda no câmbio, esses veículos têm **IPI zero** — o que reduz a base de cálculo e o efeito cascata sobre o ICMS. O momento atual combina câmbio historicamente baixo com a isenção estrutural de IPI, formando a combinação mais favorável dos últimos anos para importação de clássicos.
+Para um [Mustang, Camaro ou Corvette](https://www.carroimportado.com/blog/mustang-camaro-f100-qual-classico-americano-valoriza-mais-brasil) com mais de 30 anos de fabricação, a equação é ainda mais favorável: além da queda no câmbio, esses veículos têm **IPI zero** — o que reduz a base de cálculo e o efeito cascata sobre o ICMS. O momento atual combina câmbio historicamente baixo com a isenção estrutural de IPI, formando a combinação mais favorável dos últimos anos para importação de clássicos.
 
 ## O risco no horizonte: Copom de julho
 
 A reunião do Copom no final de julho é o principal evento a monitorar. O mercado está dividido entre um novo corte de 0,25 ponto e uma pausa — e a decisão pode mover o câmbio significativamente nas semanas seguintes. Ninguém sabe se o dólar vai a R$ 4,90 ou volta para R$ 5,50.
 
-O que se sabe: o câmbio de hoje é 18% mais barato que o pico de dezembro de 2024. Quem está avaliando importar tem uma janela concreta para simular com os números atuais — cole o link de um anúncio do Cars.com na calculadora e veja o custo total com o câmbio de hoje.
+O que se sabe: o câmbio de hoje é 18% mais barato que o pico de dezembro de 2024. Quem está avaliando importar tem uma janela concreta para simular com os números atuais — cole o link de um anúncio do Cars.com na [calculadora](https://www.carroimportado.com/) e veja o custo total com o câmbio de hoje.
 
 ---
 

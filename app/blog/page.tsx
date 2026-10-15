@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import NavHeader from "../components/NavHeader";
 import { getPublishedPosts } from "../lib/blog";
 import { formatPostDate } from "../lib/date";
@@ -50,14 +51,19 @@ export default function BlogPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            {posts.map((post) => (
+            {posts.map((post, i) => (
               <article key={post.slug} className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                 {post.coverImage && (
-                  <img
-                    src={post.coverImage}
-                    alt={post.title}
-                    className="w-full h-48 object-cover"
-                  />
+                  <div className="relative w-full h-48">
+                    <Image
+                      src={post.coverImage}
+                      alt={post.title}
+                      fill
+                      priority={i === 0}
+                      sizes="(max-width: 768px) 100vw, 768px"
+                      className="object-cover"
+                    />
+                  </div>
                 )}
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import NavHeader from "../../components/NavHeader";
-import { getPostBySlug, getPublishedPosts, getPostBody } from "../../lib/blog";
+import { getPostBySlug, getPublishedPosts, getPostBody, getRelatedSlugs, type BlogPost } from "../../lib/blog";
+import { SEO_POSTS } from "../../lib/blog-seo";
 import { formatPostDate } from "../../lib/date";
 
 // Gera as rotas estáticas apenas para posts publicados
@@ -17,10 +19,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return { title: "Post não encontrado" };
+  const seo = SEO_POSTS[post.slug];
 
   return {
-    title: post.title,
-    description: post.excerpt,
+    // absolute: sem o sufixo "| Carro Importado" do layout. O título longo do
+    // post era cortado na busca justo antes do sufixo; o nome do site já
+    // aparece no resultado pelo schema WebSite da home.
+    title: { absolute: seo?.titulo ?? post.title },
+    description: seo?.descricao ?? post.excerpt,
     alternates: { canonical: `https://www.carroimportado.com/blog/${post.slug}` },
     openGraph: {
       title: post.title,
@@ -34,6 +40,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
   };
 }
+
+/**
+ * "Leia também": posts com tag em comum primeiro e, se faltar, os mais
+ * recentes — todo post termina com 3 links para outros posts.
+ */
+function postsRelacionados(post: BlogPost, limite = 3): BlogPost[] {
+  const publicados = getPublishedPosts();
+  const porTag = getRelatedSlugs(post.slug, limite)
+    .map((s) => publicados.find((p) => p.slug === s))
+    .filter((p): p is BlogPost => !!p);
+  const recentes = publicados.filter((p) => p.slug !== post.slug && !porTag.includes(p));
+  return [...porTag, ...recentes].slice(0, limite);
+}
+
+const LOGO = {
+  "@type": "ImageObject",
+  url: "https://www.carroimportado.com/icon.png",
+  width: 512,
+  height: 512,
+};
 
 /**
  * Tabelas do markdown rolam dentro do próprio contêiner. Sem isso, uma tabela
@@ -61,11 +87,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     description: post.excerpt,
     datePublished: post.date,
     dateModified: post.date,
-    author: { "@type": "Organization", name: "carroimportado.com" },
+    author: { "@type": "Organization", name: "Carro Importado", url: "https://www.carroimportado.com" },
     publisher: {
       "@type": "Organization",
-      name: "carroimportado.com",
+      name: "Carro Importado",
       url: "https://www.carroimportado.com",
+      logo: LOGO,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -130,12 +157,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </header>
 
+        {/* next/image: a capa é o maior elemento da tela (LCP). Servida no
+            tamanho da coluna e em WebP/AVIF, em vez do JPEG original de até 570 KB. */}
         {post.coverImage && (
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="w-full rounded-2xl mb-8 object-cover max-h-64"
-          />
+          <div className="relative w-full h-64 mb-8 overflow-hidden rounded-2xl">
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              priority
+              sizes="(max-width: 672px) 100vw, 672px"
+              className="object-cover"
+            />
+          </div>
         )}
 
         {/* Conteúdo do post */}
@@ -170,6 +204,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             🚗 Abrir calculadora
           </Link>
         </div>
+
+        <nav className="mt-12" aria-labelledby="leia-tambem">
+          <h2 id="leia-tambem" className="text-lg font-bold text-slate-900 mb-4">
+            Leia também
+          </h2>
+          <ul className="space-y-3">
+            {postsRelacionados(post).map((r) => (
+              <li key={r.slug}>
+                <Link
+                  href={`/blog/${r.slug}`}
+                  className="block bg-white border border-slate-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-sm transition"
+                >
+                  <span className="block font-semibold text-slate-900 leading-snug">{r.title}</span>
+                  <span className="block text-xs text-slate-500 mt-1">
+                    {formatPostDate(r.date)} · {r.readTimeMin} min de leitura
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         <div className="mt-6 text-center">
           <Link href="/blog" className="text-sm text-slate-400 hover:text-blue-600 transition-colors">

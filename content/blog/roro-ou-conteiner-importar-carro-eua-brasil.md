@@ -35,7 +35,7 @@ Faixas típicas para a rota EUA → Santos. O valor real varia com porto de orig
 
 Aqui está o ponto que muda a decisão. No Brasil, os impostos de importação não incidem sobre o preço do carro — incidem sobre o **valor aduaneiro**, que é o preço do carro *mais o frete mais o seguro*. Ou seja: quando você escolhe um frete mais caro, você não paga só a diferença do frete. Você aumenta a base de cálculo de todos os impostos.
 
-E tem um segundo efeito: o AFRMM, taxa da marinha mercante, é exatamente 25% do valor do frete marítimo. Frete maior, AFRMM maior.
+E tem um segundo efeito: o [AFRMM](https://www.carroimportado.com/blog/custos-ocultos-importacao-carro-eua-brasil), taxa da marinha mercante, é exatamente 25% do valor do frete marítimo. Frete maior, AFRMM maior.
 
 Veja o que acontece ao acrescentar US$ 1.000 ao frete (câmbio R$ 5,15, destino SP):
 
@@ -85,7 +85,7 @@ Em três situações o RoRo simplesmente não serve:
 
 - O valor inclui THC e taxas portuárias nos dois lados, ou vêm à parte?
 - O seguro marítimo está incluso? Qual a cobertura e a franquia?
-- Qual o prazo estimado até o embarque — e, se for compartilhado, até a consolidação?
+- Qual o [prazo](https://www.carroimportado.com/blog/quanto-tempo-leva-importar-carro-eua-brasil-2026) estimado até o embarque — e, se for compartilhado, até a consolidação?
 - Quem é o responsável por danos no manuseio em porto?
 - Há vistoria fotográfica documentada antes do embarque?
 
@@ -93,4 +93,4 @@ Essa última é a mais importante e a mais esquecida. Fotos datadas de todos os 
 
 ## Simule antes de escolher
 
-A calculadora do carroimportado.com aceita o valor do frete como campo próprio. Rode a mesma simulação duas vezes — uma com a cotação do RoRo, outra com a do contêiner — e você vai ver o custo final real de cada opção, com a cascata de impostos já aplicada. É a única forma de comparar as duas propostas pelo número que importa, que é quanto sai do seu bolso no fim.
+A [calculadora do carroimportado.com](https://www.carroimportado.com/) aceita o valor do frete como campo próprio. Rode a mesma simulação duas vezes — uma com a cotação do RoRo, outra com a do contêiner — e você vai ver o custo final real de cada opção, com a cascata de impostos já aplicada. É a única forma de comparar as duas propostas pelo número que importa, que é quanto sai do seu bolso no fim.
