@@ -8,7 +8,7 @@ tags: [Guia, Custos, Importação]
 published: true
 coverImage: /blog/custos-ocultos-importacao-carro-eua-brasil.jpg
 ---
-Quem pesquisa o custo de importar um carro americano costuma somar Imposto de Importação, IPI e ICMS — e para por aí. O problema é que existe um segundo grupo de despesas, menos visíveis, que costuma surpreender quem recebe a primeira fatura do despachante. Essas cobranças são legítimas, obrigatórias e chegam a representar **15% a 25% do custo total do processo** — o suficiente para desequilibrar um orçamento que parecia fechado.
+Quem pesquisa o custo de importar um carro americano costuma somar Imposto de Importação, IPI e ICMS — e para por aí. O problema é que existe um segundo grupo de despesas, menos visíveis, que costuma surpreender quem recebe a primeira fatura do [despachante](https://www.carroimportado.com/blog/despachante-aduaneiro-importacao-carro-americano). Essas cobranças são legítimas, obrigatórias e chegam a representar **15% a 25% do custo total do processo** — o suficiente para desequilibrar um orçamento que parecia fechado.
 
 ## AFRMM — a taxa federal que poucos calculam
 
@@ -34,7 +34,7 @@ Após o desembaraço, o carro precisa sair do porto e chegar até o destino fina
 
 O ICMS, por ser calculado "por dentro" (método de cálculo que inclui o próprio tributo na base), usa como base **CIF + II + IPI + PIS/COFINS + despesas de desembaraço (capatazia, AFRMM, honorários)** . Isso significa que cada despesa operacional que você adiciona ao processo eleva automaticamente a base do ICMS — que por sua vez eleva o imposto. Não é um custo linear: um item de R$ 5.000 nas despesas portuárias pode custar efetivamente R$ 6.000–7.000 no total, dependendo da alíquota de ICMS do seu estado.
 
-A calculadora do carroimportado.com já considera todos esses itens no custo total — AFRMM, capatazia, honorários estimados de despachante e frete marítimo — para que o número que você vê seja o mais próximo possível do que vai pagar de verdade.
+A [calculadora do carroimportado.com](https://www.carroimportado.com/) já considera todos esses itens no custo total — AFRMM, capatazia, honorários estimados de despachante e frete marítimo — para que o número que você vê seja o mais próximo possível do que vai pagar de verdade.
 
 ---
 

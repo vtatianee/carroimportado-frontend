@@ -9,7 +9,7 @@ const SITE_URL = "https://www.carroimportado.com";
 const SITE_NAME = "Carro Importado";
 const TITLE = "Importar Carro dos EUA para o Brasil: Calcule o Custo Real (2026)";
 const DESCRIPTION =
-  "Cole o link do Cars.com e calcule em segundos: II (35%), IPI, PIS, COFINS e ICMS por estado. Descubra o custo total de desembarque no Brasil — grátis e sem cadastro.";
+  "Cole o link do Cars.com e calcule em segundos o II (35%), IPI, PIS, COFINS e ICMS por estado: o custo total de importação, grátis e sem cadastro.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

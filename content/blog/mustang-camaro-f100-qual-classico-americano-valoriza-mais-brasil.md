@@ -14,7 +14,7 @@ Este artigo compara os cinco clássicos americanos mais importados para o Brasil
 
 ## Como ler as comparações
 
-Os valores abaixo usam câmbio de R$ 5,15, frete estimado de US$ 2.500 e destino SP (ICMS 12%). O custo desembarcado inclui todos os impostos em cascata (II 35%, IPI, PIS, COFINS, ICMS) mais desembaraço aduaneiro (US$ 3.000 estimado). O valor de revenda é uma faixa de mercado observada em anúncios e leilões brasileiros em 2026 — não é garantia de liquidez.
+Os valores abaixo usam câmbio de R$ 5,15, [frete](https://www.carroimportado.com/blog/roro-ou-conteiner-importar-carro-eua-brasil) estimado de US$ 2.500 e destino SP ([ICMS](https://www.carroimportado.com/blog/icms-importacao-carro-por-estado-brasil-2026) 12%). O custo desembarcado inclui todos os impostos em cascata (II 35%, IPI, PIS, COFINS, ICMS) mais desembaraço aduaneiro (US$ 3.000 estimado). O valor de revenda é uma faixa de mercado observada em anúncios e leilões brasileiros em 2026 — não é garantia de liquidez.
 
 ## 1. Ford Mustang (1965–1973) — O mais líquido
 
@@ -90,4 +90,4 @@ Para quem importa pela primeira vez com foco em liquidez e menor risco: **Ford M
 
 Para quem tem horizonte de 5+ anos e quer capturar valorização: **Camaro Z28 1969 ou Charger R/T 1969** — mas somente com documentação impecável e avaliação presencial ou por inspetor de confiança nos EUA antes de fechar negócio.
 
-Use a calculadora do carroimportado.com para simular o custo total de qualquer um desses modelos com o câmbio atual e o estado de destino que você preferir. A diferença de ICMS entre São Paulo (12%) e Rio de Janeiro (20%) representa R$ 40.000–80.000 no custo final de um clássico de médio porte — e esse é um fator que o comprador controla.
+Use a [calculadora do carroimportado.com](https://www.carroimportado.com/) para simular o custo total de qualquer um desses modelos com o câmbio atual e o estado de destino que você preferir. A diferença de ICMS entre São Paulo (12%) e Rio de Janeiro (20%) representa R$ 40.000–80.000 no custo final de um clássico de médio porte — e esse é um fator que o comprador controla.

@@ -32,7 +32,7 @@ Os estados brasileiros aplicam alíquotas diferentes para importações de veíc
 
 ## Quanto a diferença de alíquota impacta no bolso
 
-Para tornar concreto, considere um Chevrolet Camaro SS 2018 avaliado em US$ 28.000, com câmbio a R$ 5,15 e frete estimado de US$ 2.500:
+Para tornar concreto, considere um Chevrolet Camaro SS 2018 avaliado em US$ 28.000, com [câmbio](https://www.carroimportado.com/blog/cambio-dolar-julho-2026-importacao-carro-americano) a R$ 5,15 e frete estimado de US$ 2.500:
 
 | Cenário | ICMS pago (R$) | Custo total desembarcado (R$) |
 | --- | ---: | ---: |
@@ -46,10 +46,10 @@ A diferença entre importar desembarcando em Santos (SP) e no Rio de Janeiro che
 
 Tecnicamente, o ICMS de importação é devido ao estado onde ocorre o desembaraço aduaneiro — ou seja, o porto ou aeroporto por onde o carro entra no Brasil. Isso significa que, em tese, desembarcar em Paranaguá (PR) ou Santos (SP) resulta em alíquota de 12%, enquanto desembarcar no Rio de Janeiro implica 20%.
 
-Na prática, porém, a escolha do porto não é totalmente livre. O despachante aduaneiro orienta sobre qual porto é mais viável logisticamente para o seu caso — levando em conta o porto de origem nos EUA, as rotas de navios disponíveis e o custo do frete interno após o desembaraço. Importar pelo Porto de Santos e transportar o carro de caminhão até Curitiba pode sair mais barato do que desembarcar em Paranaguá, dependendo do transportador.
+Na prática, porém, a escolha do porto não é totalmente livre. O [despachante aduaneiro](https://www.carroimportado.com/blog/despachante-aduaneiro-importacao-carro-americano) orienta sobre qual porto é mais viável logisticamente para o seu caso — levando em conta o porto de origem nos EUA, as rotas de navios disponíveis e o custo do frete interno após o desembaraço. Importar pelo Porto de Santos e transportar o carro de caminhão até Curitiba pode sair mais barato do que desembarcar em Paranaguá, dependendo do transportador.
 
 ## O que vale simular antes de decidir
 
-Antes de fechar com uma importadora ou despachante, vale simular o custo total com diferentes estados na calculadora — a diferença de ICMS aparece diretamente no resultado. A combinação de câmbio favorável, porto logisticamente eficiente e alíquota de 12% é o cenário ideal para quem quer minimizar o custo de desembarque.
+Antes de fechar com uma importadora ou despachante, vale simular o custo total com diferentes estados na [calculadora](https://www.carroimportado.com/) — a diferença de ICMS aparece diretamente no resultado. A combinação de câmbio favorável, porto logisticamente eficiente e alíquota de 12% é o cenário ideal para quem quer minimizar o custo de desembarque.
 
 Um ponto que raramente é discutido: estados com alíquota de 12% também concentram os principais portos de entrada de veículos (Santos, Itajaí, Paranaguá), o que significa que a vantagem fiscal e a vantagem logística costumam andar juntas.

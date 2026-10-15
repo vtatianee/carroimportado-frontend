@@ -26,9 +26,9 @@ Se você está avaliando importar um elétrico ou híbrido dos EUA, o impacto ap
 
 ## Quem ainda escapa da alíquota cheia
 
-Vale lembrar que veículos com mais de 30 anos de fabricação continuam isentos de IPI na importação, independentemente do tipo de motorização — essa regra não foi alterada. Para clássicos americanos elétricos de nicho (raros, mas existentes) ou para qualquer clássico a combustão, a vantagem do IPI zero permanece valendo.
+Vale lembrar que [veículos com mais de 30 anos de fabricação](https://www.carroimportado.com/guia) continuam isentos de IPI na importação, independentemente do tipo de motorização — essa regra não foi alterada. Para clássicos americanos elétricos de nicho (raros, mas existentes) ou para qualquer clássico a combustão, a vantagem do IPI zero permanece valendo.
 
-Quer ver o impacto real no seu caso? Cole o link de um anúncio do Cars.com na calculadora e compare o custo total considerando a alíquota atualizada.
+Quer ver o impacto real no seu caso? Cole o link de um anúncio do Cars.com na [calculadora](https://www.carroimportado.com/) e compare o custo total considerando a alíquota atualizada.
 
 ---
 

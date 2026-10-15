@@ -6,7 +6,8 @@ import NavHeader from "../components/NavHeader";
 import { STEPS, COSTS_SUMMARY } from "../data/guia";
 
 export const metadata: Metadata = {
-  title: "Como Importar um Carro dos EUA para o Brasil — Guia Completo 2026",
+  // absolute: com o sufixo "| Carro Importado" passava de 80 caracteres e era cortado na busca.
+  title: { absolute: "Como Importar Carro dos EUA para o Brasil: Guia Completo 2026" },
   description:
     "8 etapas para importar carro dos EUA para o Brasil em 2026: LI, IBAMA, CAT, Siscomex, desembaraço e DETRAN. Checklist completo + tempo estimado por etapa.",
   alternates: {

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import EmpresasClient from "./EmpresasClient";
 
 export const metadata: Metadata = {
-  title: "Empresas de Importação de Carros dos EUA para o Brasil",
+  title: { absolute: "Empresas de Importação de Carros dos EUA para o Brasil" },
   description:
-    "Exportadoras na Flórida e importadoras no Brasil especializadas em carros americanos. Despachantes aduaneiros, frete RORO e container — compare e escolha com segurança.",
+    "Exportadoras na Flórida, importadoras no Brasil, despachantes aduaneiros e frete RoRo ou contêiner: empresas para importar seu carro dos EUA.",
   keywords: [
     "empresa importação carro EUA Brasil",
     "exportadora carros Florida Brasil",

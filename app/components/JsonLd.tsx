@@ -53,6 +53,25 @@ const FAQ_SCHEMA = [
 ];
 
 export function JsonLd() {
+  // WebSite + Organization: é daqui que o Google tira o nome do site e o logo
+  // que aparecem acima do título nos resultados de busca.
+  const webSiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Carro Importado",
+    alternateName: "carroimportado.com",
+    url: "https://www.carroimportado.com/",
+    inLanguage: "pt-BR",
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Carro Importado",
+    url: "https://www.carroimportado.com/",
+    logo: "https://www.carroimportado.com/icon.png",
+  };
+
   const webAppSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -78,6 +97,10 @@ export function JsonLd() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([webSiteSchema, organizationSchema]) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
