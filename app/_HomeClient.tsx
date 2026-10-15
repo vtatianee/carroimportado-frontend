@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { track } from "@vercel/analytics";
 import NavHeader from "./components/NavHeader";
 import ChamadaJogo from "./components/ChamadaJogo";
+import AvisoEstimativa from "./components/AvisoEstimativa";
+import QuantoCusta from "./components/QuantoCusta";
 
 // ── Histórico de pesquisas (localStorage) ─────────────────────────────────────
 const HISTORY_KEY = "search_history";
@@ -392,6 +394,9 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
           </div>
         </div>
       )}
+      {/* Todo valor calculado vem com o aviso de que é estimativa, sem validade legal. */}
+      <AvisoEstimativa />
+
       {/* Aviso legal — importação restrita */}
       {isRestricted && (
         <div className="bg-red-50 border border-red-300 rounded-2xl p-5">
@@ -941,9 +946,7 @@ function ReverseCalc({
             </table>
           </div>
 
-          <p className="text-xs text-slate-500 text-center">
-            ⚠️ Estimativa com base nas alíquotas da Receita Federal 2026. Consulte um despachante aduaneiro para cotação exata.
-          </p>
+          <AvisoEstimativa />
 
           {/* Botão buscar anúncios */}
           <div className="flex justify-center">
@@ -1627,7 +1630,7 @@ export default function Home() {
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-5 sm:py-8 text-center">
           <h1 className="text-2xl sm:text-4xl font-bold leading-tight tracking-tight mb-2">
-            Encontrou um carro nos EUA?<br className="hidden sm:block" /> Simule o custo de importá-lo para o Brasil.
+            Quanto custa importar um carro dos EUA?<br className="hidden sm:block" /> Simule o custo real para o Brasil.
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-4">
             Cole o link do{" "}
@@ -1841,6 +1844,19 @@ export default function Home() {
         {!hasSearched && !urlResult && !manualResult && !loading && (
           <Results result={EXAMPLE_RESULT} isExample />
         )}
+
+        {/* Resposta direta à busca "quanto custa importar um carro dos EUA" */}
+        <QuantoCusta
+          exemplo={{
+            carro: [EXAMPLE_RESULT.car_data.make, EXAMPLE_RESULT.car_data.model, EXAMPLE_RESULT.car_data.year].join(" "),
+            precoUsd: EXAMPLE_RESULT.car_data.price_usd,
+            cambio: EXAMPLE_RESULT.import_costs.exchange_rate_usd_brl,
+            estado: EXAMPLE_RESULT.import_costs.destination_state,
+            totalBrl: EXAMPLE_RESULT.import_costs.total_landed_brl,
+            impostosETaxasBrl: EXAMPLE_RESULT.import_costs.breakdown_brl.total_taxes,
+            cargaPct: EXAMPLE_RESULT.import_costs.effective_tax_rate_pct,
+          }}
+        />
 
         {/* Chamada para o jogo */}
         <ChamadaJogo />
