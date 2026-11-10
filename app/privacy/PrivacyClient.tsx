@@ -57,15 +57,14 @@ function PrivacyPT() {
   return (
     <article className="prose prose-slate max-w-none">
       <h1 className="text-3xl font-bold text-slate-900 mb-2">Política de Privacidade</h1>
-      <p className="text-slate-500 text-sm mb-8">Última atualização: agosto de 2026</p>
+      <p className="text-slate-500 text-sm mb-8">Última atualização: 9 de novembro de 2026</p>
 
       <div className="mb-8 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-slate-700">
-        <strong>O que mudou nesta versão:</strong> incluímos o aplicativo para iPhone,
-        que antes não estava coberto; descrevemos a publicidade do Google AdMob e o
-        identificador de publicidade (IDFA), que existe apenas no aplicativo — o site
-        não usa Google AdSense nem qualquer outra publicidade; passamos a explicar que
-        o pedido de orçamento envia seus dados para as empresas que você escolher; e
-        detalhamos a transferência de dados para fora do Brasil.
+        <strong>O que mudou nesta versão:</strong> incluímos a publicidade do Google AdSense no site.
+        O site passa a exibir anúncios do Google, que pode usar cookies para exibir
+        publicidade personalizada. Adicionamos a seção 5 (abaixo) com o detalhamento,
+        incluímos o Google na lista de fornecedores (6.2) e a base legal correspondente (8).
+        O restante da política não mudou.
       </div>
 
       <Section title="1. Quem somos e como falar com a gente">
@@ -112,8 +111,15 @@ function PrivacyPT() {
       </Section>
 
       <Section title="5. Cookies e publicidade no site">
-        <p><strong>O site não exibe publicidade e não usa cookies de publicidade.</strong> Não usamos Google AdSense nem nenhum outro serviço de anúncios no site — a publicidade descrita na seção 4 existe apenas no aplicativo para iPhone.</p>
-        <p>O site usa o <strong>Vercel Analytics</strong>, que produz estatísticas agregadas de audiência sem identificar visitantes individualmente e não grava cookie de rastreamento, e a <strong>Cloudflare</strong>, que protege o site contra abuso e gera métricas de tráfego. Por isso o site não exibe aviso de cookies: não há cookie não essencial para pedir consentimento.</p>
+        <p>O site exibe publicidade do <strong>Google AdSense</strong>. Para isso, o Google e seus parceiros podem usar <strong>cookies</strong> e identificadores para exibir anúncios com base nas suas visitas anteriores a este e a outros sites — é a chamada <strong>publicidade personalizada</strong>.</p>
+        <p><strong>O que isso significa na prática:</strong></p>
+        <ul>
+          <li>Anúncios personalizados usam o seu histórico de navegação para mostrar anúncios mais relevantes para você. Anúncios não personalizados usam apenas informações contextuais (como o conteúdo da página e a sua localização aproximada).</li>
+          <li>O Google pode coletar, para fins de publicidade, dados como endereço IP, tipo de navegador e de dispositivo, páginas visitadas e interações com anúncios. Não compartilhamos com o Google nenhum dado que você digita na calculadora ou nos formulários (nome, e-mail, WhatsApp).</li>
+        </ul>
+        <p><strong>Como desativar a personalização.</strong> Você pode desativar os anúncios personalizados a qualquer momento em <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Configurações de anúncios do Google</a> ou em <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">www.aboutads.info/choices</a>. Também é possível bloquear cookies de publicidade nas configurações do seu navegador, mas isso pode afetar o funcionamento de alguns recursos do site.</p>
+        <p>Saiba mais em <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Como o Google usa informações de sites ou apps que usam nossos serviços</a>.</p>
+        <p>O site também usa o <strong>Vercel Analytics</strong>, que produz estatísticas agregadas de audiência sem identificar visitantes individualmente e não grava cookie de rastreamento, e a <strong>Cloudflare</strong>, que protege o site contra abuso e gera métricas de tráfego.</p>
       </Section>
 
       <Section title="6. Com quem compartilhamos dados">
@@ -128,7 +134,7 @@ function PrivacyPT() {
           <li><strong>Resend</strong> — envio dos e-mails dos formulários e da lista de novidades (EUA)</li>
           <li><strong>ScraperAPI</strong> — leitura das páginas públicas de anúncios de veículos (EUA)</li>
           <li><strong>Anthropic</strong> — geração de descrições em português por inteligência artificial (EUA)</li>
-          <li><strong>Google</strong> — publicidade no aplicativo, via AdMob (EUA e Irlanda). Não usamos Google no site.</li>
+          <li><strong>Google</strong> — publicidade no aplicativo, via AdMob (EUA e Irlanda), e no site, via Google AdSense (EUA e Irlanda).</li>
           <li><strong>Apple</strong> — SKAdNetwork, medição de publicidade no aplicativo (EUA)</li>
         </ul>
         <p>Também consultamos fontes públicas que <strong>não recebem dado pessoal nenhum</strong>: o Banco Central do Brasil (cotação PTAX) e a Tabela FIPE.</p>
@@ -140,7 +146,7 @@ function PrivacyPT() {
         <p>Essas transferências se fundamentam:</p>
         <ul>
           <li>no <strong>art. 33, V</strong>, quando são necessárias para executar o que você pediu — hospedar o site, ler o anúncio que você colou, calcular os tributos, entregar o e-mail que você enviou;</li>
-          <li>no <strong>art. 33, VIII — seu consentimento específico</strong>, no caso da publicidade personalizada do aplicativo (AdMob), colhido no formulário de consentimento exibido no aplicativo.</li>
+          <li>no <strong>art. 33, VIII — seu consentimento específico</strong>, no caso da publicidade personalizada do aplicativo (AdMob), colhido no formulário de consentimento exibido no aplicativo, e da publicidade personalizada do site (Google AdSense), colhido no aviso de cookies do site.</li>
         </ul>
         <p>Você pode nos pedir, pelo contato desta política, informações sobre as garantias adotadas em cada transferência.</p>
       </Section>
@@ -154,6 +160,8 @@ function PrivacyPT() {
           <li><strong>Cadastro de empresas e fornecedores no diretório</strong> — art. 7º, V e IX.</li>
           <li><strong>Publicidade personalizada no aplicativo</strong> (AdMob, IDFA) — art. 7º, I: seu consentimento.</li>
           <li><strong>Publicidade não personalizada no aplicativo</strong> — art. 7º, IX: legítimo interesse em manter o aplicativo gratuito.</li>
+          <li><strong>Publicidade personalizada no site</strong> (Google AdSense) — art. 7º, I: seu consentimento, coletado no aviso de cookies do site.</li>
+          <li><strong>Publicidade não personalizada no site</strong> (Google AdSense) — art. 7º, IX: legítimo interesse em manter o site gratuito.</li>
           <li><strong>Registros de acesso, segurança e prevenção a abuso</strong> — art. 7º, IX e art. 16, I, e art. 15 do Marco Civil da Internet.</li>
           <li><strong>Estatísticas agregadas de uso</strong> — dados anonimizados, art. 12.</li>
         </ul>
@@ -218,15 +226,14 @@ function PrivacyEN() {
   return (
     <article className="prose prose-slate max-w-none">
       <h1 className="text-3xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
-      <p className="text-slate-500 text-sm mb-8">Last updated: August 2026</p>
+      <p className="text-slate-500 text-sm mb-8">Last updated: November 9, 2026</p>
 
       <div className="mb-8 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-slate-700">
-        <strong>What changed in this version:</strong> we added the iPhone app, which was
-        not covered before; we describe Google AdMob advertising and the advertising
-        identifier (IDFA), which exists only in the app — the website uses no Google
-        AdSense or any other advertising; we now explain that the quote request sends
-        your data to the companies you select; and we detail transfers of data outside
-        Brazil.
+        <strong>What changed in this version:</strong> we added Google AdSense advertising
+        to the website. The website now shows Google ads, and Google may use cookies to
+        show personalized advertising. We added section 5 (below) with the details, added
+        Google to the list of providers (6.2), and added the corresponding legal basis (8).
+        The rest of the policy is unchanged.
       </div>
 
       <Section title="1. Who we are and how to reach us">
@@ -273,8 +280,15 @@ function PrivacyEN() {
       </Section>
 
       <Section title="5. Cookies and advertising on the website">
-        <p><strong>The website shows no advertising and uses no advertising cookies.</strong> We do not use Google AdSense or any other ad service on the website — the advertising described in section 4 exists only in the iPhone app.</p>
-        <p>The website uses <strong>Vercel Analytics</strong>, which produces aggregate audience statistics without identifying individual visitors and sets no tracking cookie, and <strong>Cloudflare</strong>, which protects the site against abuse and generates traffic metrics. Because of this, the website shows no cookie notice: there is no non-essential cookie to ask consent for.</p>
+        <p>The website shows <strong>Google AdSense</strong> advertising. For this, Google and its partners may use <strong>cookies</strong> and identifiers to show ads based on your previous visits to this and other websites — known as <strong>personalized advertising</strong>.</p>
+        <p><strong>What this means in practice:</strong></p>
+        <ul>
+          <li>Personalized ads use your browsing history to show ads more relevant to you. Non-personalized ads use only contextual information (such as the page content and your approximate location).</li>
+          <li>Google may collect, for advertising purposes, data such as IP address, browser and device type, pages visited, and interactions with ads. We do not share with Google any data you type into the calculator or the forms (name, email, WhatsApp).</li>
+        </ul>
+        <p><strong>How to turn off personalization.</strong> You can turn off personalized ads at any time in <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Google Ad Settings</a> or at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">www.aboutads.info/choices</a>. You can also block advertising cookies in your browser settings, but this may affect some features of the website.</p>
+        <p>Learn more at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">How Google uses information from sites or apps that use its services</a>.</p>
+        <p>The website also uses <strong>Vercel Analytics</strong>, which produces aggregate audience statistics without identifying individual visitors and sets no tracking cookie, and <strong>Cloudflare</strong>, which protects the site against abuse and generates traffic metrics.</p>
       </Section>
 
       <Section title="6. Who we share data with">
@@ -289,7 +303,7 @@ function PrivacyEN() {
           <li><strong>Resend</strong> — delivery of form emails and the newsletter (USA)</li>
           <li><strong>ScraperAPI</strong> — reading public vehicle listing pages (USA)</li>
           <li><strong>Anthropic</strong> — AI-generated Portuguese descriptions (USA)</li>
-          <li><strong>Google</strong> — advertising in the app, via AdMob (USA and Ireland). We do not use Google on the website.</li>
+          <li><strong>Google</strong> — advertising in the app, via AdMob (USA and Ireland), and on the website, via Google AdSense (USA and Ireland).</li>
           <li><strong>Apple</strong> — SKAdNetwork, in-app ad measurement (USA)</li>
         </ul>
         <p>We also query public sources that <strong>receive no personal data at all</strong>: the Central Bank of Brazil (PTAX rate) and the FIPE table.</p>
@@ -301,7 +315,7 @@ function PrivacyEN() {
         <p>These transfers are based on:</p>
         <ul>
           <li><strong>Art. 33, V</strong>, where they are necessary to perform what you requested — hosting the site, reading the listing you pasted, calculating the taxes, delivering the email you sent;</li>
-          <li><strong>Art. 33, VIII — your specific consent</strong>, for the app's personalized advertising (AdMob), obtained through the in-app consent form.</li>
+          <li><strong>Art. 33, VIII — your specific consent</strong>, for the app&apos;s personalized advertising (AdMob), obtained through the in-app consent form, and for the website&apos;s personalized advertising (Google AdSense), obtained through the website&apos;s cookie notice.</li>
         </ul>
         <p>You may ask us, through the contact in this policy, for information about the safeguards applied to each transfer.</p>
       </Section>
@@ -315,6 +329,8 @@ function PrivacyEN() {
           <li><strong>Company and supplier directory listings</strong> — Art. 7, V and IX.</li>
           <li><strong>Personalized advertising in the app</strong> (AdMob, IDFA) — Art. 7, I: your consent.</li>
           <li><strong>Non-personalized advertising in the app</strong> — Art. 7, IX: legitimate interest in keeping the app free.</li>
+          <li><strong>Personalized advertising on the website</strong> (Google AdSense) — Art. 7, I: your consent, collected through the website&apos;s cookie notice.</li>
+          <li><strong>Non-personalized advertising on the website</strong> (Google AdSense) — Art. 7, IX: legitimate interest in keeping the website free.</li>
           <li><strong>Access logs, security, and abuse prevention</strong> — Art. 7, IX and Art. 16, I, and Art. 15 of the Brazilian Civil Rights Framework for the Internet.</li>
           <li><strong>Aggregate usage statistics</strong> — anonymized data, Art. 12.</li>
         </ul>

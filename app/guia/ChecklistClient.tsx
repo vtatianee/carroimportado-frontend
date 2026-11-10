@@ -18,6 +18,8 @@ export function ChecklistClient() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
+      // Depois da hidratação, de propósito: no servidor não há localStorage.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) setChecked(JSON.parse(saved));
     } catch {}
     setLoaded(true);

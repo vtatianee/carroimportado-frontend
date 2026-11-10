@@ -561,7 +561,7 @@ export default function GuiaPage() {
             <div>
               <h3 className="font-semibold text-slate-900 mb-2">🚩 Sinais de alerta</h3>
               <ul className="text-sm text-slate-600 space-y-1.5">
-                <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Promete "despachar sem pagar impostos" ou "reduzir drasticamente o II" — isso é crime</li>
+                <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Promete &quot;despachar sem pagar impostos&quot; ou &quot;reduzir drasticamente o II&quot; — isso é crime</li>
                 <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Não emite nota fiscal pelos honorários</li>
                 <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Pede pagamento adiantado total antes de iniciar o processo</li>
                 <li className="flex gap-2"><span className="text-red-500 shrink-0">•</span>Não tem CNPJ ou endereço físico verificável</li>
@@ -596,6 +596,8 @@ export default function GuiaPage() {
             <Link href="/privacy" className="hover:text-slate-600 underline">Privacidade</Link>
             {" · "}
             <Link href="/terms" className="hover:text-slate-600 underline">Termos</Link>
+            {" · "}
+            <Link href="/contato" className="hover:text-slate-600 underline">Contato</Link>
           </p>
         </footer>
       </div>

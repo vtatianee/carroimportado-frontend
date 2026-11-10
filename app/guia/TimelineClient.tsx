@@ -119,14 +119,15 @@ export function TimelineClient() {
   const start = new Date(startDate + "T12:00:00");
 
   // Build phase timeline
+  const phaseTimeline: { phase: (typeof PHASES)[number]; weeks: number; start: Date; end: Date }[] = [];
   let cursor = new Date(start);
-  const phaseTimeline = PHASES.map((phase) => {
+  for (const phase of PHASES) {
     const weeks = getWeeks(phase, scenario);
     const phaseStart = new Date(cursor);
     const phaseEnd = addWeeks(cursor, weeks);
     cursor = new Date(phaseEnd);
-    return { phase, weeks, start: phaseStart, end: phaseEnd };
-  });
+    phaseTimeline.push({ phase, weeks, start: phaseStart, end: phaseEnd });
+  }
 
   const totalWeeks = phaseTimeline.reduce((s, p) => s + p.weeks, 0);
   const completionDate = phaseTimeline[phaseTimeline.length - 1].end;
