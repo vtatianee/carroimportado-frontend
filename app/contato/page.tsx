@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import NavHeader from "../components/NavHeader";
+import { BotaoPreferenciasCookies } from "../components/AvisoCookies";
 
 const EMAIL = "arche.boost@gmail.com";
 
@@ -122,6 +123,7 @@ export default function ContatoPage() {
           <Link href="/terms" className="hover:text-blue-600 transition-colors">Termos de Uso</Link>
           <Link href="/sobre" className="hover:text-blue-600 transition-colors">Sobre</Link>
           <Link href="/contato" className="hover:text-blue-600 transition-colors">Contato</Link>
+          <BotaoPreferenciasCookies className="hover:text-blue-600 transition-colors" />
         </div>
         <p className="mt-3">© 2026 carroimportado.com — Todos os direitos reservados</p>
       </footer>

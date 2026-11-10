@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BotaoPreferenciasCookies } from "../components/AvisoCookies";
 import Image from "next/image";
 import NavHeader from "../components/NavHeader";
 import { getPublishedPosts } from "../lib/blog";
@@ -102,6 +103,7 @@ export default function BlogPage() {
             <Link href="/sobre" className="hover:text-slate-700 transition-colors">Sobre</Link>
             <Link href="/contato" className="hover:text-slate-700 transition-colors">Contato</Link>
             <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacidade</Link>
+            <BotaoPreferenciasCookies className="hover:text-slate-700 transition-colors" />
           </p>
           <p>© 2026 carroimportado.com</p>
         </div>

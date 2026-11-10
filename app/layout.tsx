@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import AvisoCookies from "./components/AvisoCookies";
+import {
+  ADSENSE_CLIENT,
+  ADSENSE_PUB,
+  SCRIPT_CONFIG_ANUNCIOS,
+  SCRIPT_SINAL_FUNDING_CHOICES,
+} from "./lib/anuncios";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -79,11 +86,30 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${geist.className} h-full`}>
+      {/* <script> comum, não next/script: o next/script injeta a tag pelo
+          JavaScript do cliente, e a revisão do AdSense procura a tag no HTML
+          servido. A ordem importa: a configuração (pausa + não personalizado)
+          precisa rodar antes do adsbygoogle.js. Por isso `defer` em vez do
+          `async` do snippet do Google: o React 19 sobe toda <script async src>
+          para o topo do <head>, ACIMA do script inline, e ela poderia pedir
+          anúncio antes da pausa. `defer` fica no lugar e roda depois do parse,
+          sem bloquear a renderização. Ver lib/anuncios.ts. */}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_CONFIG_ANUNCIOS }} />
+        <script
+          defer
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          crossOrigin="anonymous"
+        />
+        <script async src={`https://fundingchoicesmessages.google.com/i/${ADSENSE_PUB}?ers=1`} />
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_SINAL_FUNDING_CHOICES }} />
+      </head>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 antialiased">
         {children}
         {/* Vercel Analytics não usa cookie e produz só estatística agregada,
             sem identificar o visitante — não exige aviso de consentimento. */}
         <Analytics />
+        <AvisoCookies />
       </body>
     </html>
   );

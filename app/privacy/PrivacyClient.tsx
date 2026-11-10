@@ -146,7 +146,7 @@ function PrivacyPT() {
         <p>Essas transferências se fundamentam:</p>
         <ul>
           <li>no <strong>art. 33, V</strong>, quando são necessárias para executar o que você pediu — hospedar o site, ler o anúncio que você colou, calcular os tributos, entregar o e-mail que você enviou;</li>
-          <li>no <strong>art. 33, VIII — seu consentimento específico</strong>, no caso da publicidade personalizada do aplicativo (AdMob), colhido no formulário de consentimento exibido no aplicativo.</li>
+          <li>no <strong>art. 33, VIII — seu consentimento específico</strong>, no caso da publicidade personalizada do aplicativo (AdMob), colhido no formulário de consentimento exibido no aplicativo, e da publicidade personalizada do site (Google AdSense), colhido no aviso de cookies do site.</li>
         </ul>
         <p>Você pode nos pedir, pelo contato desta política, informações sobre as garantias adotadas em cada transferência.</p>
       </Section>
@@ -315,7 +315,7 @@ function PrivacyEN() {
         <p>These transfers are based on:</p>
         <ul>
           <li><strong>Art. 33, V</strong>, where they are necessary to perform what you requested — hosting the site, reading the listing you pasted, calculating the taxes, delivering the email you sent;</li>
-          <li><strong>Art. 33, VIII — your specific consent</strong>, for the app&apos;s personalized advertising (AdMob), obtained through the in-app consent form.</li>
+          <li><strong>Art. 33, VIII — your specific consent</strong>, for the app&apos;s personalized advertising (AdMob), obtained through the in-app consent form, and for the website&apos;s personalized advertising (Google AdSense), obtained through the website&apos;s cookie notice.</li>
         </ul>
         <p>You may ask us, through the contact in this policy, for information about the safeguards applied to each transfer.</p>
       </Section>

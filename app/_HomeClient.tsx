@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { BotaoPreferenciasCookies } from "./components/AvisoCookies";
 import { track } from "@vercel/analytics";
 import NavHeader from "./components/NavHeader";
 import ChamadaJogo from "./components/ChamadaJogo";
@@ -1894,6 +1895,8 @@ export default function Home() {
             <Link href="/privacy" className="hover:text-slate-700 underline">Privacidade</Link>
             {" · "}
             <Link href="/terms" className="hover:text-slate-700 underline">Termos</Link>
+            {" · "}
+            <BotaoPreferenciasCookies className="hover:text-slate-700 underline" />
           </p>
           <p className="text-slate-400">© {new Date().getFullYear()} carroimportado.com — Todos os direitos reservados</p>
         </footer>
