@@ -21,7 +21,8 @@
  * antes do adsbygoogle.js carregar segura qualquer pedido de anúncio até
  * sabermos a região; `requestNonPersonalizedAds` decide o tipo; e
  * `pauseAdRequests=0` libera. Tudo precisa rodar ANTES do adsbygoogle.js, por
- * isso é um <script> inline no <head>, não um componente React.
+ * isso é um <script> inline no começo do <body>, não um componente React
+ * (no <head> ele quebrava a hidratação — ver app/layout.tsx).
  */
 
 export const ADSENSE_CLIENT = "ca-pub-8694151594129435";
