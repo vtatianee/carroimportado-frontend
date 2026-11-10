@@ -295,6 +295,7 @@ export default function EmpresasClient() {
             <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacidade</Link>
             <Link href="/terms" className="hover:text-slate-700 transition-colors">Termos</Link>
             <Link href="/sobre" className="hover:text-slate-700 transition-colors">Sobre</Link>
+            <Link href="/contato" className="hover:text-slate-700 transition-colors">Contato</Link>
           </div>
         </div>
       </footer>

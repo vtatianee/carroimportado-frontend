@@ -55,6 +55,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.5,
     },
+    {
+      url: `${base}/contato`,
+      lastModified: new Date("2026-11-09"),
+      changeFrequency: "yearly",
+      priority: 0.4,
+    },
     // /privacy e /terms têm robots noindex — omitidos do sitemap intencionalmente
     ...postEntries,
   ];

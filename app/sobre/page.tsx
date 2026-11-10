@@ -149,6 +149,7 @@ export default function SobrePage() {
           <Link href="/privacy" className="hover:text-blue-600 transition-colors">Política de Privacidade</Link>
           <Link href="/terms" className="hover:text-blue-600 transition-colors">Termos de Uso</Link>
           <Link href="/sobre" className="hover:text-blue-600 transition-colors">Sobre</Link>
+          <Link href="/contato" className="hover:text-blue-600 transition-colors">Contato</Link>
         </div>
         <p className="mt-3">© 2026 carroimportado.com — Todos os direitos reservados</p>
       </footer>

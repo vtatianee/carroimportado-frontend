@@ -235,6 +235,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <footer className="border-t border-slate-200 bg-white py-6 mt-4">
         <div className="max-w-2xl mx-auto px-4 text-center text-sm text-slate-500">
+          <p className="mb-2 flex justify-center gap-4">
+            <Link href="/sobre" className="hover:text-slate-700 transition-colors">Sobre</Link>
+            <Link href="/contato" className="hover:text-slate-700 transition-colors">Contato</Link>
+            <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacidade</Link>
+          </p>
           <p>© 2026 carroimportado.com</p>
         </div>
       </footer>

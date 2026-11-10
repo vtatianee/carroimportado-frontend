@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
   let cfVisitors = 0;
   let cfRequests = 0;
   let cfPageViews = 0;
-  let cfByDay: { date: string; visitors: number; requests: number }[] = [];
+  const cfByDay: { date: string; visitors: number; requests: number }[] = [];
 
   if (CF_ZONE_ID && CF_API_TOKEN) {
     try {

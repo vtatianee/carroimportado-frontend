@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { track } from "@vercel/analytics";
 import NavHeader from "./components/NavHeader";
 import ChamadaJogo from "./components/ChamadaJogo";
@@ -247,24 +248,21 @@ function DonutChart({ segments }: { segments: ChartSegment[] }) {
   const total = segments.reduce((sum, s) => sum + s.valueBrl, 0);
   const r = 36;
   const circumference = 2 * Math.PI * r;
-  let cumulative = 0;
+  // Início de cada fatia = soma dos comprimentos das anteriores.
+  const lengths = segments.map((seg) => (seg.valueBrl / total) * circumference);
+  const offsets = lengths.map((_, i) => lengths.slice(0, i).reduce((a, b) => a + b, 0));
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-6">
       <div className="relative w-44 h-44 shrink-0">
         <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-          {segments.map((seg, i) => {
-            const len = (seg.valueBrl / total) * circumference;
-            const el = (
-              <circle key={i} cx="50" cy="50" r={r} fill="none"
-                stroke={seg.color} strokeWidth="22"
-                strokeDasharray={`${len} ${circumference - len}`}
-                strokeDashoffset={-cumulative}
-              />
-            );
-            cumulative += len;
-            return el;
-          })}
+          {segments.map((seg, i) => (
+            <circle key={i} cx="50" cy="50" r={r} fill="none"
+              stroke={seg.color} strokeWidth="22"
+              strokeDasharray={`${lengths[i]} ${circumference - lengths[i]}`}
+              strokeDashoffset={-offsets[i]}
+            />
+          ))}
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
           <span className="text-[10px] text-slate-400 leading-tight">Total</span>
@@ -717,6 +715,8 @@ function ReverseCalc({
   // um request por tecla digitada no orçamento.
   useEffect(() => {
     if (budgetNum <= 0) {
+      // Limpar o resultado quando o orçamento fica vazio é intencional.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setResult(null);
       setCalcError(null);
       setInsufficient(false);
@@ -1501,7 +1501,10 @@ export default function Home() {
   const [tab, setTab] = useState<"url" | "manual" | "reversa">("url");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
 
-  // Carrega histórico do localStorage ao montar
+  // Carrega histórico do localStorage ao montar. Precisa ser depois da
+  // hidratação: no servidor não há localStorage, e ler no useState inicial
+  // faria o HTML do servidor divergir do cliente.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setHistory(loadHistory()); }, []);
 
   function addToHistory(entry: Omit<HistoryEntry, "id" | "searched_at">) {
@@ -1878,17 +1881,19 @@ export default function Home() {
           <p>Alíquotas: Receita Federal · Câmbio: PTAX Banco Central do Brasil · Preços de referência: Tabela FIPE</p>
           <p className="text-slate-400">Os valores são estimativas. Consulte um despachante aduaneiro habilitado para cotações precisas.</p>
           <p>
-            <a href="/guia" className="hover:text-slate-700 underline">Guia de Importação</a>
+            <Link href="/guia" className="hover:text-slate-700 underline">Guia de Importação</Link>
             {" · "}
-            <a href="/empresas" className="hover:text-slate-700 underline">Empresas</a>
+            <Link href="/empresas" className="hover:text-slate-700 underline">Empresas</Link>
             {" · "}
-            <a href="/blog" className="hover:text-slate-700 underline">Blog</a>
+            <Link href="/blog" className="hover:text-slate-700 underline">Blog</Link>
             {" · "}
-            <a href="/sobre" className="hover:text-slate-700 underline">Sobre</a>
+            <Link href="/sobre" className="hover:text-slate-700 underline">Sobre</Link>
             {" · "}
-            <a href="/privacy" className="hover:text-slate-700 underline">Privacidade</a>
+            <Link href="/contato" className="hover:text-slate-700 underline">Contato</Link>
             {" · "}
-            <a href="/terms" className="hover:text-slate-700 underline">Termos</a>
+            <Link href="/privacy" className="hover:text-slate-700 underline">Privacidade</Link>
+            {" · "}
+            <Link href="/terms" className="hover:text-slate-700 underline">Termos</Link>
           </p>
           <p className="text-slate-400">© {new Date().getFullYear()} carroimportado.com — Todos os direitos reservados</p>
         </footer>
