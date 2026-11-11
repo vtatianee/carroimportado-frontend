@@ -86,25 +86,42 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${geist.className} h-full`}>
-      {/* <script> comum, não next/script: o next/script injeta a tag pelo
-          JavaScript do cliente, e a revisão do AdSense procura a tag no HTML
-          servido. A ordem importa: a configuração (pausa + não personalizado)
-          precisa rodar antes do adsbygoogle.js. Por isso `defer` em vez do
-          `async` do snippet do Google: o React 19 sobe toda <script async src>
-          para o topo do <head>, ACIMA do script inline, e ela poderia pedir
-          anúncio antes da pausa. `defer` fica no lugar e roda depois do parse,
-          sem bloquear a renderização. Ver lib/anuncios.ts. */}
+      {/* <script async src> é "recurso" para o React 19: ele sobe a tag para o
+          <head> e não a hidrata, então pode ficar aqui. */}
       <head>
+        <script async src={`https://fundingchoicesmessages.google.com/i/${ADSENSE_PUB}?ers=1`} />
+      </head>
+      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 antialiased">
+        {/* <script> comum, não next/script: o next/script injeta a tag pelo
+            JavaScript do cliente, e a revisão do AdSense procura a tag no HTML
+            servido. A ordem importa: a configuração (pausa + não personalizado)
+            precisa rodar antes do adsbygoogle.js. Por isso `defer` em vez do
+            `async` do snippet do Google: o React 19 sobe toda <script async src>
+            para o topo do <head>, ACIMA do script inline, e ela poderia pedir
+            anúncio antes da pausa. `defer` fica no lugar e roda depois do parse,
+            sem bloquear a renderização. Ver lib/anuncios.ts.
+
+            Ficam no começo do <body>, e NÃO no <head>, por causa da hidratação.
+            O adsbygoogle.js insere o próprio <script src=".../show_ads_impl...">
+            antes do primeiro <script> do documento, que está sempre no <head>, e
+            sem o atributo `async`. Ao hidratar o <head>, o React casa cada
+            <script> nosso com o próximo <script> que encontra e só pula os que
+            têm `src` + `async`. O script injetado tomava o lugar do primeiro,
+            todos os seguintes andavam uma posição, e a página inteira dava
+            "Minified React error #418" (HTML não bate) em todo carregamento.
+            Aqui no <body> nada injeta <script> antes deles. Executam na mesma
+            ordem de antes: inline durante o parse, `defer` depois dele.
+            suppressHydrationWarning: o adsbygoogle.js marca a própria tag com
+            data-checked-head="true" antes da hidratação (só atributo; sem ele o
+            dev acusa diferença a cada carregamento). */}
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_CONFIG_ANUNCIOS }} />
         <script
+          suppressHydrationWarning
           defer
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
           crossOrigin="anonymous"
         />
-        <script async src={`https://fundingchoicesmessages.google.com/i/${ADSENSE_PUB}?ers=1`} />
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_SINAL_FUNDING_CHOICES }} />
-      </head>
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 antialiased">
         {children}
         {/* Vercel Analytics não usa cookie e produz só estatística agregada,
             sem identificar o visitante — não exige aviso de consentimento. */}

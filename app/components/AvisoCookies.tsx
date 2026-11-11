@@ -42,7 +42,7 @@ export default function AvisoCookies() {
       else setAberto(true);
     };
 
-    // O script do <head> pode ter decidido a região antes da hidratação.
+    // O script inline do layout pode ter decidido a região antes da hidratação.
     if (typeof w.__anunciosGdpr === "boolean") aoSaberRegiao(w.__anunciosGdpr);
     window.addEventListener(EVENTO_REGIAO, ouvirRegiao);
     window.addEventListener(EVENTO_PREFERENCIAS, ouvirPreferencias);
