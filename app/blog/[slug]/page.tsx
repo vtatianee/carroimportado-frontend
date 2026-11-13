@@ -10,6 +10,7 @@ import NavHeader from "../../components/NavHeader";
 import { getPostBySlug, getPublishedPosts, getPostBody, getRelatedSlugs, type BlogPost } from "../../lib/blog";
 import { SEO_POSTS } from "../../lib/blog-seo";
 import { formatPostDate } from "../../lib/date";
+import Compartilhar from "./Compartilhar";
 
 // Gera as rotas estáticas apenas para posts publicados
 export async function generateStaticParams() {
@@ -156,6 +157,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <span>·</span>
             <span>{post.readTimeMin} min de leitura</span>
           </div>
+          <div className="mt-4">
+            <Compartilhar url={`https://www.carroimportado.com/blog/${post.slug}`} titulo={post.title} variante="compacto" />
+          </div>
         </header>
 
         {/* next/image: a capa é o maior elemento da tela (LCP). Servida no
@@ -191,6 +195,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <p className="text-slate-400 italic">Conteúdo em preparação.</p>
           )}
         </article>
+
+        <Compartilhar url={`https://www.carroimportado.com/blog/${post.slug}`} titulo={post.title} />
 
         {/* CTA final */}
         <div className="mt-12 bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center">

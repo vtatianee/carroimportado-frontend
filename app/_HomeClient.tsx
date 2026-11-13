@@ -1499,7 +1499,7 @@ function HowItWorks() {
 
 // ── Página principal ──────────────────────────────────────────────────────────
 export default function Home() {
-  const [tab, setTab] = useState<"url" | "manual" | "reversa">("url");
+  const [tab, setTab] = useState<"url" | "manual" | "reversa">("manual");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   // Carrega histórico do localStorage ao montar. Precisa ser depois da
@@ -1661,17 +1661,12 @@ export default function Home() {
         {/* Form card */}
         <section id="calculadora" className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 scroll-mt-20">
           <p className="text-slate-500 mb-6 text-sm">
-            Cole o link de um anúncio do{" "}
-            <a href="https://www.cars.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:underline">Cars.com</a>
-            {" "}ou insira os valores manualmente.
+            Insira os valores do carro, simule pelo seu orçamento ou cole o link de um anúncio do{" "}
+            <a href="https://www.cars.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:underline">Cars.com</a>.
           </p>
 
           {/* Tabs */}
           <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1 overflow-x-auto">
-            <button onClick={() => { setTab("url"); setError(null); }}
-              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${tab === "url" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
-              🔗 <span className="hidden sm:inline">Cole um </span>Link
-            </button>
             <button onClick={() => { setTab("manual"); setError(null); }}
               className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${tab === "manual" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
               ✏️ <span className="hidden sm:inline">Inserir </span>Manual
@@ -1679,6 +1674,10 @@ export default function Home() {
             <button onClick={() => { setTab("reversa"); setError(null); }}
               className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${tab === "reversa" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
               💰 <span className="hidden sm:inline">Simular por </span>Orçamento
+            </button>
+            <button onClick={() => { setTab("url"); setError(null); }}
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${tab === "url" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+              🔗 <span className="hidden sm:inline">Cole um </span>Link
             </button>
           </div>
 
