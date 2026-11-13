@@ -1498,7 +1498,7 @@ function HowItWorks() {
 }
 
 // ── Página principal ──────────────────────────────────────────────────────────
-export default function Home() {
+export default function Home({ ultimasNoticias }: { ultimasNoticias?: React.ReactNode }) {
   const [tab, setTab] = useState<"url" | "manual" | "reversa">("manual");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
 
@@ -1863,6 +1863,9 @@ export default function Home() {
 
         {/* Chamada para o jogo */}
         <ChamadaJogo />
+
+        {/* Últimas notícias do blog (Server Component vindo de app/page.tsx) */}
+        {ultimasNoticias}
 
         {/* Como funciona */}
         <HowItWorks />
