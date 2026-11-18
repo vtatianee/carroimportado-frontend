@@ -8,6 +8,8 @@ import NavHeader from "./components/NavHeader";
 import ChamadaJogo from "./components/ChamadaJogo";
 import AvisoEstimativa from "./components/AvisoEstimativa";
 import QuantoCusta from "./components/QuantoCusta";
+import { ESTADOS } from "./lib/estados";
+import ConfirmarCalculo from "./components/ConfirmarCalculo";
 
 // ── Histórico de pesquisas (localStorage) ─────────────────────────────────────
 const HISTORY_KEY = "search_history";
@@ -37,15 +39,6 @@ function saveHistory(entries: HistoryEntry[]) {
 
 // As chamadas à API passam pelo proxy Next.js (app/api/*) para não expor a URL do backend no browser.
 
-const ESTADOS = [
-  { value: "SP", label: "São Paulo (SP) — ICMS 12%" },
-  { value: "RJ", label: "Rio de Janeiro (RJ) — ICMS 20%" },
-  { value: "MG", label: "Minas Gerais (MG) — ICMS 12%" },
-  { value: "SC", label: "Santa Catarina (SC) — ICMS 12%" },
-  { value: "RS", label: "Rio Grande do Sul (RS) — ICMS 12%" },
-  { value: "PR", label: "Paraná (PR) — ICMS 12%" },
-  { value: "OTHER", label: "Outros estados — ICMS 17%" },
-];
 
 function fmt(n: number) {
   return n.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
@@ -366,7 +359,7 @@ const EXAMPLE_RESULT: AnalyzeResult = {
 };
 
 // ── Bloco de resultados (reutilizado pelos dois modos) ────────────────────────
-function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boolean }) {
+function Results({ result, isExample, envioPorEmail = false }: { result: AnalyzeResult; isExample?: boolean; envioPorEmail?: boolean }) {
   const { car_data: car, import_costs: ic, benchmark_brasil: bm, cotacao_dolar: cd } = result;
   const va = ic.valor_aduaneiro;
   const da = ic.desembaraco_aduaneiro;
@@ -550,6 +543,24 @@ function Results({ result, isExample }: { result: AnalyzeResult; isExample?: boo
           <SectionHeading icon={<IconPencil />}>Sobre este veículo</SectionHeading>
           <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">{result.description_pt}</p>
         </section>
+      )}
+
+      {/* Captura de lead: só com cálculo real, nunca no exemplo. `key` zera o
+          formulário quando chega um cálculo novo (o pré-preenchimento muda). */}
+      {!isExample && (
+        <ConfirmarCalculo
+          key={`${car.price_usd}-${ic.destination_state}-${carTitle}`}
+          envioPorEmail={envioPorEmail}
+          dados={{
+            carro: [car.year, car.make, car.model].filter(Boolean).join(" "),
+            precoUsd: car.price_usd > 0 ? car.price_usd : null,
+            estado: ic.destination_state,
+            isClassic: car.is_classic === true,
+            cambio: ic.exchange_rate_usd_brl,
+            totalBrl: ic.total_landed_brl,
+            impostosBrl: bd.total_taxes,
+          }}
+        />
       )}
 
       {/* Compartilhar */}
@@ -1498,7 +1509,13 @@ function HowItWorks() {
 }
 
 // ── Página principal ──────────────────────────────────────────────────────────
-export default function Home({ ultimasNoticias }: { ultimasNoticias?: React.ReactNode }) {
+export default function Home({
+  ultimasNoticias,
+  envioCalculoPorEmail = false,
+}: {
+  ultimasNoticias?: React.ReactNode;
+  envioCalculoPorEmail?: boolean;
+}) {
   const [tab, setTab] = useState<"url" | "manual" | "reversa">("manual");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
 
@@ -1837,8 +1854,8 @@ export default function Home({ ultimasNoticias }: { ultimasNoticias?: React.Reac
         )}
 
         {/* Resultados */}
-        {tab === "url" && urlResult && !loading && <Results result={urlResult} />}
-        {tab === "manual" && manualResult && !loading && <Results result={manualResult} />}
+        {tab === "url" && urlResult && !loading && <Results result={urlResult} envioPorEmail={envioCalculoPorEmail} />}
+        {tab === "manual" && manualResult && !loading && <Results result={manualResult} envioPorEmail={envioCalculoPorEmail} />}
 
         {/* Próximos passos — aparece quando há resultado real */}
         {(urlResult || manualResult) && !loading && <NextSteps result={urlResult || manualResult} />}
