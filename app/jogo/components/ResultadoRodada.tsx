@@ -97,6 +97,15 @@ export default function ResultadoRodada({
           🧮 Calcular custo de importação
         </Link>
         <p className="-mt-1 text-xs text-center text-slate-500">Quanto esse carro custaria trazido para o Brasil?</p>
+        <p className="text-sm text-center text-slate-600">
+          Quer confirmar o valor com um despachante?{" "}
+          <Link
+            href={`/orcamento?${new URLSearchParams({ price_usd: String(carro.precoReal), year: String(carro.ano), model: carro.modelo }).toString()}`}
+            className="font-semibold text-blue-700 hover:underline"
+          >
+            Peça em 24h →
+          </Link>
+        </p>
 
         {linkCarsCom && (
           // Secundário de propósito: leva o jogador para fora do site, enquanto o
