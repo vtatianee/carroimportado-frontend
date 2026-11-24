@@ -210,6 +210,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           >
             🚗 Abrir calculadora
           </Link>
+          <p className="text-slate-600 text-sm mt-5 pt-4 border-t border-blue-200">
+            Fez as contas e quer confirmar o valor com um despachante?{" "}
+            <Link href="/orcamento" className="font-semibold text-blue-700 hover:underline">
+              Peça a confirmação em 24h →
+            </Link>
+          </p>
         </div>
 
         <nav className="mt-12" aria-labelledby="leia-tambem">

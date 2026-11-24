@@ -284,6 +284,19 @@ export async function GET(req: NextRequest) {
         ).join("")}
       </table>`;
 
+  // Leads (contados pelo backend em usage_daily_modo como modo lead_<origem>).
+  const LEADS = [
+    ["lead_calculator_result", "Confirmação pedida na calculadora"],
+    ["lead_orcamento", "Pedido em /orcamento"],
+    ["lead_calculator_pdf", "Cálculo enviado por e-mail"],
+  ] as const;
+  const leadsSection = statsErro
+    ? ""
+    : `<table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%;margin-top:12px">
+        <tr style="background:#f1f5f9"><th style="text-align:left">Leads na semana</th><th style="text-align:right">Total</th></tr>
+        ${LEADS.map(([modo, rotulo]) => `<tr><td style="${celula};color:#334155">${rotulo}</td><td style="${celula};text-align:right;font-weight:600">${contar(modo)}</td></tr>`).join("")}
+      </table>`;
+
   const html = `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#0f172a">
       <h2 style="margin-bottom:4px">📊 Relatório semanal — carroimportado.com</h2>
@@ -304,6 +317,7 @@ export async function GET(req: NextRequest) {
 
       <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Cálculos por modo</h3>
       ${modoSection}
+      ${leadsSection}
 
       <h3 style="color:#1e293b;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-top:24px">Buscas por dia</h3>
       <table cellpadding="6" style="border-collapse:collapse;font-size:13px;width:100%">
