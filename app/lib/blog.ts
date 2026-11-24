@@ -51,6 +51,12 @@ function readMarkdownPosts(): { post: BlogPost; body: string }[] {
           ? data.date.toISOString().slice(0, 10)
           : data.date,
         slug: data.slug ?? file.replace(/\.md$/, ""),
+        // O YAML lê `tags: [Importação, 2026]` com 2026 como número, e o
+        // contrato exige texto: um ano sem aspas numa tag derrubava o build
+        // inteiro (aconteceu em 22/11/2026, travando todos os deploys).
+        tags: Array.isArray(data.tags)
+          ? data.tags.map((t: unknown) => (typeof t === "number" ? String(t) : t))
+          : data.tags,
       };
 
       const parsed = BlogPostFrontmatterSchema.safeParse(normalized);
